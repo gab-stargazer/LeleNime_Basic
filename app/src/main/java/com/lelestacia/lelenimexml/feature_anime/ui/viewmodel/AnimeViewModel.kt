@@ -18,6 +18,10 @@ class AnimeViewModel @Inject constructor(
     fun seasonAnimePagingData(): Flow<PagingData<AnimeCard>> = repository.seasonAnimePagingData()
         .cachedIn(viewModelScope)
 
-    fun searchAnimeByTitle(query: String) = repository.searchAnimeByTitle(query)
+    fun searchAnimeByTitle() = repository.searchAnimeByTitle()
         .cachedIn(viewModelScope)
+
+    fun searchNewQuery(newQuery: String) {
+        repository.searchNewQuery(newQuery)
+    }
 }

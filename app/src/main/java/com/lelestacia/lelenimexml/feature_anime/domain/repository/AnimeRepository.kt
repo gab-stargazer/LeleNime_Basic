@@ -6,7 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface AnimeRepository {
 
-    fun seasonAnimePagingData() : Flow<PagingData<Data>>
+    fun seasonAnimePagingData(): Flow<PagingData<AnimeCard>>
 
-    fun searchAnimeByTitle(query: String): Flow<PagingData<Data>>
+    fun searchAnimeByTitle(): Flow<PagingData<AnimeCard>>
+
+    fun searchNewQuery(newQuery: String)
 }

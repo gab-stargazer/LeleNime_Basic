@@ -12,24 +12,48 @@ import kotlinx.coroutines.flow.buffer
 import javax.inject.Inject
 
 class AnimeRepositoryImpl @Inject constructor(
-    private val apiService : JikanAPI
+    private val apiService: JikanAPI
 ) : AnimeRepository {
+
+    private var query = ""
+    private var searchAnimePaging: SearchAnimePaging? = null
+        get() {
+            if (field == null || field?.invalid == true) {
+                field = SearchAnimePaging(query, apiService)
+            }
+            return field
+        }
 
     override fun seasonAnimePagingData(): Flow<PagingData<AnimeCard>> {
         return Pager(
-            config = PagingConfig(pageSize = 25, prefetchDistance = 10, initialLoadSize = 25),
+            config = PagingConfig(
+                pageSize = 25,
+                prefetchDistance = 10,
+                initialLoadSize = 25,
+                enablePlaceholders = false
+            ),
             pagingSourceFactory = {
                 SeasonAnimePaging(apiService)
             }
         ).flow.buffer()
     }
 
-    override fun searchAnimeByTitle(query: String): Flow<PagingData<Data>> {
+    override fun searchAnimeByTitle(): Flow<PagingData<AnimeCard>> {
         return Pager(
-            config = PagingConfig(pageSize = 25, prefetchDistance = 10, initialLoadSize = 25),
+            config = PagingConfig(
+                pageSize = 25,
+                prefetchDistance = 10,
+                initialLoadSize = 25,
+                enablePlaceholders = false
+            ),
             pagingSourceFactory = {
-                SearchAnimePaging(query, apiService)
+                searchAnimePaging!!
             }
         ).flow.buffer()
+    }
+
+    override fun searchNewQuery(newQuery: String) {
+        query = newQuery
+        searchAnimePaging?.invalidate()
     }
 }
