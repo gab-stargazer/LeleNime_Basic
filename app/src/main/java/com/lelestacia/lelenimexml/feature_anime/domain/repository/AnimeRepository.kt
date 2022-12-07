@@ -1,7 +1,7 @@
 package com.lelestacia.lelenimexml.feature_anime.domain.repository
 
 import androidx.paging.PagingData
-import com.lelestacia.lelenimexml.core.domain.dto.season.Data
+import com.lelestacia.lelenimexml.feature_anime.domain.model.AnimeCard
 import kotlinx.coroutines.flow.Flow
 
 interface AnimeRepository {

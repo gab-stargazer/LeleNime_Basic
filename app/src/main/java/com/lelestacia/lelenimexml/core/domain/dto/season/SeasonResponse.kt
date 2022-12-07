@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class SeasonResponse(
     @SerializedName("data")
-    val `data`: List<Data> = listOf(),
+    val data: List<Data> = listOf(),
     @SerializedName("pagination")
     val pagination: Pagination = Pagination()
 )

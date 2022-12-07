@@ -6,14 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.asLiveData
+import androidx.paging.PagingData
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.lelestacia.lelenimexml.databinding.FragmentSeasonAnimeBinding
+import com.lelestacia.lelenimexml.feature_anime.domain.model.AnimeCard
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.AnimeRowPagingAdapter
+import com.lelestacia.lelenimexml.feature_anime.ui.adapter.FooterLoadStateAdapter
+import com.lelestacia.lelenimexml.feature_anime.ui.adapter.HeaderLoadStateAdapter
 import com.lelestacia.lelenimexml.feature_anime.ui.viewmodel.AnimeViewModel
+import kotlinx.coroutines.Dispatchers
 
 
 class SeasonAnimeFragment : Fragment() {
 
+    private lateinit var pagingAdapter: AnimeRowPagingAdapter
     private val viewModel by activityViewModels<AnimeViewModel>()
     private var _binding: FragmentSeasonAnimeBinding? = null
     private val binding get() = _binding!!
@@ -28,12 +35,24 @@ class SeasonAnimeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = AnimeRowPagingAdapter()
-        lifecycleScope.launchWhenCreated {
-            viewModel.seasonAnimePagingData().collect {
-                adapter.submitData(lifecycle, it)
-            }
+        pagingAdapter = AnimeRowPagingAdapter()
+        binding.rvSeasonAnime.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = pagingAdapter.withLoadStateHeaderAndFooter(
+                header = HeaderLoadStateAdapter {
+                    pagingAdapter::refresh
+                },
+                footer = FooterLoadStateAdapter {
+                    pagingAdapter::retry
+                }
+            )
+            setHasFixedSize(true)
         }
+        viewModel.seasonAnimePagingData()
+            .asLiveData(Dispatchers.Main)
+            .observe(viewLifecycleOwner) {
+                pagingAdapter.submitData(lifecycle, it as PagingData<AnimeCard>)
+            }
     }
 
     override fun onDestroyView() {

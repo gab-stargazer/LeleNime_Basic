@@ -11,8 +11,11 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="rating">Rating\t\t\t\t:\t%s</string>
+    <string name="rating">Rating\t\t\t\t\t:\t%s</string>
     <string name="episode">Episodes\t\t:\t%s</string>
+    <string name="status">Status\t\t\t\t\t:\t%s</string>
+    <string name="loading">Loading</string>
+    <string name="retry">Retry</string>
     <string name="status">Status\t\t\t\t:\t%s</string>
     <string name="insert_anime_title">Insert Anime Title Here…</string>
     <string name="search">Search</string>
