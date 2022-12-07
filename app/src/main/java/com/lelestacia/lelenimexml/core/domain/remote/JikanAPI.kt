@@ -9,10 +9,13 @@ import retrofit2.http.Query
 interface JikanAPI {
 
     @GET("seasons/now")
-    suspend fun getCurrentSeason(@Query("page") page: Int = 1) : SeasonResponse
+    suspend fun getCurrentSeason(@Query("page") page: Int): SeasonResponse
+
+    @GET("anime")
+    suspend fun searchAnimeByTitle(@Query("q") q: String, @Query("page") page: Int): SeasonResponse
 
     @GET("anime/{id}")
-    suspend fun getAnimeById(@Path("id") id: Int) : AnimeByIdResponse
+    suspend fun getAnimeById(@Path("id") id: Int): AnimeByIdResponse
 
     companion object {
         const val BASE_URL = "https://api.jikan.moe/v4/"
