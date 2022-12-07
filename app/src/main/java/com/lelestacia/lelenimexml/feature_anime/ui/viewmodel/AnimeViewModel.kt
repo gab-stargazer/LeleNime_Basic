@@ -14,4 +14,7 @@ class AnimeViewModel @Inject constructor(
 
     fun seasonAnimePagingData() = repository.seasonAnimePagingData()
         .cachedIn(viewModelScope)
+
+    fun searchAnimeByTitle(query: String) = repository.searchAnimeByTitle(query)
+        .cachedIn(viewModelScope)
 }

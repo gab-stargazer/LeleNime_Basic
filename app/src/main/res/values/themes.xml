@@ -15,6 +15,7 @@
 
         <item name="cardBackgroundColor">@color/orange</item>
         <item name="background">@color/beige</item>
+        <item name="colorOnSurfaceVariant">?attr/cardBackgroundColor</item>
     </style>
 
     <style name="Theme.LeleNimeXML.NoActionBar">

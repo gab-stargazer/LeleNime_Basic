@@ -14,4 +14,6 @@
     <string name="rating">Rating\t\t\t\t:\t%s</string>
     <string name="episode">Episodes\t\t:\t%s</string>
     <string name="status">Status\t\t\t\t:\t%s</string>
+    <string name="insert_anime_title">Insert Anime Title Here…</string>
+    <string name="search">Search</string>
 </resources>
