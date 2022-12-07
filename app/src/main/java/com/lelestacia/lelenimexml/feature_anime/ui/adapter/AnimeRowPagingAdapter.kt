@@ -7,28 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.lelestacia.lelenimexml.R
-import com.lelestacia.lelenimexml.core.domain.dto.season.Data
 import com.lelestacia.lelenimexml.databinding.CardAnimeRowBinding
+import com.lelestacia.lelenimexml.feature_anime.domain.model.AnimeCard
 
 class AnimeRowPagingAdapter :
-    PagingDataAdapter<Data, AnimeRowPagingAdapter.ViewHolder>(DIFF_CALLBACk) {
-
-    inner class ViewHolder(private val binding: CardAnimeRowBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Data) {
-            binding.apply {
-                val context = root.context
-                ivCoverAnime.load(item.images.jpg.largeImageUrl) {
-                    crossfade(true)
-                }
-                tvTitleAnime.text = item.title
-                tvRatingAnime.text = context.getString(R.string.rating, item.rating)
-                tvEpisodeAnime.text = context.getString(R.string.episode, item.episodes.toString())
-                tvStatusAnime.text = context.getString(R.string.status, item.status)
-            }
-        }
-    }
+    PagingDataAdapter<AnimeCard, AnimeRowPagingAdapter.ViewHolder>(DIFF_CALLBACk) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -37,17 +20,34 @@ class AnimeRowPagingAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getItem(position)?.let {
-            holder.bind(it)
+        val item = getItem(position)
+        if (item != null)
+            holder.bind(item)
+    }
+
+    inner class ViewHolder(private val binding: CardAnimeRowBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: AnimeCard) {
+            binding.apply {
+                val context = root.context
+                ivCoverAnime.load(item.coverImage) {
+                    crossfade(true)
+                }
+                tvTitleAnime.text = item.title
+                tvRatingAnime.text = context.getString(R.string.rating, item.rating.toString())
+                tvEpisodeAnime.text = context.getString(R.string.episode, item.episode.toString())
+                tvStatusAnime.text = context.getString(R.string.status, item.status)
+            }
         }
     }
 
     companion object {
-        private val DIFF_CALLBACk = object : DiffUtil.ItemCallback<Data>() {
-            override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean =
-                oldItem.malId == newItem.malId
+        private val DIFF_CALLBACk = object : DiffUtil.ItemCallback<AnimeCard>() {
+            override fun areItemsTheSame(oldItem: AnimeCard, newItem: AnimeCard): Boolean =
+                oldItem.malID == newItem.malID
 
-            override fun areContentsTheSame(oldItem: Data, newItem: Data): Boolean =
+            override fun areContentsTheSame(oldItem: AnimeCard, newItem: AnimeCard): Boolean =
                 oldItem == newItem
         }
     }
