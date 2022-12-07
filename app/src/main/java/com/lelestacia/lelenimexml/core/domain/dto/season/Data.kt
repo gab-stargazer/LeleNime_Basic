@@ -2,6 +2,7 @@ package com.lelestacia.lelenimexml.core.domain.dto.season
 
 
 import com.google.gson.annotations.SerializedName
+import com.lelestacia.lelenimexml.feature_anime.domain.model.AnimeCard
 
 data class Data(
     @SerializedName("aired")
@@ -76,4 +77,15 @@ data class Data(
     val url: String = "",
     @SerializedName("year")
     val year: Int = 0
-)
+) {
+    fun toAnimeCard() : AnimeCard {
+        return AnimeCard(
+            malID = malId,
+            title = title,
+            coverImage = images.jpg.largeImageUrl,
+            rating = score,
+            episode = episodes ?: 0,
+            status = status
+        )
+    }
+}
