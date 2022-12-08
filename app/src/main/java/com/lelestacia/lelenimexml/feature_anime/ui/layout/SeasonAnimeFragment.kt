@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lelestacia.lelenimexml.databinding.FragmentSeasonAnimeBinding
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.AnimeRowPagingAdapter
@@ -32,7 +33,10 @@ class SeasonAnimeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val pagingAdapter = AnimeRowPagingAdapter()
+        val pagingAdapter = AnimeRowPagingAdapter {
+            val action = SeasonAnimeFragmentDirections.seasonToDetail(it)
+            view.findNavController().navigate(action)
+        }
         binding.rvSeasonAnime.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = pagingAdapter.withLoadStateHeaderAndFooter(

@@ -12,8 +12,6 @@ class SeasonAnimePaging(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeCard> {
         return try {
             val apiResponse = apiService.getCurrentSeason(params.key ?: 1)
-            println(apiResponse.pagination)
-            println(apiResponse.data)
             LoadResult.Page(
                 data = apiResponse.data.map {
                     it.toAnimeCard()

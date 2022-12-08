@@ -8,7 +8,7 @@ import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.lelestacia.lelenimexml.databinding.LoadStateFooterBinding
 
-class FooterLoadStateAdapter(val onRetry: () -> Unit) :
+class FooterLoadStateAdapter(private val onRetry: () -> Unit) :
     LoadStateAdapter<FooterLoadStateAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): ViewHolder {
@@ -26,7 +26,7 @@ class FooterLoadStateAdapter(val onRetry: () -> Unit) :
 
         fun bind(loadState: LoadState) {
             binding.btnRetry.setOnClickListener {
-                onRetry
+                onRetry.invoke()
             }
             when (loadState) {
                 is LoadState.NotLoading ->

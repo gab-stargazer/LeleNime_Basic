@@ -19,15 +19,20 @@
     </group>
     <item android:title="Anime">
         <menu>
-            <item
-                android:id="@+id/nav_season_anime"
-                android:title="Currently Airing" />
-            <item
-                android:id="@+id/nav_explore_anime"
-                android:title="Explore" />
-            <item
-                android:id="@+id/nav_my_list_anime"
-                android:title="My List" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:icon="@drawable/ic_movie"
+                    android:id="@+id/nav_season_anime"
+                    android:title="Currently Airing" />
+                <item
+                    android:icon="@drawable/ic_search"
+                    android:id="@+id/nav_explore_anime"
+                    android:title="Explore" />
+                <item
+                    android:icon="@drawable/ic_list"
+                    android:id="@+id/nav_my_list_anime"
+                    android:title="My List" />
+            </group>
         </menu>
     </item>
 </menu>

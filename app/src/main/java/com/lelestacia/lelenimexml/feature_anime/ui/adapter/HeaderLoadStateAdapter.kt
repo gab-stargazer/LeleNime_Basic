@@ -11,10 +11,6 @@ import com.lelestacia.lelenimexml.databinding.LoadStateHeaderBinding
 class HeaderLoadStateAdapter(val onRetry: () -> Unit) :
     LoadStateAdapter<HeaderLoadStateAdapter.ViewHolder>() {
 
-    override fun displayLoadStateAsItem(loadState: LoadState): Boolean {
-        return super.displayLoadStateAsItem(loadState)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): ViewHolder {
         val binding =
             LoadStateHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -30,7 +26,7 @@ class HeaderLoadStateAdapter(val onRetry: () -> Unit) :
 
         fun bind(loadState: LoadState) {
             binding.btnRetry.setOnClickListener {
-                onRetry
+                onRetry.invoke()
             }
             when (loadState) {
                 is LoadState.NotLoading ->
