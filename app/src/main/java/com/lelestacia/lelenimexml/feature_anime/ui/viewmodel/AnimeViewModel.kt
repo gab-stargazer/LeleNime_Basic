@@ -1,17 +1,13 @@
 package com.lelestacia.lelenimexml.feature_anime.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.lelestacia.lelenimexml.core.domain.dto.animefull.AnimeFUll
 import com.lelestacia.lelenimexml.core.utililty.NetworkResponse
-import com.lelestacia.lelenimexml.feature_anime.domain.model.AnimeCard
+import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
 import com.lelestacia.lelenimexml.feature_anime.domain.repository.AnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +18,7 @@ class AnimeViewModel @Inject constructor(
 
     private val _anime = MutableLiveData<NetworkResponse<AnimeFUll>>()
     val anime get() = _anime as LiveData<NetworkResponse<AnimeFUll>>
+    private val query = MutableLiveData("")
 
     fun getAnimeById(animeID: Int) {
         viewModelScope.launch {
@@ -29,13 +26,17 @@ class AnimeViewModel @Inject constructor(
         }
     }
 
-    fun seasonAnimePagingData(): Flow<PagingData<AnimeCard>> = repository.seasonAnimePagingData()
+    fun seasonAnimePagingData(): LiveData<PagingData<Anime>> = repository.seasonAnimePagingData()
         .cachedIn(viewModelScope)
+        .asLiveData()
 
-    fun searchAnimeByTitle() = repository.searchAnimeByTitle()
-        .cachedIn(viewModelScope)
+    fun searchAnimeByTitle(): LiveData<PagingData<Anime>> = query.distinctUntilChanged().switchMap {
+        repository.searchAnimeByTitle(it)
+            .cachedIn(viewModelScope)
+            .asLiveData()
+    }
 
-    fun searchNewQuery(newQuery: String) {
-        repository.searchNewQuery(newQuery)
+    fun searchAnime(newQuery: String) {
+        query.value = newQuery
     }
 }

@@ -4,11 +4,11 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.lelestacia.lelenimexml.core.domain.dto.animefull.AnimeFUll
-import com.lelestacia.lelenimexml.core.domain.remote.JikanAPI
+import com.lelestacia.lelenimexml.core.network.api.JikanAPI
 import com.lelestacia.lelenimexml.core.utililty.NetworkResponse
-import com.lelestacia.lelenimexml.feature_anime.domain.model.AnimeCard
-import com.lelestacia.lelenimexml.feature_anime.domain.remote.SearchAnimePaging
-import com.lelestacia.lelenimexml.feature_anime.domain.remote.SeasonAnimePaging
+import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
+import com.lelestacia.lelenimexml.feature_anime.data.remote.SearchAnimePaging
+import com.lelestacia.lelenimexml.feature_anime.data.remote.SeasonAnimePaging
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,15 +22,6 @@ class AnimeRepositoryImpl @Inject constructor(
     private val apiService: JikanAPI,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AnimeRepository {
-
-    private var query = ""
-    private var searchAnimePaging: SearchAnimePaging? = null
-        get() {
-            if (field == null || field?.invalid == true) {
-                field = SearchAnimePaging(query, apiService)
-            }
-            return field
-        }
 
     override suspend fun getAnimeById(animeID: Int): NetworkResponse<AnimeFUll> {
         return withContext(ioDispatcher) {
@@ -48,7 +39,7 @@ class AnimeRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun seasonAnimePagingData(): Flow<PagingData<AnimeCard>> {
+    override fun seasonAnimePagingData(): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -62,7 +53,7 @@ class AnimeRepositoryImpl @Inject constructor(
         ).flow.buffer()
     }
 
-    override fun searchAnimeByTitle(): Flow<PagingData<AnimeCard>> {
+    override fun searchAnimeByTitle(query: String): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -71,13 +62,8 @@ class AnimeRepositoryImpl @Inject constructor(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                searchAnimePaging!!
+                SearchAnimePaging(query, apiService)
             }
         ).flow.buffer()
-    }
-
-    override fun searchNewQuery(newQuery: String) {
-        query = newQuery
-        searchAnimePaging?.invalidate()
     }
 }

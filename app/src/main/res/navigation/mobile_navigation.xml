@@ -7,24 +7,24 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.lelestacia.lelenimexml.ui.home.HomeFragment"
+        android:name="com.lelestacia.lelenimexml.feature_anime.ui.view.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.lelestacia.lelenimexml.ui.gallery.GalleryFragment"
+        android:name="com.lelestacia.lelenimexml.feature_anime.ui.view.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.lelestacia.lelenimexml.ui.slideshow.SlideshowFragment"
+        android:name="com.lelestacia.lelenimexml.feature_anime.ui.view.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_season_anime"
-        android:name="com.lelestacia.lelenimexml.feature_anime.ui.layout.SeasonAnimeFragment"
+        android:name="com.lelestacia.lelenimexml.feature_anime.ui.view.SeasonAnimeFragment"
         android:label="Currently Airing"
         tools:layout="@layout/fragment_season_anime" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_explore_anime"
-        android:name="com.lelestacia.lelenimexml.feature_anime.ui.layout.ExploreAnimeFragment"
+        android:name="com.lelestacia.lelenimexml.feature_anime.ui.view.ExploreAnimeFragment"
         android:label="Explore"
         tools:layout="@layout/fragment_explore_anime" >
         <action
@@ -44,16 +44,16 @@
     </fragment>
     <fragment
         android:id="@+id/nav_my_list_anime"
-        android:name="com.lelestacia.lelenimexml.feature_anime.ui.layout.MyListAnime"
+        android:name="com.lelestacia.lelenimexml.feature_anime.ui.view.MyListAnime"
         android:label="fragment_my_list_anime"
         tools:layout="@layout/fragment_my_list_anime" />
     <fragment
         android:id="@+id/nav_detail_anime"
-        android:name="com.lelestacia.lelenimexml.feature_anime.ui.layout.DetailAnimeFragment"
+        android:name="com.lelestacia.lelenimexml.feature_anime.ui.view.DetailAnimeFragment"
         android:label="Detail Anime"
         tools:layout="@layout/fragment_detail_anime">
         <argument
-            android:name="animeID"
-            app:argType="integer" />
+            android:name="anime"
+            app:argType="com.lelestacia.lelenimexml.feature_anime.domain.model.Anime" />
     </fragment>
 </navigation>
