@@ -3,16 +3,16 @@ package com.lelestacia.lelenimexml.feature_anime.ui.viewmodel
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.lelestacia.lelenimexml.core.domain.dto.animefull.AnimeFUll
-import com.lelestacia.lelenimexml.core.utililty.NetworkResponse
-import com.lelestacia.lelenimexml.feature_anime.data.repository.AnimeRepository
+import com.lelestacia.lelenimexml.core.model.remote.animefull.AnimeFUll
+import com.lelestacia.lelenimexml.core.utility.NetworkResponse
 import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
+import com.lelestacia.lelenimexml.feature_anime.domain.usecases.AnimeUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class AnimeViewModel @Inject constructor(
-    private val repository: AnimeRepository
+    private val animeUseCases: AnimeUseCases
 ) : ViewModel() {
 
     private val _anime = MutableLiveData<NetworkResponse<AnimeFUll>>()
@@ -20,7 +20,7 @@ class AnimeViewModel @Inject constructor(
     private val query = MutableLiveData("")
 
     fun searchAnimeByTitle(): LiveData<PagingData<Anime>> = query.distinctUntilChanged().switchMap {
-        repository.searchAnimeByTitle(it)
+        animeUseCases.searchAnimeByTitle(it)
             .cachedIn(viewModelScope)
             .asLiveData()
     }

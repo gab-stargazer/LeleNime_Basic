@@ -4,15 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.lelestacia.lelenimexml.feature_anime.data.repository.AnimeRepository
+import com.lelestacia.lelenimexml.feature_anime.domain.usecases.AnimeUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class AiringViewModel @Inject constructor(
-    private val animeRepository: AnimeRepository
+    animeUseCases: AnimeUseCases
 ) : ViewModel() {
 
-    val airingAnime = animeRepository.seasonAnimePagingData()
+    val airingAnime = animeUseCases.seasonAnimePagingData()
         .cachedIn(viewModelScope).asLiveData()
 }

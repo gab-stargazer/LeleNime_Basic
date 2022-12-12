@@ -1,4 +1,15 @@
 buildscript {
+    ext.kotlin_version = "1.5.10"
+    ext.navigation_version = "2.5.3"
+    ext.viewmodel_version = "2.5.1"
+    ext.hilt_version = "2.44.2"
+    ext.room_version = "2.4.3"
+    ext.paging_version = "3.1.1"
+    ext.retrofit_version = "2.9.0"
+    ext.coroutine_version = "1.6.4"
+    ext.coil_version = "2.2.2"
+    ext.timber_version = "5.0.1"
+
     repositories {
         // other repositories...
         mavenCentral()
