@@ -1,8 +1,8 @@
 package com.lelestacia.lelenimexml.core.di
 
 import com.lelestacia.lelenimexml.core.network.api.JikanAPI
-import com.lelestacia.lelenimexml.feature_anime.domain.repository.AnimeRepository
-import com.lelestacia.lelenimexml.feature_anime.domain.repository.AnimeRepositoryImpl
+import com.lelestacia.lelenimexml.feature_anime.data.repository.AnimeRepository
+import com.lelestacia.lelenimexml.feature_anime.data.repository.AnimeRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +15,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideAnimeRepository(animeApi: JikanAPI): AnimeRepository =
+    fun provideAnimeRepository(
+        animeApi: JikanAPI
+    ): AnimeRepository =
         AnimeRepositoryImpl(animeApi)
 }

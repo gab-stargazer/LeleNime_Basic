@@ -4,7 +4,8 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.lelestacia.lelenimexml.core.network.api.JikanAPI
 import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
-import com.lelestacia.lelenimexml.feature_anime.utility.AnimeMapper
+import com.lelestacia.lelenimexml.feature_anime.utility.SeasonAnimeMapper
+import kotlinx.coroutines.delay
 
 class SearchAnimePaging(
     private val query: String,
@@ -16,16 +17,19 @@ class SearchAnimePaging(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Anime> {
         return try {
-            val apiResponse = apiService.searchAnimeByTitle(query, params.key ?: 1)
+            val currentPage = params.key ?: 1
+            delay(500)
+            val apiResponse = apiService
+                .searchAnimeByTitle(q = query, page = currentPage)
             LoadResult.Page(
                 data = apiResponse.data.map { networkAnime ->
-                    AnimeMapper.networkToAnime(networkAnime)
+                    SeasonAnimeMapper.networkToAnime(networkAnime)
                 },
                 prevKey =
-                if (apiResponse.pagination.currentPage == 1) null
-                else apiResponse.pagination.currentPage.minus(1),
+                if (currentPage == 1) null
+                else currentPage.minus(1),
                 nextKey =
-                if (apiResponse.pagination.hasNextPage) apiResponse.pagination.currentPage.plus(1)
+                if (apiResponse.pagination.hasNextPage) currentPage.plus(1)
                 else null
             )
         } catch (e: Exception) {

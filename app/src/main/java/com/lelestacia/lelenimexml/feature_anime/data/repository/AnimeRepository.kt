@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.feature_anime.domain.repository
+package com.lelestacia.lelenimexml.feature_anime.data.repository
 
 import androidx.paging.PagingData
 import com.lelestacia.lelenimexml.core.domain.dto.animefull.AnimeFUll

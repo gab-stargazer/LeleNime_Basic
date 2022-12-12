@@ -1,14 +1,12 @@
-package com.lelestacia.lelenimexml.feature_anime.domain.repository
+package com.lelestacia.lelenimexml.feature_anime.data.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import androidx.paging.*
 import com.lelestacia.lelenimexml.core.domain.dto.animefull.AnimeFUll
 import com.lelestacia.lelenimexml.core.network.api.JikanAPI
 import com.lelestacia.lelenimexml.core.utililty.NetworkResponse
-import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
 import com.lelestacia.lelenimexml.feature_anime.data.remote.SearchAnimePaging
 import com.lelestacia.lelenimexml.feature_anime.data.remote.SeasonAnimePaging
+import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -39,18 +37,19 @@ class AnimeRepositoryImpl @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     override fun seasonAnimePagingData(): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 25,
-                prefetchDistance = 10,
+                prefetchDistance = 5,
                 initialLoadSize = 25,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
                 SeasonAnimePaging(apiService)
             }
-        ).flow.buffer()
+        ).flow
     }
 
     override fun searchAnimeByTitle(query: String): Flow<PagingData<Anime>> {

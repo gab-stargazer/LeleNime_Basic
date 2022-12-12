@@ -1,22 +1,23 @@
-package com.lelestacia.lelenimexml.feature_anime.ui.view
+package com.lelestacia.lelenimexml.feature_anime.ui.view.currently_airing
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lelestacia.lelenimexml.databinding.FragmentSeasonAnimeBinding
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.AnimePagingAdapter
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.FooterLoadStateAdapter
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.HeaderLoadStateAdapter
-import com.lelestacia.lelenimexml.feature_anime.ui.viewmodel.AnimeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SeasonAnimeFragment : Fragment() {
 
-    private val viewModel by activityViewModels<AnimeViewModel>()
+    private val viewModel by viewModels<AiringViewModel>()
     private var _binding: FragmentSeasonAnimeBinding? = null
     private val binding get() = _binding!!
 
@@ -46,7 +47,7 @@ class SeasonAnimeFragment : Fragment() {
             )
             setHasFixedSize(true)
         }
-        viewModel.seasonAnimePagingData()
+        viewModel.airingAnime
             .observe(viewLifecycleOwner) { anime ->
                 pagingAdapter.submitData(lifecycle, anime)
             }
