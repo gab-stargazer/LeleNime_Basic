@@ -5,49 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/background"
-    tools:context=".feature_anime.ui.layout.ExploreAnimeFragment">
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_anime_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="@string/insert_anime_title"
-        android:textColorHint="?android:attr/textColorPrimary"
-        app:boxBackgroundColor="?attr/cardBackgroundColor"
-        app:hintTextColor="?android:attr/textColorPrimary"
-        app:layout_constraintEnd_toStartOf="@id/btn_search"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_anime_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="@string/search"
-        android:textColor="?android:attr/textColorPrimary"
-        app:icon="@drawable/ic_search"
-        app:iconGravity="top"
-        app:iconTint="?android:attr/textColorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/input_layout_anime_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/input_layout_anime_title" />
+    tools:context=".feature_anime.ui.view.ExploreAnimeFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_anime_result"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingHorizontal="8dp"
+        android:layout_height="match_parent"
         android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_search"
         tools:listitem="@layout/card_anime_row" />
 </androidx.constraintlayout.widget.ConstraintLayout>
