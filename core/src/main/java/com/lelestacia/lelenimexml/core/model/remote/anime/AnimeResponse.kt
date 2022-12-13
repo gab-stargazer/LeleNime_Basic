@@ -22,7 +22,7 @@ data class AnimeResponse(
     @SerializedName("status")
     val status: String,
     @SerializedName("rating")
-    val rating: String,
+    val rating: String?,
     @SerializedName("score")
     val score: Double?,
     @SerializedName("scored_by")

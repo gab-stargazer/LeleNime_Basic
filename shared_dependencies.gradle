@@ -37,6 +37,7 @@ dependencies {
 
     //Coil
     implementation "io.coil-kt:coil:$coil_version"
+    implementation 'jp.wasabeef.transformers:coil:1.0.6'
 
     //Timber
     implementation "com.jakewharton.timber:timber:$timber_version"
