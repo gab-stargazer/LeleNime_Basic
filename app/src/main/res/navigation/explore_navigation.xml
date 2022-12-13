@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/explore_navigation"
+    app:startDestination="@id/nav_explore_anime">
+    <fragment
+        android:id="@+id/nav_explore_anime"
+        android:name="com.lelestacia.lelenimexml.feature_anime.ui.view.ExploreAnimeFragment"
+        android:label="Explore"
+        tools:layout="@layout/fragment_explore_anime" />
+</navigation>

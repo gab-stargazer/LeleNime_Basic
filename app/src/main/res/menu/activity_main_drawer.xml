@@ -22,15 +22,15 @@
             <group android:checkableBehavior="single">
                 <item
                     android:icon="@drawable/ic_movie"
-                    android:id="@+id/nav_season_anime"
+                    android:id="@+id/season_navigation"
                     android:title="Currently Airing" />
                 <item
                     android:icon="@drawable/ic_search"
-                    android:id="@+id/nav_explore_anime"
+                    android:id="@+id/explore_navigation"
                     android:title="Explore" />
                 <item
                     android:icon="@drawable/ic_list"
-                    android:id="@+id/nav_my_list_anime"
+                    android:id="@+id/my_anime_history"
                     android:title="My List" />
             </group>
         </menu>

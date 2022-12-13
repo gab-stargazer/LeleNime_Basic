@@ -8,7 +8,6 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lelestacia.lelenimexml.R
 import com.lelestacia.lelenimexml.databinding.FragmentExploreAnimeBinding
@@ -35,8 +34,7 @@ class ExploreAnimeFragment : Fragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val pagingAdapter = AnimePagingAdapter { anime ->
-            val action = ExploreAnimeFragmentDirections.exploreToDetail(anime)
-            findNavController().navigate(action)
+
         }
         binding.rvAnimeResult.apply {
             layoutManager = LinearLayoutManager(requireContext())
