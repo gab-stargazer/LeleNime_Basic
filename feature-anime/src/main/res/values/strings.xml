@@ -1,0 +1,16 @@
+<resources>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="rating">Rating\t\t\t\t\t:\t%s</string>
+    <string name="episode">Episodes\t\t\t:\t%s</string>
+    <string name="status">Status\t\t\t\t\t:\t%s</string>
+    <string name="loading">Loading</string>
+    <string name="retry">Retry</string>
+    <string name="insert_anime_title">Insert Anime Title Here…</string>
+    <string name="search">Search</string>
+    <string name="placeholder_title">%s\t:</string>
+    <string name="cover_image">Cover Image</string>
+    <string name="type">Type\t\t\t\t:</string>
+    <string name="episode_detail">Episode\t\t:</string>
+    <string name="genre">Genre\t\t\t\t:</string>
+    <string name="status_detail">Status\t\t\t:</string>
+</resources>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/background"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_background_anime"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="64dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@id/iv_cover_anime"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/test" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_cover_anime"
+            android:layout_width="200dp"
+            android:layout_height="267dp"
+            android:layout_marginTop="48dp"
+            android:contentDescription="@string/cover_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/test" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_anime_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
+            android:textAlignment="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/iv_cover_anime"
+            app:layout_constraintStart_toStartOf="@+id/iv_cover_anime"
+            app:layout_constraintTop_toBottomOf="@+id/iv_cover_anime"
+            tools:text="Chainsaw-Man" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_anime_title_japanese"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/tv_anime_title"
+            tools:text="チェンソーマン" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_type_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/type"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_anime_title_japanese" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_type_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/tv_type_holder"
+            app:layout_constraintStart_toEndOf="@id/tv_type_holder"
+            app:layout_constraintTop_toTopOf="@id/tv_type_holder"
+            tools:text="TV" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_episode_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/episode_detail"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_type_holder" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_episode_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/tv_episode_holder"
+            app:layout_constraintStart_toEndOf="@id/tv_episode_holder"
+            app:layout_constraintTop_toTopOf="@id/tv_episode_holder"
+            tools:text="12" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_genre_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/genre"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_episode_holder" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_genre_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/tv_genre_holder"
+            app:layout_constraintStart_toEndOf="@id/tv_genre_holder"
+            app:layout_constraintTop_toTopOf="@id/tv_genre_holder"
+            tools:text="Horror, Action" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_status_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/status_detail"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_genre_holder" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_status_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/tv_status_holder"
+            app:layout_constraintStart_toEndOf="@id/tv_status_holder"
+            app:layout_constraintTop_toTopOf="@id/tv_status_holder"
+            tools:text="Currently Airing" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_synopsis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:justificationMode="inter_word"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/tv_status_holder"
+            tools:text="Denji is robbed of a normal teenage life, left with nothing but his deadbeat father's overwhelming debt. His only companion is his pet, the chainsaw devil Pochita, with whom he slays devils for money that inevitably ends up in the yakuza's pockets. All Denji can do is dream of a good, simple life: one with delicious food and a beautiful girlfriend by his side. But an act of greedy betrayal by the yakuza leads to Denji's brutal, untimely death, crushing all hope of him ever achieving happiness.\n\nRemarkably, an old contract allows Pochita to merge with the deceased Denji and bestow devil powers on him, changing him into a hybrid able to transform his body parts into chainsaws. Because Denji's new abilities pose a significant risk to society, the Public Safety Bureau's elite devil hunter Makima takes him in, letting him live as long as he obeys her command. Guided by the promise of a content life alongside an attractive woman, Denji devotes everything and fights with all his might to make his naive dreams a reality.\n\n[Written by MAL Rewrite]" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
