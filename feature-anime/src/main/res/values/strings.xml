@@ -9,8 +9,12 @@
     <string name="search">Search</string>
     <string name="placeholder_title">%s\t:</string>
     <string name="cover_image">Cover Image</string>
-    <string name="type">Type\t\t\t\t:</string>
-    <string name="episode_detail">Episode\t\t:</string>
-    <string name="genre">Genre\t\t\t\t:</string>
-    <string name="status_detail">Status\t\t\t:</string>
+    <string name="type">Type</string>
+    <string name="episode_detail">Episode</string>
+    <string name="genre">Genre</string>
+    <string name="status_detail">Status</string>
+    <string name="rank_and_score">#%s - %s</string>
+    <string name="information_value">:\t%s</string>
+    <string name="characters_holder">Characters\t:</string>
+    <string name="aired">Aired</string>
 </resources>

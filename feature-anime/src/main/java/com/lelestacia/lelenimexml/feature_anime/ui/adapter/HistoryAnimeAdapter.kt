@@ -2,28 +2,18 @@ package com.lelestacia.lelenimexml.feature_anime.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.CardAnimeRowBinding
 import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
 
-class AnimePagingAdapter(val onAnimeSelected: (Anime) -> Unit) :
-    PagingDataAdapter<Anime, AnimePagingAdapter.ViewHolder>(DIFF_CALLBACK) {
+class HistoryAnimeAdapter(
+    val onAnimeSelected: (Anime) -> Unit
+) : ListAdapter<Anime, HistoryAnimeAdapter.ViewHolder>(DIFF_CALLBACK) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding =
-            CardAnimeRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        if (item != null)
-            holder.bind(item)
-    }
 
     inner class ViewHolder(private val binding: CardAnimeRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -45,6 +35,17 @@ class AnimePagingAdapter(val onAnimeSelected: (Anime) -> Unit) :
                     onAnimeSelected(item)
                 }
             }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = CardAnimeRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        getItem(position)?.let {  anime ->
+            holder.bind(anime)
         }
     }
 

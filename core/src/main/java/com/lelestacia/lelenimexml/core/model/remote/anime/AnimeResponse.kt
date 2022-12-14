@@ -16,7 +16,7 @@ data class AnimeResponse(
     @SerializedName("title_japanese")
     val titleJapanese: String?,
     @SerializedName("type")
-    val type: String,
+    val type: String?,
     @SerializedName("episodes")
     val episodes: Int?,
     @SerializedName("status")

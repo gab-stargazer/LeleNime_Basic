@@ -8,6 +8,15 @@
     <fragment
         android:id="@+id/nav_my_list_anime"
         android:name="com.lelestacia.lelenimexml.feature_anime.ui.my_anime.MyAnimeFragment"
-        android:label="fragment_my_list_anime"
-        tools:layout="@layout/fragment_my_list_anime" />
+        android:label="My Anime"
+        tools:layout="@layout/fragment_my_list_anime" >
+        <action
+            android:id="@+id/history_to_detail"
+            app:destination="@id/detail_anime_navigation" >
+            <argument
+                android:name="anime"
+                app:argType="com.lelestacia.lelenimexml.feature_anime.domain.model.Anime" />
+        </action>
+    </fragment>
+    <include app:graph="@navigation/detail_navigation" />
 </navigation>

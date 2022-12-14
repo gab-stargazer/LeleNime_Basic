@@ -1,7 +1,9 @@
 package com.lelestacia.lelenimexml.core.source.remote
 
+import com.lelestacia.lelenimexml.core.model.remote.GenericResponse
 import com.lelestacia.lelenimexml.core.model.remote.anime.AnimeResponse
 import com.lelestacia.lelenimexml.core.model.remote.anime.GenericPaginationResponse
+import com.lelestacia.lelenimexml.core.model.remote.character.CharacterResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -17,8 +19,8 @@ interface JikanAPI {
         @Query("page") page: Int
     ): GenericPaginationResponse<List<AnimeResponse>>
 
-    @GET("anime/{id}/full")
-    suspend fun getAnimeById(@Path("id") id: Int): com.lelestacia.lelenimexml.core.model.remote.animefull.AnimeFUll
+    @GET("anime/{id}/characters")
+    suspend fun getAnimeCharacters(@Path("id") id: Int): GenericResponse<List<CharacterResponse>>
 
     companion object {
         const val BASE_URL = "https://api.jikan.moe/v4/"

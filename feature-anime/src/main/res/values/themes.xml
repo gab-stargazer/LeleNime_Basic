@@ -16,6 +16,9 @@
         <item name="cardBackgroundColor">@color/white</item>
         <item name="background">@color/beige</item>
         <item name="colorOnSurfaceVariant">@color/orange</item>
+
+        <item name="indicatorColor">@color/navy</item>
+        <item name="trackColor">@color/orange</item>
     </style>
 
     <style name="Theme.LeleNimeXML.NoActionBar">

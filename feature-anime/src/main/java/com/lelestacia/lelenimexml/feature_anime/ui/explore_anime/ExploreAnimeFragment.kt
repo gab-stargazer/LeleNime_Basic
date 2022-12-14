@@ -36,6 +36,8 @@ class ExploreAnimeFragment : Fragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val pagingAdapter = AnimePagingAdapter { anime ->
+            val animeEntity = anime.toAnimeEntity()
+            viewModel.insertOrUpdateNewAnimeToHistory(animeEntity)
             val action = ExploreAnimeFragmentDirections.exploreToDetail(anime)
             view.findNavController().navigate(action)
         }

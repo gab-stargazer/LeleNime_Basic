@@ -32,6 +32,8 @@ class SeasonAnimeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val pagingAdapter = AnimePagingAdapter { anime ->
+            val animeEntity = anime.toAnimeEntity()
+            viewModel.insertOrUpdateNewAnimeToHistory(animeEntity)
             val action = SeasonAnimeFragmentDirections.airingToDetail(anime)
             findNavController().navigate(action)
         }

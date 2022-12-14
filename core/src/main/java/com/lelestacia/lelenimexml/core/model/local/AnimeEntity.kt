@@ -3,14 +3,15 @@ package com.lelestacia.lelenimexml.core.model.local
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
-@Entity(tableName = "season_anime")
-data class SeasonAnimeEntity(
+@Entity(tableName = "anime_table")
+data class AnimeEntity(
     @PrimaryKey(autoGenerate = false)
     val malId: Int,
     val coverImages: String,
     @Embedded
-    val trailer: Trailer,
+    val trailer: Trailer?,
     val title: String,
     val titleEnglish: String?,
     val titleJapanese: String?,
@@ -25,9 +26,10 @@ data class SeasonAnimeEntity(
     val season: String?,
     val year: Int,
     val genres: List<String>,
+    val lastViewed: Date
 ) {
 
-     data class Trailer(
+    data class Trailer(
         val youtubeId: String?,
         val url: String?,
         val images: String?
