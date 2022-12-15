@@ -15,8 +15,10 @@ class SeasonAnimePaging(private val apiService: JikanAPI) : PagingSource<Int, An
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeResponse> {
         return try {
             val currentPage = params.key ?: 1
-            delay(500)
+
             val apiResponse = apiService.getCurrentSeason(currentPage)
+            delay(500)
+
             LoadResult.Page(
                 data = apiResponse.data,
                 prevKey =

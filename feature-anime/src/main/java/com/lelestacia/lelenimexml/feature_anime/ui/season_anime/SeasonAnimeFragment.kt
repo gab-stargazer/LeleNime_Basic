@@ -1,60 +1,98 @@
 package com.lelestacia.lelenimexml.feature_anime.ui.season_anime
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.FragmentSeasonAnimeBinding
-import com.lelestacia.lelenimexml.feature_anime.ui.adapter.AnimePagingAdapter
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.FooterLoadStateAdapter
-import com.lelestacia.lelenimexml.feature_anime.ui.adapter.HeaderLoadStateAdapter
+import com.lelestacia.lelenimexml.feature_anime.ui.adapter.ListAnimePagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SeasonAnimeFragment : Fragment() {
+class SeasonAnimeFragment : Fragment(R.layout.fragment_season_anime) {
 
     private val viewModel by viewModels<SeasonAnimeViewModel>()
-    private var _binding: FragmentSeasonAnimeBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSeasonAnimeBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val binding: FragmentSeasonAnimeBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val pagingAdapter = AnimePagingAdapter { anime ->
+
+        val seasonAnimeAdapter = ListAnimePagingAdapter { anime ->
+            val animeEntity = anime.toAnimeEntity()
+            viewModel.insertOrUpdateNewAnimeToHistory(animeEntity)
             val action = SeasonAnimeFragmentDirections.airingToDetail(anime)
             findNavController().navigate(action)
         }
-        binding.rvSeasonAnime.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = pagingAdapter.withLoadStateHeaderAndFooter(
-                header = HeaderLoadStateAdapter {
-                    pagingAdapter.refresh()
-                },
-                footer = FooterLoadStateAdapter {
-                    pagingAdapter.retry()
-                }
-            )
-            setHasFixedSize(true)
-        }
-        viewModel.airingAnime
-            .observe(viewLifecycleOwner) { anime ->
-                pagingAdapter.submitData(lifecycle, anime)
+
+        val myLayoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        binding.rvSeasonAnime
+            .apply {
+                layoutManager = myLayoutManager
+                adapter = seasonAnimeAdapter.withLoadStateFooter(
+                    footer = FooterLoadStateAdapter {
+                        seasonAnimeAdapter.retry()
+                    }
+                )
+                addItemDecoration(DividerItemDecoration(context, myLayoutManager.orientation))
+                setHasFixedSize(true)
             }
+
+        seasonAnimeAdapter
+            .loadStateFlow
+            .asLiveData()
+            .observe(viewLifecycleOwner) { loadState ->
+                if (loadState.refresh is LoadState.Loading) {
+                    binding.showLoading(isLoading = true)
+                } else binding.showLoading(isLoading = false)
+
+                if (loadState.refresh is LoadState.Error) {
+                    val error = (loadState.refresh as LoadState.Error).error
+                    binding.showError(true, error.localizedMessage)
+
+                } else {
+                    binding.showError(isError = false, errorMessage = null)
+                }
+            }
+
+        viewModel
+            .airingAnime
+            .observe(viewLifecycleOwner) { airingAnimePagingData ->
+                seasonAnimeAdapter.submitData(lifecycle, airingAnimePagingData)
+            }
+
+        binding.btnRetry.setOnClickListener {
+            seasonAnimeAdapter.refresh()
+        }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun FragmentSeasonAnimeBinding.showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            progressCircular.visibility = View.VISIBLE
+            tvLoading.visibility = View.VISIBLE
+        } else {
+            progressCircular.visibility = View.GONE
+            tvLoading.visibility = View.GONE
+        }
+    }
+
+    private fun FragmentSeasonAnimeBinding.showError(isError: Boolean, errorMessage: String?) {
+        if (isError) {
+            btnRetry.visibility = View.VISIBLE
+            tvError.text = errorMessage
+            tvError.visibility = View.VISIBLE
+        } else {
+            btnRetry.visibility = View.GONE
+            tvError.visibility = View.GONE
+        }
     }
 }

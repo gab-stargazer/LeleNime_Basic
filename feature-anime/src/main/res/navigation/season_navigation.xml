@@ -11,7 +11,9 @@
         tools:layout="@layout/fragment_season_anime">
         <action
             android:id="@+id/airing_to_detail"
-            app:destination="@id/detail_anime_navigation">
+            app:destination="@id/detail_anime_navigation"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="false">
             <argument
                 android:name="anime"
                 app:argType="com.lelestacia.lelenimexml.feature_anime.domain.model.Anime" />

@@ -1,6 +1,7 @@
 package com.lelestacia.lelenimexml
 
 import android.os.Bundle
+import android.viewbinding.library.activity.viewBinding
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -16,12 +17,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
+    private val binding: ActivityMainBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
@@ -37,7 +36,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_slideshow,
                 com.lelestacia.lelenimexml.feature_anime.R.id.nav_season_anime,
                 com.lelestacia.lelenimexml.feature_anime.R.id.nav_explore_anime,
-                com.lelestacia.lelenimexml.feature_anime.R.id.nav_my_list_anime
+                com.lelestacia.lelenimexml.feature_anime.R.id.nav_my_list_anime,
+                com.lelestacia.lelenimexml.feature_others.R.id.nav_settings,
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

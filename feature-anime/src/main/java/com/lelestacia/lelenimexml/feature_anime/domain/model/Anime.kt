@@ -1,7 +1,9 @@
 package com.lelestacia.lelenimexml.feature_anime.domain.model
 
 import android.os.Parcelable
+import com.lelestacia.lelenimexml.core.model.local.AnimeEntity
 import kotlinx.parcelize.Parcelize
+import java.util.*
 
 @Parcelize
 data class Anime(
@@ -29,4 +31,31 @@ data class Anime(
         val url: String?,
         val images: String?
     ) : Parcelable
+
+    fun toAnimeEntity() : AnimeEntity {
+        return AnimeEntity(
+            malId = malId,
+            coverImages = images,
+            trailer = AnimeEntity.Trailer(
+                youtubeId = trailer?.youtubeId,
+                url = trailer?.url,
+                images = trailer?.images
+            ),
+            title = title,
+            titleEnglish = titleEnglish,
+            titleJapanese = titleJapanese,
+            type = type,
+            episodes = episodes,
+            status = status,
+            rating = rating,
+            score = score,
+            scoredBy = scoredBy,
+            rank = rank,
+            synopsis = synopsis,
+            season = season,
+            year = year,
+            genres = genres,
+            lastViewed = Date()
+        )
+    }
 }

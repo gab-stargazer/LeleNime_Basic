@@ -27,7 +27,7 @@ data class SeasonAnimeEntity(
     val genres: List<String>,
 ) {
 
-    data class Trailer(
+     data class Trailer(
         val youtubeId: String?,
         val url: String?,
         val images: String?

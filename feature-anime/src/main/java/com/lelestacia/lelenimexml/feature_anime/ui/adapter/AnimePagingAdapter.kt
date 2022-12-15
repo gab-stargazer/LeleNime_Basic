@@ -10,7 +10,7 @@ import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.CardAnimeRowBinding
 import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
 
-class AnimePagingAdapter(val onClicked: (Anime) -> Unit) :
+class AnimePagingAdapter(val onAnimeSelected: (Anime) -> Unit) :
     PagingDataAdapter<Anime, AnimePagingAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,7 +42,7 @@ class AnimePagingAdapter(val onClicked: (Anime) -> Unit) :
                 tvStatusAnime.text = context
                     .getString(R.string.status, item.status)
                 root.setOnClickListener {
-                    onClicked(item)
+                    onAnimeSelected(item)
                 }
             }
         }

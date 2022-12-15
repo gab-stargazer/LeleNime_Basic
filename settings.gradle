@@ -10,9 +10,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "LeleNime XML"
 include ':app'
 include ':core'
 include ':feature-anime'
+include ':feature-others'
