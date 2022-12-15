@@ -6,7 +6,11 @@ import com.lelestacia.lelenimexml.core.model.remote.anime.AnimeResponse
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
-class SearchAnimePaging(private val query: String, private val apiService: JikanAPI) :
+class SearchAnimePaging(
+    private val query: String,
+    private val apiService: JikanAPI,
+    private val isSafety: Boolean
+) :
     PagingSource<Int, AnimeResponse>() {
 
     override fun getRefreshKey(state: PagingState<Int, AnimeResponse>): Int? {
@@ -17,8 +21,13 @@ class SearchAnimePaging(private val query: String, private val apiService: Jikan
         return try {
             val currentPage = params.key ?: 1
             delay(500)
-            val apiResponse = apiService
-                .searchAnimeByTitle(q = query, page = currentPage)
+            val apiResponse =
+                if (isSafety) {
+                    apiService.searchAnimeByTitle(q = query, page = currentPage, sfw = true)
+                } else {
+                    apiService
+                        .searchAnimeByTitle(q = query, page = currentPage)
+                }
             LoadResult.Page(
                 data = apiResponse.data,
                 prevKey =

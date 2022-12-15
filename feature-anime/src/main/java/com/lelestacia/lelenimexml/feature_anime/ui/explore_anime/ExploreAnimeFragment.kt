@@ -1,7 +1,13 @@
 package com.lelestacia.lelenimexml.feature_anime.ui.explore_anime
 
+import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.viewbinding.library.fragment.viewBinding
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -21,23 +27,14 @@ import com.lelestacia.lelenimexml.feature_anime.ui.adapter.HeaderLoadStateAdapte
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ExploreAnimeFragment : Fragment(), MenuProvider {
+class ExploreAnimeFragment : Fragment(R.layout.fragment_explore_anime), MenuProvider {
 
     private val viewModel by viewModels<ExploreAnimeViewModel>()
-    private var _binding: FragmentExploreAnimeBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentExploreAnimeBinding.inflate(inflater, container, false)
-        setupMenu()
-        return binding.root
-    }
+    private val binding: FragmentExploreAnimeBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupMenu()
 
         val exploreAnimeAdapter = AnimePagingAdapter { anime ->
             val animeEntity = anime.toAnimeEntity()
@@ -151,6 +148,9 @@ class ExploreAnimeFragment : Fragment(), MenuProvider {
         val searchView = myActionMenuItem.actionView as SearchView?
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                    .hideSoftInputFromWindow(view?.windowToken, 0)
+
                 viewModel.searchAnime(query ?: "")
                 return true
             }
@@ -159,12 +159,5 @@ class ExploreAnimeFragment : Fragment(), MenuProvider {
         })
     }
 
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return false
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean = false
 }

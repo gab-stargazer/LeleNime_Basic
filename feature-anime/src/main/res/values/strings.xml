@@ -17,4 +17,5 @@
     <string name="information_value">:\t%s</string>
     <string name="characters_holder">Characters\t:</string>
     <string name="aired">Aired</string>
+    <string name="not_found">No Result Found</string>
 </resources>

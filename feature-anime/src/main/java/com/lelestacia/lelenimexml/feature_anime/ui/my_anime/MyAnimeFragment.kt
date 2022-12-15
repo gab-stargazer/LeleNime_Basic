@@ -1,30 +1,22 @@
 package com.lelestacia.lelenimexml.feature_anime.ui.my_anime
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.FragmentMyListAnimeBinding
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.HistoryAnimeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyAnimeFragment : Fragment() {
+class MyAnimeFragment : Fragment(R.layout.fragment_my_list_anime) {
 
     private val viewModel by viewModels<MyAnimeViewModel>()
-    private var _binding: FragmentMyListAnimeBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMyListAnimeBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    private val binding: FragmentMyListAnimeBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

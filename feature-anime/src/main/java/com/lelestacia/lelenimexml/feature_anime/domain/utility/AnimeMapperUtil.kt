@@ -4,6 +4,7 @@ package com.lelestacia.lelenimexml.feature_anime.domain.utility
 import com.lelestacia.lelenimexml.core.model.local.AnimeEntity
 import com.lelestacia.lelenimexml.core.model.local.SeasonAnimeEntity
 import com.lelestacia.lelenimexml.core.model.remote.anime.AnimeResponse
+import com.lelestacia.lelenimexml.core.utility.Constant.UNKNOWN
 import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
 
 object AnimeMapperUtil {
@@ -22,7 +23,7 @@ object AnimeMapperUtil {
             title = networkData.title,
             titleEnglish = networkData.titleEnglish,
             titleJapanese = networkData.titleJapanese,
-            type = networkData.type ?: "Unknown",
+            type = networkData.type ?: UNKNOWN,
             episodes = networkData.episodes,
             status = networkData.status,
             rating = networkData.rating ?: "",
@@ -76,7 +77,7 @@ object AnimeMapperUtil {
             title = networkData.title,
             titleEnglish = networkData.titleEnglish,
             titleJapanese = networkData.titleJapanese,
-            type = networkData.type ?: "Unknown",
+            type = networkData.type ?: UNKNOWN,
             episodes = networkData.episodes,
             status = networkData.status,
             rating = networkData.rating ?: "",

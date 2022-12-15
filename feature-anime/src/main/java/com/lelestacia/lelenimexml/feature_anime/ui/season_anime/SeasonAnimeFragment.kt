@@ -1,9 +1,8 @@
 package com.lelestacia.lelenimexml.feature_anime.ui.season_anime
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -11,25 +10,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.FragmentSeasonAnimeBinding
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.FooterLoadStateAdapter
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.ListAnimeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SeasonAnimeFragment : Fragment() {
+class SeasonAnimeFragment : Fragment(R.layout.fragment_season_anime) {
 
     private val viewModel by viewModels<SeasonAnimeViewModel>()
-    private var _binding: FragmentSeasonAnimeBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSeasonAnimeBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val binding: FragmentSeasonAnimeBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -102,10 +93,5 @@ class SeasonAnimeFragment : Fragment() {
             btnRetry.visibility = View.GONE
             tvError.visibility = View.GONE
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

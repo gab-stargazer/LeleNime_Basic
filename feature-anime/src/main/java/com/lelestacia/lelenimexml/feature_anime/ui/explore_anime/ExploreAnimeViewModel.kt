@@ -16,7 +16,6 @@ class ExploreAnimeViewModel @Inject constructor(
     private val searchQuery = MutableLiveData("")
 
     val searchAnimeByTitle = searchQuery
-        .distinctUntilChanged()
         .switchMap {
         animeUseCases.searchAnimeByTitle(it)
             .cachedIn(viewModelScope)

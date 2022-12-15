@@ -27,4 +27,5 @@
     <include app:graph="@navigation/season_navigation" />
     <include app:graph="@navigation/explore_navigation" />
     <include app:graph="@navigation/my_anime_history"/>
+    <include app:graph="@navigation/settings_navigation"/>
 </navigation>

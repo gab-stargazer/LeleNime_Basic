@@ -1,5 +1,6 @@
 package com.lelestacia.lelenimexml.core.repository
 
+import android.content.Context
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -12,6 +13,8 @@ import com.lelestacia.lelenimexml.core.source.remote.JikanAPI
 import com.lelestacia.lelenimexml.core.source.remote.SearchAnimePaging
 import com.lelestacia.lelenimexml.core.source.remote.SeasonAnimePaging
 import com.lelestacia.lelenimexml.core.utility.CharacterMapper
+import com.lelestacia.lelenimexml.core.utility.Constant.IS_SFW
+import com.lelestacia.lelenimexml.core.utility.Constant.USER_PREF
 import com.lelestacia.lelenimexml.core.utility.Resource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +30,7 @@ import javax.inject.Inject
 class AnimeRepositoryImpl @Inject constructor(
     private val apiService: JikanAPI,
     private val animeDatabase: AnimeDatabase,
+    private val mContext: Context,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AnimeRepository {
 
@@ -45,6 +49,8 @@ class AnimeRepositoryImpl @Inject constructor(
     }
 
     override fun searchAnimeByTitle(query: String): Flow<PagingData<AnimeResponse>> {
+        val isSafeMode = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
+            .getBoolean(IS_SFW, true)
         return Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -53,7 +59,7 @@ class AnimeRepositoryImpl @Inject constructor(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                SearchAnimePaging(query, apiService)
+                SearchAnimePaging(query, apiService, isSafeMode)
             }
         ).flow
     }

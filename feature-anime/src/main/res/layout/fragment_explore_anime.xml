@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/background"
+    android:background="?attr/backgroundColor"
     android:theme="@style/Theme.LeleNimeXML">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -90,5 +90,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="No Result Found" />
+        android:text="@string/not_found" />
 </androidx.constraintlayout.widget.ConstraintLayout>

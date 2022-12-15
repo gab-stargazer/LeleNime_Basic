@@ -1,9 +1,8 @@
 package com.lelestacia.lelenimexml.feature_anime.ui.detail_anime
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -12,29 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.snackbar.Snackbar
+import com.lelestacia.lelenimexml.core.utility.Constant.UNKNOWN
 import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.FragmentDetailAnimeBinding
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.CharacterAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.transformers.coil.BlurTransformation
 import kotlinx.coroutines.flow.catch
-import timber.log.Timber
 
 @AndroidEntryPoint
-class DetailAnimeFragment : Fragment() {
+class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime) {
 
     private val viewModel by viewModels<DetailAnimeViewModel>()
     private val args by navArgs<DetailAnimeFragmentArgs>()
-    private var _binding: FragmentDetailAnimeBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentDetailAnimeBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val binding: FragmentDetailAnimeBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,7 +38,6 @@ class DetailAnimeFragment : Fragment() {
     private fun FragmentDetailAnimeBinding.setCharacterView() {
         val characterAdapter = CharacterAdapter()
         rvCharacter.adapter = characterAdapter
-        rvCharacter.setHasFixedSize(true)
         rvCharacter.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
@@ -61,7 +50,6 @@ class DetailAnimeFragment : Fragment() {
         }.asLiveData()
             .observe(viewLifecycleOwner) { characters ->
                 characterAdapter.submitList(characters)
-                Timber.d("Character Count: ${characters.size}")
             }
     }
 
@@ -116,12 +104,9 @@ class DetailAnimeFragment : Fragment() {
     }
 
     private fun getAiredSeason(season: String?, year: Int): String {
-        return if (season.isNullOrEmpty()) "Unknown"
-        else "$season $year"
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        return if (season.isNullOrEmpty()) UNKNOWN
+        else "${season.replaceFirstChar { 
+            it.uppercase()
+        }} $year"
     }
 }

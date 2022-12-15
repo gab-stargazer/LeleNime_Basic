@@ -19,6 +19,13 @@ interface JikanAPI {
         @Query("page") page: Int
     ): GenericPaginationResponse<List<AnimeResponse>>
 
+    @GET("anime")
+    suspend fun searchAnimeByTitle(
+        @Query("q") q: String,
+        @Query("page") page: Int,
+        @Query("sfw") sfw: Boolean
+    ): GenericPaginationResponse<List<AnimeResponse>>
+
     @GET("anime/{id}/characters")
     suspend fun getAnimeCharacters(@Path("id") id: Int): GenericResponse<List<CharacterResponse>>
 
