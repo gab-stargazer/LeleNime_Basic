@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +40,7 @@ class DetailAnimeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             setHeaderSection()
+            setBodySection()
             setCharacterView()
         }
     }
@@ -50,18 +51,18 @@ class DetailAnimeFragment : Fragment() {
         rvCharacter.setHasFixedSize(true)
         rvCharacter.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        lifecycleScope.launchWhenCreated {
-            viewModel.getAnimeCharactersById(args.anime.malId).catch { t ->
-                Snackbar.make(
-                    root,
-                    t.localizedMessage ?: "Something Went Wrong",
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }.collect { characters ->
+
+        viewModel.getAnimeCharactersById(args.anime.malId).catch { t ->
+            Snackbar.make(
+                root,
+                t.localizedMessage ?: "Something Went Wrong",
+                Snackbar.LENGTH_LONG
+            ).show()
+        }.asLiveData()
+            .observe(viewLifecycleOwner) { characters ->
                 characterAdapter.submitList(characters)
-                Timber.d(characterAdapter.currentList.toString())
+                Timber.d("Character Count: ${characters.size}")
             }
-        }
     }
 
     private fun FragmentDetailAnimeBinding.setHeaderSection() {
@@ -82,6 +83,10 @@ class DetailAnimeFragment : Fragment() {
                 anime.rank.toString(),
                 anime.score ?: "Unknown"
             )
+    }
+
+    private fun FragmentDetailAnimeBinding.setBodySection() {
+        val anime = args.anime
         tvTypeValue.text = getString(R.string.information_value, anime.type)
         tvEpisodeValue.text =
             if (anime.episodes != null) getString(
@@ -96,7 +101,7 @@ class DetailAnimeFragment : Fragment() {
             R.string.information_value,
             getAiredSeason(anime.season, anime.year)
         )
-        tvSynopsis.text = getString(R.string.information_value, anime.synopsis)
+        tvSynopsis.text = anime.synopsis ?: "No Synopsis Provided By The MAL"
     }
 
     private fun getGenreAsString(genre: List<String>): String {
@@ -111,7 +116,8 @@ class DetailAnimeFragment : Fragment() {
     }
 
     private fun getAiredSeason(season: String?, year: Int): String {
-        return "${season ?: "Somewhere in"} $year"
+        return if (season.isNullOrEmpty()) "Unknown"
+        else "$season $year"
     }
 
     override fun onDestroyView() {

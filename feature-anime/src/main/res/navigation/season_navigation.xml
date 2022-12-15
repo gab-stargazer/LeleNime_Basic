@@ -12,6 +12,7 @@
         <action
             android:id="@+id/airing_to_detail"
             app:destination="@id/detail_anime_navigation"
+            app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false">
             <argument
                 android:name="anime"

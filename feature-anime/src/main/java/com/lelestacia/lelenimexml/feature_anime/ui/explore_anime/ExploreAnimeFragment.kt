@@ -8,8 +8,11 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.asLiveData
 import androidx.navigation.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.FragmentExploreAnimeBinding
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.AnimePagingAdapter
@@ -35,28 +38,101 @@ class ExploreAnimeFragment : Fragment(), MenuProvider {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val pagingAdapter = AnimePagingAdapter { anime ->
+
+        val exploreAnimeAdapter = AnimePagingAdapter { anime ->
             val animeEntity = anime.toAnimeEntity()
             viewModel.insertOrUpdateNewAnimeToHistory(animeEntity)
             val action = ExploreAnimeFragmentDirections.exploreToDetail(anime)
             view.findNavController().navigate(action)
         }
+
+        exploreAnimeAdapter
+            .loadStateFlow
+            .asLiveData()
+            .observe(viewLifecycleOwner) { loadState ->
+                with(loadState.refresh) {
+                    when (this) {
+                        is LoadState.Loading -> {
+                            binding.showNotFound(isNotFound = false)
+                            binding.showError(false, errorMessage = null)
+
+                            if (exploreAnimeAdapter.itemCount == 0) {
+                                binding.showLoading(isLoading = true)
+                                return@observe
+                            }
+
+                            Snackbar
+                                .make(view, getString(R.string.loading), Snackbar.LENGTH_SHORT)
+                                .show()
+                        }
+                        is LoadState.NotLoading -> {
+                            binding.showLoading(isLoading = false)
+                            if (exploreAnimeAdapter.itemCount == 0)
+                                binding.showNotFound(isNotFound = true)
+                            else binding.showNotFound(isNotFound = false)
+                        }
+                        is LoadState.Error -> {
+                            binding.showLoading(isLoading = false)
+                            binding.showError(isError = true, error.localizedMessage)
+                        }
+                    }
+                }
+            }
+
         binding.rvAnimeResult.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = pagingAdapter.withLoadStateHeaderAndFooter(
+            adapter = exploreAnimeAdapter.withLoadStateHeaderAndFooter(
                 header = HeaderLoadStateAdapter {
-                    pagingAdapter.retry()
+                    exploreAnimeAdapter.retry()
                 },
                 footer = FooterLoadStateAdapter {
-                    pagingAdapter.retry()
+                    exploreAnimeAdapter.retry()
                 }
             )
             setHasFixedSize(true)
         }
-        viewModel.searchAnimeByTitle
+
+        viewModel
+            .searchAnimeByTitle
             .observe(viewLifecycleOwner) { anime ->
-                pagingAdapter.submitData(lifecycle, anime)
+                exploreAnimeAdapter.submitData(lifecycle, anime)
             }
+
+        binding.btnRetry
+            .setOnClickListener {
+                exploreAnimeAdapter.refresh()
+            }
+    }
+
+    private fun FragmentExploreAnimeBinding.showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            progressCircular.visibility = View.VISIBLE
+            tvLoading.visibility = View.VISIBLE
+        } else {
+            progressCircular.visibility = View.GONE
+            tvLoading.visibility = View.GONE
+        }
+    }
+
+    private fun FragmentExploreAnimeBinding.showError(isError: Boolean, errorMessage: String?) {
+        if (isError) {
+            btnRetry.visibility = View.VISIBLE
+            tvError.text = errorMessage
+            tvError.visibility = View.VISIBLE
+        } else {
+            btnRetry.visibility = View.GONE
+            tvError.visibility = View.GONE
+        }
+    }
+
+    private fun FragmentExploreAnimeBinding.showNotFound(isNotFound: Boolean) {
+        if (isNotFound) {
+            ivNotFound.visibility = View.VISIBLE
+            tvNotFound.visibility = View.VISIBLE
+        } else {
+            ivNotFound.visibility = View.GONE
+            tvNotFound.visibility = View.GONE
+        }
     }
 
     private fun setupMenu() {

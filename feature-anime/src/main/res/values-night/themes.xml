@@ -18,5 +18,7 @@
 
         <item name="indicatorColor">@color/orange</item>
         <item name="trackColor">@color/white</item>
+
+        <item name="android:windowContentTransitions">true</item>
     </style>
 </resources>
