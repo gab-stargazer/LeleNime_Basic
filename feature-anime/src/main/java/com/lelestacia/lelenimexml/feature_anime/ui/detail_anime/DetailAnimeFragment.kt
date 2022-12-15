@@ -105,8 +105,8 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime) {
 
     private fun getAiredSeason(season: String?, year: Int): String {
         return if (season.isNullOrEmpty()) UNKNOWN
-        else "${season.replaceFirstChar { 
-            it.uppercase()
+        else "${season.replaceFirstChar { firstCharacter ->
+            firstCharacter.uppercase()
         }} $year"
     }
 }
