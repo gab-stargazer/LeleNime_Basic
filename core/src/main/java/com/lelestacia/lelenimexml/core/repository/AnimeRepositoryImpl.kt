@@ -70,8 +70,13 @@ class AnimeRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAnimeHistory(): Flow<List<AnimeEntity>> {
-        return animeDatabase.animeDao().getAllAnime()
+    override fun getAnimeHistory(): Flow<PagingData<AnimeEntity>> {
+        return Pager(
+            config = PagingConfig(15),
+            pagingSourceFactory = {
+                animeDatabase.animeDao().getAllAnime()
+            }
+        ).flow
     }
 
     override suspend fun getAnimeCharacters(id: Int): Resource<List<CharacterResponse>> {

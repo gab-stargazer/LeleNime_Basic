@@ -24,11 +24,10 @@
         android:id="@+id/switch_mode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:trackTint="?attr/trackTint"
         android:layout_margin="24dp"
-        app:thumbTint="?attr/thumbTint"
         android:text="@string/safety_mode"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:thumbTint="?attr/thumbTint"
+        app:trackTint="?attr/trackTint" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,6 @@ interface AnimeUseCases {
     fun seasonAnimePagingData(): Flow<PagingData<Anime>>
     fun searchAnimeByTitle(query: String): Flow<PagingData<Anime>>
     suspend fun insertOrUpdateNewAnimeToHistory(animeEntity: AnimeEntity)
-    fun getAnimeHistory(): Flow<List<Anime>>
+    fun getAnimeHistory(): Flow<PagingData<Anime>>
     fun getAnimeCharacterById(id: Int): Flow<List<CharacterData>>
 }

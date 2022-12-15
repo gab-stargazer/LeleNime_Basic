@@ -6,24 +6,11 @@
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_title_holder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:text="Recently Viewed"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_anime_history"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:paddingVertical="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title_holder"
-        tools:listitem="@layout/card_anime_row" />
+        tools:listitem="@layout/item_list_anime" />
 </androidx.constraintlayout.widget.ConstraintLayout>

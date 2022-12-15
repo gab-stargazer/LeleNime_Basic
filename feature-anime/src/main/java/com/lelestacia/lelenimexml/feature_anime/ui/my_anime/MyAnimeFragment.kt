@@ -9,7 +9,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.FragmentMyListAnimeBinding
-import com.lelestacia.lelenimexml.feature_anime.ui.adapter.HistoryAnimeAdapter
+import com.lelestacia.lelenimexml.feature_anime.ui.adapter.ListAnimePagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +20,7 @@ class MyAnimeFragment : Fragment(R.layout.fragment_my_list_anime) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = HistoryAnimeAdapter { anime ->
+        val adapter = ListAnimePagingAdapter { anime ->
             val animeEntity = anime.toAnimeEntity()
             viewModel.insertOrUpdateNewAnimeToHistory(animeEntity)
             val action = MyAnimeFragmentDirections.historyToDetail(anime)
@@ -31,7 +31,7 @@ class MyAnimeFragment : Fragment(R.layout.fragment_my_list_anime) {
             rvAnimeHistory.layoutManager = LinearLayoutManager(requireContext())
         }
         viewModel.listOfAnime.observe(viewLifecycleOwner) { animeHistories ->
-            adapter.submitList(animeHistories)
+            adapter.submitData(lifecycle, animeHistories)
         }
     }
 }

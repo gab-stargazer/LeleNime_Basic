@@ -17,13 +17,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
 import androidx.navigation.findNavController
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.FragmentExploreAnimeBinding
-import com.lelestacia.lelenimexml.feature_anime.ui.adapter.AnimePagingAdapter
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.FooterLoadStateAdapter
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.HeaderLoadStateAdapter
+import com.lelestacia.lelenimexml.feature_anime.ui.adapter.ListAnimePagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,12 +37,15 @@ class ExploreAnimeFragment : Fragment(R.layout.fragment_explore_anime), MenuProv
         super.onViewCreated(view, savedInstanceState)
         setupMenu()
 
-        val exploreAnimeAdapter = AnimePagingAdapter { anime ->
+        val exploreAnimeAdapter = ListAnimePagingAdapter { anime ->
             val animeEntity = anime.toAnimeEntity()
             viewModel.insertOrUpdateNewAnimeToHistory(animeEntity)
             val action = ExploreAnimeFragmentDirections.exploreToDetail(anime)
             view.findNavController().navigate(action)
         }
+
+        val myLayoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         exploreAnimeAdapter
             .loadStateFlow
@@ -77,7 +81,7 @@ class ExploreAnimeFragment : Fragment(R.layout.fragment_explore_anime), MenuProv
             }
 
         binding.rvAnimeResult.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = myLayoutManager
             adapter = exploreAnimeAdapter.withLoadStateHeaderAndFooter(
                 header = HeaderLoadStateAdapter {
                     exploreAnimeAdapter.retry()
@@ -86,6 +90,7 @@ class ExploreAnimeFragment : Fragment(R.layout.fragment_explore_anime), MenuProv
                     exploreAnimeAdapter.retry()
                 }
             )
+            addItemDecoration(DividerItemDecoration(context, myLayoutManager.orientation))
             setHasFixedSize(true)
         }
 

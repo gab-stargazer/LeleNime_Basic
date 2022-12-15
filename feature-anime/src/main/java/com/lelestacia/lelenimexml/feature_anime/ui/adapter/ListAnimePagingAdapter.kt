@@ -11,8 +11,8 @@ import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.ItemListAnimeBinding
 import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
 
-class ListAnimeAdapter(val onAnimeSelected: (Anime) -> Unit) :
-    PagingDataAdapter<Anime, ListAnimeAdapter.ViewHolder>(DIFF_CALLBACK) {
+class ListAnimePagingAdapter(val onAnimeSelected: (Anime) -> Unit) :
+    PagingDataAdapter<Anime, ListAnimePagingAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     inner class ViewHolder(private val binding: ItemListAnimeBinding) :
         RecyclerView.ViewHolder(binding.root) {

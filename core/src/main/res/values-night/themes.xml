@@ -27,6 +27,7 @@
 
 
         <item name="thumbTint">@color/blue</item>
+        <item name="trackTint">#7A7A7A</item>
 
 
 

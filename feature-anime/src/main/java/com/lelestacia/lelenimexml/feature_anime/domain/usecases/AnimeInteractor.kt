@@ -36,7 +36,7 @@ class AnimeInteractor @Inject constructor(
         animeRepository.insertOrUpdateNewAnimeToHistory(animeEntity)
     }
 
-    override fun getAnimeHistory(): Flow<List<Anime>> {
+    override fun getAnimeHistory(): Flow<PagingData<Anime>> {
         return animeRepository.getAnimeHistory().map {
             it.map { animeEntity ->
                 AnimeMapperUtil.animeEntityToAnime(animeEntity)

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.FragmentSeasonAnimeBinding
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.FooterLoadStateAdapter
-import com.lelestacia.lelenimexml.feature_anime.ui.adapter.ListAnimeAdapter
+import com.lelestacia.lelenimexml.feature_anime.ui.adapter.ListAnimePagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,24 +25,25 @@ class SeasonAnimeFragment : Fragment(R.layout.fragment_season_anime) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val seasonAnimeAdapter = ListAnimeAdapter { anime ->
+        val seasonAnimeAdapter = ListAnimePagingAdapter { anime ->
             val animeEntity = anime.toAnimeEntity()
             viewModel.insertOrUpdateNewAnimeToHistory(animeEntity)
             val action = SeasonAnimeFragmentDirections.airingToDetail(anime)
             findNavController().navigate(action)
         }
 
-        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        val myLayoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         binding.rvSeasonAnime
             .apply {
-                this.layoutManager = layoutManager
+                layoutManager = myLayoutManager
                 adapter = seasonAnimeAdapter.withLoadStateFooter(
                     footer = FooterLoadStateAdapter {
                         seasonAnimeAdapter.retry()
                     }
                 )
-                addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
+                addItemDecoration(DividerItemDecoration(context, myLayoutManager.orientation))
                 setHasFixedSize(true)
             }
 
