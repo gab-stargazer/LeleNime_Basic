@@ -5,7 +5,8 @@ import androidx.paging.map
 import com.lelestacia.lelenimexml.core.model.local.AnimeEntity
 import com.lelestacia.lelenimexml.core.repository.AnimeRepository
 import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
-import com.lelestacia.lelenimexml.feature_anime.domain.model.CharacterData
+import com.lelestacia.lelenimexml.feature_anime.domain.model.Character
+import com.lelestacia.lelenimexml.feature_anime.domain.model.CharacterFullProfile
 import com.lelestacia.lelenimexml.feature_anime.domain.utility.AnimeMapperUtil
 import com.lelestacia.lelenimexml.feature_anime.domain.utility.CharacterMapper
 import kotlinx.coroutines.flow.Flow
@@ -44,11 +45,18 @@ class AnimeInteractor @Inject constructor(
         }
     }
 
-    override fun getAnimeCharacterById(id: Int): Flow<List<CharacterData>> {
+    override fun getAnimeCharacterById(id: Int): Flow<List<Character>> {
         return animeRepository.getAnimeCharactersById(id).map { list ->
             list.map { characterEntity ->
                 CharacterMapper.entityToCharacter(characterEntity)
             }
         }
+    }
+
+    override fun getCharacterInformationByCharacterId(characterId: Int): Flow<CharacterFullProfile> {
+        return animeRepository.getAnimeCharacterFullProfileByCharacterId(characterId)
+            .map { fullProfileEntity ->
+                CharacterMapper.fullProfileEntityToFullProfile(fullProfileEntity)
+            }
     }
 }

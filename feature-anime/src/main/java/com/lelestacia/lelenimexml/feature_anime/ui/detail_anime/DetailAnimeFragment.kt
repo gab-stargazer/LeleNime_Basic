@@ -6,6 +6,7 @@ import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,7 +37,10 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime) {
     }
 
     private fun FragmentDetailAnimeBinding.setCharacterView() {
-        val characterAdapter = CharacterAdapter()
+        val characterAdapter = CharacterAdapter { characterId ->
+            val action = DetailAnimeFragmentDirections.getCharacterDetail(characterId)
+            view?.findNavController()?.navigate(action)
+        }
         rvCharacter.adapter = characterAdapter
         rvCharacter.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
@@ -89,7 +93,7 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime) {
             R.string.information_value,
             getAiredSeason(anime.season, anime.year)
         )
-        tvSynopsis.text = anime.synopsis ?: "No Synopsis Provided By The MAL"
+        tvSynopsis.text = anime.synopsis ?: getString(R.string.no_information_by_mal)
     }
 
     private fun getGenreAsString(genre: List<String>): String {

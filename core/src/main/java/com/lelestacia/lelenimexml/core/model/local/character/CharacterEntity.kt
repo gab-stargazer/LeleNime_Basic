@@ -1,8 +1,11 @@
-package com.lelestacia.lelenimexml.core.model.local
+package com.lelestacia.lelenimexml.core.model.local.character
 
 import androidx.room.Entity
 
-@Entity(tableName = "character_table", primaryKeys = ["animeId", "characterId"])
+@Entity(
+    tableName = "character_table",
+    primaryKeys = ["animeId", "characterId"]
+)
 data class CharacterEntity(
     val animeId: Int,
     val characterId: Int,

@@ -18,4 +18,6 @@
     <string name="characters_holder">Characters\t:</string>
     <string name="aired">Aired</string>
     <string name="not_found">No Result Found</string>
+    <string name="no_information_by_mal">No information provided by the MAL Website</string>
+    <string name="no_nickname">This character has no nicknames</string>
 </resources>
