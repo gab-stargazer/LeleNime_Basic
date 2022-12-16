@@ -38,6 +38,7 @@ class FragmentCharacterBottomSheet :
                 }
                 tvCharacterName.text = characterDetail.name
                 tvCharacterFavorite.text = characterDetail.favoriteBy.toString()
+                ivFavorite.visibility = View.VISIBLE
                 tvCharacterRomaji.text = characterDetail.characterKanjiName
                 setNickName(
                     characterDetail.characterNickNames,
@@ -60,7 +61,7 @@ class FragmentCharacterBottomSheet :
             return
         }
 
-        if (characterInformation.contains(nickname.toString().toRegex())) {
+        if (characterInformation.contains(nickname.toString())) {
             tvCharacterNickname.visibility = View.GONE
             return
         }

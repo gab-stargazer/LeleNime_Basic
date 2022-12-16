@@ -3,7 +3,7 @@ package com.lelestacia.lelenimexml.core.source.local
 import androidx.room.*
 import com.lelestacia.lelenimexml.core.model.local.character.CharacterAdditionalInformationEntity
 import com.lelestacia.lelenimexml.core.model.local.character.CharacterEntity
-import com.lelestacia.lelenimexml.core.model.local.character.CharacterFullProfileEntity
+import com.lelestacia.lelenimexml.core.model.local.character.CharacterDetailEntity
 
 @Dao
 interface CharacterDao {
@@ -22,5 +22,5 @@ interface CharacterDao {
 
     @Transaction
     @Query("SELECT * FROM character_table WHERE characterId = :characterId")
-    fun getCharacterFullProfile(characterId: Int): CharacterFullProfileEntity
+    fun getCharacterFullProfile(characterId: Int): CharacterDetailEntity
 }

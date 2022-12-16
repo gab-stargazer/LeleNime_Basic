@@ -1,21 +1,11 @@
 package com.lelestacia.lelenimexml.feature_anime.domain.utility
 
+import com.lelestacia.lelenimexml.core.model.local.character.CharacterDetailEntity
 import com.lelestacia.lelenimexml.core.model.local.character.CharacterEntity
-import com.lelestacia.lelenimexml.core.model.local.character.CharacterFullProfileEntity
-import com.lelestacia.lelenimexml.core.model.remote.character.CharacterResponse
 import com.lelestacia.lelenimexml.feature_anime.domain.model.Character
 import com.lelestacia.lelenimexml.feature_anime.domain.model.CharacterFullProfile
 
 object CharacterMapper {
-    fun fromNetwork(characterNetworkResponse: CharacterResponse): Character {
-        return Character(
-            characterMalId = characterNetworkResponse.characterData.characterMalId,
-            images = characterNetworkResponse.characterData.images.webp.imageUrl,
-            name = characterNetworkResponse.characterData.name,
-            role = characterNetworkResponse.role,
-            favoriteBy = characterNetworkResponse.favoriteBy
-        )
-    }
 
     fun entityToCharacter(characterEntity: CharacterEntity): Character {
         return Character(
@@ -27,7 +17,7 @@ object CharacterMapper {
         )
     }
 
-    fun fullProfileEntityToFullProfile(fullProfile: CharacterFullProfileEntity)
+    fun fullProfileEntityToFullProfile(fullProfile: CharacterDetailEntity)
             : CharacterFullProfile =
         CharacterFullProfile(
             characterMalId = fullProfile.character.characterId,

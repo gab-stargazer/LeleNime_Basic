@@ -2,7 +2,7 @@ package com.lelestacia.lelenimexml.core.source.remote
 
 import com.lelestacia.lelenimexml.core.model.remote.GenericResponse
 import com.lelestacia.lelenimexml.core.model.remote.anime.AnimeResponse
-import com.lelestacia.lelenimexml.core.model.remote.anime.GenericPaginationResponse
+import com.lelestacia.lelenimexml.core.model.remote.GenericPaginationResponse
 import com.lelestacia.lelenimexml.core.model.remote.character.CharacterDetailResponse
 import com.lelestacia.lelenimexml.core.model.remote.character.CharacterResponse
 import retrofit2.http.GET
