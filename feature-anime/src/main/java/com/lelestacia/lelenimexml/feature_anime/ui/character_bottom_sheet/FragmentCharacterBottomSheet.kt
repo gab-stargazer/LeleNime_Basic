@@ -9,11 +9,11 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.FragmentCharacterBottomSheetBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.catch
+import retrofit2.HttpException
 
 @AndroidEntryPoint
 class FragmentCharacterBottomSheet :
@@ -26,9 +26,12 @@ class FragmentCharacterBottomSheet :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getCharacterDetailByCharacterId(args.characterId).catch { t ->
-            Snackbar.make(
-                view, t.localizedMessage ?: "Something Went Wrong", Snackbar.LENGTH_SHORT
-            ).show()
+            binding.progressCircular.visibility = View.GONE
+            val errorMessage =
+                if (t is HttpException) "${t.code()} - ${t.message()}"
+                else t.localizedMessage
+            binding.tvError.text = errorMessage
+            binding.tvError.visibility = View.VISIBLE
         }.asLiveData().observe(viewLifecycleOwner) { characterDetail ->
             binding.apply {
                 progressCircular.visibility = View.GONE
@@ -39,7 +42,7 @@ class FragmentCharacterBottomSheet :
                 tvCharacterName.text = characterDetail.name
                 tvCharacterFavorite.text = characterDetail.favoriteBy.toString()
                 ivFavorite.visibility = View.VISIBLE
-                tvCharacterRomaji.text = characterDetail.characterKanjiName
+                setRomajiName(characterDetail.characterKanjiName)
                 setNickName(
                     characterDetail.characterNickNames,
                     characterDetail.characterInformation
@@ -67,6 +70,13 @@ class FragmentCharacterBottomSheet :
         }
 
         tvCharacterNickname.text = getNickName(nickname)
+    }
+
+    private fun FragmentCharacterBottomSheetBinding.setRomajiName(
+        kanjiName: String
+    ) {
+        if(kanjiName.isEmpty()) tvCharacterRomaji.visibility = View.GONE
+        tvCharacterRomaji.text = kanjiName
     }
 
     private fun getNickName(nickname: List<String>): String {

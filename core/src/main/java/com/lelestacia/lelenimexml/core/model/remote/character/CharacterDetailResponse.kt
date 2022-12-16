@@ -10,7 +10,7 @@ data class CharacterDetailResponse(
     val characterName: String,
 
     @SerializedName("name_kanji")
-    val characterKanjiName: String,
+    val characterKanjiName: String?,
 
     @SerializedName("nicknames")
     val characterNickNames: List<String> = emptyList(),

@@ -21,7 +21,7 @@ object CharacterMapper {
             : CharacterAdditionalInformationEntity =
         CharacterAdditionalInformationEntity(
             characterId = response.characterMalId,
-            characterKanjiName = response.characterKanjiName,
+            characterKanjiName = response.characterKanjiName ?: "",
             characterNickNames = response.characterNickNames,
             characterFavoriteCount = response.characterFavoriteCount,
             characterInformation = response.characterInformation ?: ""
