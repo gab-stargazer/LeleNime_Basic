@@ -3,6 +3,8 @@ package com.lelestacia.lelenimexml
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate.*
+import com.lelestacia.lelenimexml.core.utility.Constant.IS_DARK_MODE
+import com.lelestacia.lelenimexml.core.utility.Constant.USER_PREF
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -14,8 +16,8 @@ class MyApp : Application() {
         if (BuildConfig.DEBUG)
             Timber.plant(Timber.DebugTree())
 
-        val isDarkMode = getSharedPreferences("USER_PREF", Context.MODE_PRIVATE)
-            .getInt("is_dark_mode", 0)
+        val isDarkMode = getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
+            .getInt(IS_DARK_MODE, 0)
         when(isDarkMode) {
             0 -> setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
             1 -> setDefaultNightMode(MODE_NIGHT_YES)

@@ -6,7 +6,7 @@ import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatDelegate.*
-import androidx.core.widget.doOnTextChanged
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.lelestacia.lelenimexml.core.utility.Constant.IS_DARK_MODE
 import com.lelestacia.lelenimexml.core.utility.Constant.IS_SFW
@@ -26,16 +26,19 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             sharedPreferences.edit().putBoolean(IS_SFW, isChecked).apply()
             buttonView.isChecked = isChecked
         }
-        val array = resources.getStringArray(R.array.system_mode)
+        val array: Array<String> = resources.getStringArray(R.array.system_mode)
         val adapter = ArrayAdapter(
             requireContext(),
             R.layout.item_tv,
             array
         )
 
+        binding.tvSystemTheme.setText(array[sharedPreferences.getInt(IS_DARK_MODE, 0)])
         binding.tvSystemTheme.setAdapter(adapter)
-        binding.tvSystemTheme.doOnTextChanged { text, _, _, _ ->
-            when (text) {
+
+        binding.tvSystemTheme.addTextChangedListener {
+            binding.tvSystemTheme.setAdapter(adapter)
+            when(it.toString()) {
                 array[0] -> {
                     sharedPreferences.edit().putInt(IS_DARK_MODE, 0).apply()
                 }
