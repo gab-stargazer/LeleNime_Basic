@@ -38,8 +38,7 @@ class ExploreAnimeFragment : Fragment(R.layout.fragment_explore_anime), MenuProv
         setupMenu()
 
         val exploreAnimeAdapter = ListAnimePagingAdapter { anime ->
-            val animeEntity = anime.toAnimeEntity()
-            viewModel.insertOrUpdateNewAnimeToHistory(animeEntity)
+            viewModel.insertNewOrUpdateLastViewed(anime = anime)
             val action = ExploreAnimeFragmentDirections.exploreToDetail(anime)
             view.findNavController().navigate(action)
         }

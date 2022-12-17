@@ -2,7 +2,7 @@ package com.lelestacia.lelenimexml.feature_anime.domain.usecases
 
 import com.lelestacia.lelenimexml.core.repository.CharacterRepository
 import com.lelestacia.lelenimexml.feature_anime.domain.model.Character
-import com.lelestacia.lelenimexml.feature_anime.domain.model.CharacterFullProfile
+import com.lelestacia.lelenimexml.feature_anime.domain.model.CharacterDetail
 import com.lelestacia.lelenimexml.feature_anime.domain.utility.CharacterMapper.entityToCharacter
 import com.lelestacia.lelenimexml.feature_anime.domain.utility.CharacterMapper.fullProfileEntityToFullProfile
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +17,6 @@ class CharacterInteractor @Inject constructor(
             characters.map(::entityToCharacter)
         }
 
-    override fun getCharacterInformationByCharacterId(characterId: Int): Flow<CharacterFullProfile> =
+    override fun getCharacterInformationByCharacterId(characterId: Int): Flow<CharacterDetail> =
         characterRepository.getCharacterDetailById(characterId).map(::fullProfileEntityToFullProfile)
 }

@@ -3,7 +3,7 @@ package com.lelestacia.lelenimexml.feature_anime.domain.utility
 import com.lelestacia.lelenimexml.core.model.local.character.CharacterDetailEntity
 import com.lelestacia.lelenimexml.core.model.local.character.CharacterEntity
 import com.lelestacia.lelenimexml.feature_anime.domain.model.Character
-import com.lelestacia.lelenimexml.feature_anime.domain.model.CharacterFullProfile
+import com.lelestacia.lelenimexml.feature_anime.domain.model.CharacterDetail
 
 object CharacterMapper {
 
@@ -18,8 +18,8 @@ object CharacterMapper {
     }
 
     fun fullProfileEntityToFullProfile(fullProfile: CharacterDetailEntity)
-            : CharacterFullProfile =
-        CharacterFullProfile(
+            : CharacterDetail =
+        CharacterDetail(
             characterMalId = fullProfile.character.characterId,
             name = fullProfile.character.characterName,
             characterNickNames = fullProfile.additionalInformation.characterNickNames,

@@ -26,8 +26,7 @@ class SeasonAnimeFragment : Fragment(R.layout.fragment_season_anime) {
         super.onViewCreated(view, savedInstanceState)
 
         val seasonAnimeAdapter = ListAnimePagingAdapter { anime ->
-            val animeEntity = anime.toAnimeEntity()
-            viewModel.insertOrUpdateNewAnimeToHistory(animeEntity)
+            viewModel.insertNewOrUpdateLastViewed(anime)
             val action = SeasonAnimeFragmentDirections.airingToDetail(anime)
             findNavController().navigate(action)
         }

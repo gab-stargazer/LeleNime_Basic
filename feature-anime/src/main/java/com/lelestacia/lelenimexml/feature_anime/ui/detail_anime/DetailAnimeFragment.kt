@@ -5,7 +5,10 @@ import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,9 +22,10 @@ import com.lelestacia.lelenimexml.feature_anime.ui.adapter.CharacterAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.transformers.coil.BlurTransformation
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime) {
+class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnClickListener {
 
     private val viewModel by viewModels<DetailAnimeViewModel>()
     private val args by navArgs<DetailAnimeFragmentArgs>()
@@ -33,6 +37,8 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime) {
             setHeaderSection()
             setBodySection()
             setCharacterView()
+            setFabFavorite()
+            fabFavorite.setOnClickListener(this@DetailAnimeFragment)
         }
     }
 
@@ -96,6 +102,21 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime) {
         tvSynopsis.text = anime.synopsis ?: getString(R.string.no_information_by_mal)
     }
 
+    private fun FragmentDetailAnimeBinding.setFabFavorite() {
+       lifecycleScope.launch {
+           repeatOnLifecycle(Lifecycle.State.STARTED) {
+               viewModel.getAnimeById(args.anime.malId)
+                   .asLiveData()
+                   .observe(viewLifecycleOwner) { anime ->
+                       if (anime?.isFavorite == true)
+                           fabFavorite.setImageResource(R.drawable.ic_favorite)
+                       else
+                           fabFavorite.setImageResource(R.drawable.ic_favorite_hollow)
+                   }
+           }
+       }
+    }
+
     private fun getGenreAsString(genre: List<String>): String {
         var newGenre = ""
         if (genre.isEmpty()) return "Empty Genre"
@@ -109,8 +130,18 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime) {
 
     private fun getAiredSeason(season: String?, year: Int): String {
         return if (season.isNullOrEmpty()) UNKNOWN
-        else "${season.replaceFirstChar { firstCharacter ->
-            firstCharacter.uppercase()
-        }} $year"
+        else "${
+            season.replaceFirstChar { firstCharacter ->
+                firstCharacter.uppercase()
+            }
+        } $year"
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            binding.fabFavorite.id -> {
+               viewModel.insertNewOrUpdateLastViewed(args.anime)
+            }
+        }
     }
 }

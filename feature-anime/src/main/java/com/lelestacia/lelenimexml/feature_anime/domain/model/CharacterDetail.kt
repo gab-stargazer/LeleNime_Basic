@@ -1,6 +1,6 @@
 package com.lelestacia.lelenimexml.feature_anime.domain.model
 
-data class CharacterFullProfile(
+data class CharacterDetail(
     val characterMalId: Int,
     val name: String,
     val characterKanjiName: String,

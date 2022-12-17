@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.lelestacia.lelenimexml.core.model.local.AnimeEntity
+import com.lelestacia.lelenimexml.feature_anime.domain.model.Anime
 import com.lelestacia.lelenimexml.feature_anime.domain.usecases.AnimeUseCases
+import com.lelestacia.lelenimexml.feature_anime.domain.utility.AnimeMapperUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,9 +19,14 @@ class SeasonAnimeViewModel @Inject constructor(
     val airingAnime = animeUseCases.seasonAnimePagingData()
         .cachedIn(viewModelScope).asLiveData()
 
-    fun insertOrUpdateNewAnimeToHistory(animeEntity: AnimeEntity) {
+    fun insertNewOrUpdateLastViewed(anime: Anime) {
         viewModelScope.launch {
-            animeUseCases.insertOrUpdateNewAnimeToHistory(animeEntity)
+            val localAnime = animeUseCases.getAnimeByAnimeId(anime.malId)
+            val newData = AnimeMapperUtil.animeToEntity(
+                anime = anime,
+                isFavorite = localAnime?.isFavorite ?: false
+            )
+            animeUseCases.insertOrUpdateNewAnimeToHistory(newData)
         }
     }
 }

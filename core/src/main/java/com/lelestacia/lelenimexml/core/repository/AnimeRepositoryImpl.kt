@@ -70,4 +70,18 @@ class AnimeRepositoryImpl @Inject constructor(
                 animeDao.getAllAnime()
             }
         ).flow
+
+    override suspend fun getNewestAnimeDataByAnimeId(animeId: Int): Flow<AnimeEntity?> {
+        return animeDao.getNewestAnimeDataByAnimeId(animeId)
+    }
+
+    override suspend fun getAnimeByAnimeId(animeId: Int): AnimeEntity? {
+        return withContext(ioDispatcher){
+            animeDao.getAnimeByAnimeId(animeId)
+        }
+    }
+
+    override suspend fun updateAnime(anime: AnimeEntity) {
+        animeDao.updateAnime(anime)
+    }
 }

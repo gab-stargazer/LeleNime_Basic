@@ -2,4 +2,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="warning_nsfw">Before turning this option off, please make sure you are older than 18+. I don\'t have any responsibilities for your decision</string>
     <string name="safety_mode">Safety Mode</string>
+    <string-array name="system_mode">
+        <item>System Mode</item>
+        <item>Dark Mode</item>
+        <item>Day Mode</item>
+    </string-array>
 </resources>

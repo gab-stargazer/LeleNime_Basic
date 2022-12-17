@@ -21,8 +21,7 @@ class MyAnimeFragment : Fragment(R.layout.fragment_my_list_anime) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = ListAnimePagingAdapter { anime ->
-            val animeEntity = anime.toAnimeEntity()
-            viewModel.insertOrUpdateNewAnimeToHistory(animeEntity)
+            viewModel.insertNewOrUpdateLastViewed(anime)
             val action = MyAnimeFragmentDirections.historyToDetail(anime)
             view.findNavController().navigate(action)
         }

@@ -33,4 +33,14 @@ class AnimeInteractor @Inject constructor(
         animeRepository.getAnimeHistory().map { pagingData ->
             pagingData.map(::animeEntityToAnime)
         }
+
+    override suspend fun getNewestAnimeDataByAnimeId(animeId: Int): Flow<AnimeEntity?> =
+        animeRepository.getNewestAnimeDataByAnimeId(animeId)
+
+    override suspend fun getAnimeByAnimeId(animeId: Int): AnimeEntity? =
+        animeRepository.getAnimeByAnimeId(animeId)
+
+    override suspend fun updateAnime(anime: AnimeEntity) {
+        animeRepository.updateAnime(anime)
+    }
 }
