@@ -7,23 +7,28 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.lelestacia.lelenimexml.feature_anime.databinding.ItemCardCharacterBinding
-import com.lelestacia.lelenimexml.feature_anime.domain.model.CharacterData
+import com.lelestacia.lelenimexml.feature_anime.domain.model.Character
 
-class CharacterAdapter : ListAdapter<CharacterData, CharacterAdapter.ViewHolder>(DIFF_CALLBACK) {
+class CharacterAdapter(val onCharacterSelected: (Int) -> Unit) :
+    ListAdapter<Character, CharacterAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     inner class ViewHolder(private val binding: ItemCardCharacterBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: CharacterData) {
+        fun bind(item: Character) {
             binding.apply {
                 ivCharacterImage.load(item.images)
                 tvCharacterImage.text = item.name
+                root.setOnClickListener {
+                    onCharacterSelected(item.characterMalId)
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemCardCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemCardCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -34,13 +39,13 @@ class CharacterAdapter : ListAdapter<CharacterData, CharacterAdapter.ViewHolder>
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CharacterData>() {
-            override fun areItemsTheSame(oldItem: CharacterData, newItem: CharacterData): Boolean =
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Character>() {
+            override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean =
                 oldItem.characterMalId == newItem.characterMalId
 
             override fun areContentsTheSame(
-                oldItem: CharacterData,
-                newItem: CharacterData
+                oldItem: Character,
+                newItem: Character
             ): Boolean =
                 oldItem == newItem
         }

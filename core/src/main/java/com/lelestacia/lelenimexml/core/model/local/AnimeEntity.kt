@@ -1,5 +1,6 @@
 package com.lelestacia.lelenimexml.core.model.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -26,7 +27,9 @@ data class AnimeEntity(
     val season: String?,
     val year: Int,
     val genres: List<String>,
-    val lastViewed: Date
+    val lastViewed: Date,
+    @ColumnInfo(defaultValue = "false")
+    val isFavorite: Boolean
 ) {
 
     data class Trailer(

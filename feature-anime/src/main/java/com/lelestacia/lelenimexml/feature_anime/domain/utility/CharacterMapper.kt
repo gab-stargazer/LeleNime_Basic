@@ -1,22 +1,14 @@
 package com.lelestacia.lelenimexml.feature_anime.domain.utility
 
-import com.lelestacia.lelenimexml.core.model.local.CharacterEntity
-import com.lelestacia.lelenimexml.core.model.remote.character.CharacterResponse
-import com.lelestacia.lelenimexml.feature_anime.domain.model.CharacterData
+import com.lelestacia.lelenimexml.core.model.local.character.CharacterDetailEntity
+import com.lelestacia.lelenimexml.core.model.local.character.CharacterEntity
+import com.lelestacia.lelenimexml.feature_anime.domain.model.Character
+import com.lelestacia.lelenimexml.feature_anime.domain.model.CharacterDetail
 
 object CharacterMapper {
-    fun fromNetwork(characterNetworkResponse: CharacterResponse) : CharacterData {
-        return CharacterData(
-            characterMalId = characterNetworkResponse.characterResponseData.characterMalId,
-            images = characterNetworkResponse.characterResponseData.images.webp.imageUrl,
-            name = characterNetworkResponse.characterResponseData.name,
-            role = characterNetworkResponse.role,
-            favoriteBy = characterNetworkResponse.favoriteBy
-        )
-    }
 
-    fun entityToCharacter(characterEntity: CharacterEntity): CharacterData {
-        return CharacterData(
+    fun entityToCharacter(characterEntity: CharacterEntity): Character {
+        return Character(
             characterMalId = characterEntity.characterId,
             images = characterEntity.characterImage,
             name = characterEntity.characterName,
@@ -24,4 +16,17 @@ object CharacterMapper {
             favoriteBy = characterEntity.favoriteBy
         )
     }
+
+    fun fullProfileEntityToFullProfile(fullProfile: CharacterDetailEntity)
+            : CharacterDetail =
+        CharacterDetail(
+            characterMalId = fullProfile.character.characterId,
+            name = fullProfile.character.characterName,
+            characterNickNames = fullProfile.additionalInformation.characterNickNames,
+            characterKanjiName = fullProfile.additionalInformation.characterKanjiName,
+            images = fullProfile.character.characterImage,
+            role = fullProfile.character.role,
+            favoriteBy = fullProfile.character.favoriteBy,
+            characterInformation = fullProfile.additionalInformation.characterInformation
+        )
 }

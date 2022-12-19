@@ -10,7 +10,6 @@
         android:id="@+id/rv_anime_history"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingVertical="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/item_list_anime" />
 </androidx.constraintlayout.widget.ConstraintLayout>

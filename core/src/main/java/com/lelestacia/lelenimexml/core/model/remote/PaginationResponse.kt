@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.model.remote.anime
+package com.lelestacia.lelenimexml.core.model.remote
 
 import com.google.gson.annotations.SerializedName
 

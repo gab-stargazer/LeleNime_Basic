@@ -25,8 +25,7 @@ class SearchAnimePaging(
                 if (isSafety) {
                     apiService.searchAnimeByTitle(q = query, page = currentPage, sfw = true)
                 } else {
-                    apiService
-                        .searchAnimeByTitle(q = query, page = currentPage)
+                    apiService.searchAnimeByTitle(q = query, page = currentPage)
                 }
             LoadResult.Page(
                 data = apiResponse.data,
