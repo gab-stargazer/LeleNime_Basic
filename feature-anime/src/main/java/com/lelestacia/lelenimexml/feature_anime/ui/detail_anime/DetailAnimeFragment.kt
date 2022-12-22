@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.core.utility.Constant.UNKNOWN
+import com.lelestacia.lelenimexml.feature.anime.ui.detail.DetailAnimeFragmentArgs
 import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.FragmentDetailAnimeBinding
 import com.lelestacia.lelenimexml.feature_anime.ui.adapter.CharacterAdapter
@@ -27,8 +28,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnClickListener {
 
+    private val args : DetailAnimeFragmentArgs by navArgs()
     private val viewModel by viewModels<DetailAnimeViewModel>()
-    private val args by navArgs<DetailAnimeFragmentArgs>()
     private val binding: FragmentDetailAnimeBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,8 +45,7 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
 
     private fun FragmentDetailAnimeBinding.setCharacterView() {
         val characterAdapter = CharacterAdapter { characterId ->
-            val action = DetailAnimeFragmentDirections.getCharacterDetail(characterId)
-            view?.findNavController()?.navigate(action)
+
         }
         rvCharacter.adapter = characterAdapter
         rvCharacter.layoutManager =

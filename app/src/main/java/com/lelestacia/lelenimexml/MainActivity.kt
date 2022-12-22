@@ -34,9 +34,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home,
                 R.id.nav_gallery,
                 R.id.nav_slideshow,
-                com.lelestacia.lelenimexml.feature_anime.R.id.nav_season_anime,
-                com.lelestacia.lelenimexml.feature_anime.R.id.nav_explore_anime,
-                com.lelestacia.lelenimexml.feature_anime.R.id.nav_my_list_anime,
+                com.lelestacia.lelenimexml.feature.anime.R.id.anime_fragments,
                 com.lelestacia.lelenimexml.feature_others.R.id.nav_settings,
             ), drawerLayout
         )

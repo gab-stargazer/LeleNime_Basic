@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/detail_anime_navigation"
-    app:startDestination="@id/nav_detail_anime">
+    app:startDestination="@id/anime_detail_old">
     <fragment
-        android:id="@+id/nav_detail_anime"
-        android:name="com.lelestacia.lelenimexml.feature_anime.ui.detail_anime.DetailAnimeFragment"
+        android:id="@+id/anime_detail_old"
+        android:name="com.lelestacia.lelenimexml.feature.anime.ui.detail.DetailAnimeFragment"
         android:label="Detail Anime"
         tools:layout="@layout/fragment_detail_anime">
         <argument
@@ -14,11 +14,11 @@
             app:argType="com.lelestacia.lelenimexml.feature_anime.domain.model.Anime" />
         <action
             android:id="@+id/get_character_detail"
-            app:destination="@id/fragmentCharacterBottomSheet" />
+            app:destination="@id/character_old" />
     </fragment>
     <dialog
-        android:id="@+id/fragmentCharacterBottomSheet"
-        android:name="com.lelestacia.lelenimexml.feature_anime.ui.character_bottom_sheet.FragmentCharacterBottomSheet"
+        android:id="@+id/character_old"
+        android:name="com.lelestacia.lelenimexml.feature.anime.ui.character_bottom_sheet.FragmentCharacterBottomSheet"
         android:label="fragment_character_bottom_sheet"
         tools:layout="@layout/fragment_character_bottom_sheet" >
         <argument

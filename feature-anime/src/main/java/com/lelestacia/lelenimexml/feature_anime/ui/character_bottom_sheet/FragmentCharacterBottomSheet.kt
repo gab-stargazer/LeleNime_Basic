@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.lelestacia.lelenimexml.feature.anime.ui.character_bottom_sheet.FragmentCharacterBottomSheetArgs
 import com.lelestacia.lelenimexml.feature_anime.R
 import com.lelestacia.lelenimexml.feature_anime.databinding.FragmentCharacterBottomSheetBinding
 import dagger.hilt.android.AndroidEntryPoint

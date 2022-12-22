@@ -10,10 +10,10 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="rating">Rating\t\t\t\t\t:\t%s</string>
-    <string name="episode">Episodes\t\t\t:\t%s</string>
-    <string name="status">Status\t\t\t\t\t:\t%s</string>
+    <string name="hello_from_anime">Hello blank fragment</string>
+    <string name="rating_item_anime">Rating\t\t\t\t\t:\t%s</string>
+    <string name="episode_item_anime">Episodes\t\t\t:\t%s</string>
+    <string name="status_item_anime">Status\t\t\t\t\t:\t%s</string>
     <string name="loading">Loading</string>
     <string name="retry">Retry</string>
     <string name="insert_anime_title">Insert Anime Title Here…</string>

@@ -15,7 +15,7 @@ interface AnimeDao {
     fun getAllAnime(): PagingSource<Int, AnimeEntity>
 
     @Query("SELECT * FROM anime_table WHERE malId = :animeId")
-    fun getNewestAnimeDataByAnimeId(animeId: Int): Flow<AnimeEntity?>
+    fun getNewestAnimeDataByAnimeId(animeId: Int): Flow<AnimeEntity>
 
     @Query("SELECT * FROM anime_table WHERE malId =:animeId")
     fun getAnimeByAnimeId(animeId: Int): AnimeEntity?

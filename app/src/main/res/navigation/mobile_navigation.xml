@@ -23,9 +23,6 @@
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
 
-
-    <include app:graph="@navigation/season_navigation" />
-    <include app:graph="@navigation/explore_navigation" />
-    <include app:graph="@navigation/my_anime_history"/>
-    <include app:graph="@navigation/settings_navigation"/>
+    <include app:graph="@navigation/anime_navigation" />
+    <include app:graph="@navigation/settings_navigation" />
 </navigation>
