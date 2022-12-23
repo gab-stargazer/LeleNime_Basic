@@ -57,31 +57,43 @@ class AnimeRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun insertOrUpdateNewAnimeToHistory(anime: AnimeEntity) {
-        withContext(ioDispatcher) {
-            animeDao.insertOrUpdateAnime(anime)
+    override suspend fun getNewestAnimeDataByAnimeId(animeId: Int): Flow<AnimeEntity> {
+        return animeDao.getNewestAnimeDataByAnimeId(animeId)
+    }
+
+    override suspend fun getAnimeByAnimeId(animeId: Int): AnimeEntity? {
+        return withContext(ioDispatcher) {
+            animeDao.getAnimeByAnimeId(animeId)
         }
     }
 
+
     override fun getAnimeHistory(): Flow<PagingData<AnimeEntity>> =
         Pager(
-            config = PagingConfig(15),
+            config = PagingConfig(
+                pageSize = 15,
+                initialLoadSize = 30,
+                prefetchDistance = 5
+            ),
             pagingSourceFactory = {
                 animeDao.getAllAnime()
             }
         ).flow
 
-    override suspend fun getNewestAnimeDataByAnimeId(animeId: Int): Flow<AnimeEntity?> {
-        return animeDao.getNewestAnimeDataByAnimeId(animeId)
-    }
-
-    override suspend fun getAnimeByAnimeId(animeId: Int): AnimeEntity? {
-        return withContext(ioDispatcher){
-            animeDao.getAnimeByAnimeId(animeId)
+    override suspend fun insertAnimeToHistory(animeEntity: AnimeEntity) {
+        withContext(ioDispatcher) {
+            animeDao.insertOrUpdateAnime(animeEntity)
         }
     }
 
-    override suspend fun updateAnime(anime: AnimeEntity) {
-        animeDao.updateAnime(anime)
+    override suspend fun updateAnimeFavorite(malID: Int) {
+        withContext(ioDispatcher) {
+            val anime = animeDao.getAnimeByAnimeId(malID)
+            anime?.let {
+                animeDao.updateAnime(anime.apply {
+                    isFavorite = !isFavorite
+                })
+            }
+        }
     }
 }

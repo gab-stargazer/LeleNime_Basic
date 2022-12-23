@@ -29,7 +29,7 @@ data class AnimeEntity(
     val genres: List<String>,
     val lastViewed: Date,
     @ColumnInfo(defaultValue = "false")
-    val isFavorite: Boolean
+    var isFavorite: Boolean
 ) {
 
     data class Trailer(
