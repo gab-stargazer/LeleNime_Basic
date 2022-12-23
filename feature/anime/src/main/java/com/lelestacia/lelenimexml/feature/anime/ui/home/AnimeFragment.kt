@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -25,6 +26,7 @@ import com.lelestacia.lelenimexml.feature.anime.databinding.FragmentAnimeBinding
 import com.lelestacia.lelenimexml.feature.anime.ui.adapter.FooterLoadStateAdapter
 import com.lelestacia.lelenimexml.feature.anime.ui.adapter.ListAnimePagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -46,9 +48,13 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider {
 
     private fun FragmentAnimeBinding.setData() {
         val seasonAnimeAdapter = ListAnimePagingAdapter { anime ->
-            viewModel.insertOrUpdateAnimeToHistory(anime)
-            val action = AnimeFragmentDirections.animeToDetail(anime.malID)
-            findNavController().navigate(action)
+            lifecycleScope.launch {
+                launch {
+                    viewModel.insertOrUpdateAnimeToHistory(anime)
+                }.join()
+                val action = AnimeFragmentDirections.animeToDetail(anime.malID)
+                findNavController().navigate(action)
+            }
         }
 
         val myLayoutManager =
