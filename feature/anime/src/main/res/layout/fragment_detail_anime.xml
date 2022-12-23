@@ -292,5 +292,5 @@
         android:src="@drawable/ic_favorite_hollow"
         app:layout_anchor="@id/scroll_content"
         app:layout_anchorGravity="bottom|right|end"
-        app:tint="?android:attr/textColorPrimary" />
+        app:tint="@color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

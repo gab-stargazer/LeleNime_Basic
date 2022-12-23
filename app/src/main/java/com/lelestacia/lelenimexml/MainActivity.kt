@@ -31,15 +31,14 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home,
-                R.id.nav_gallery,
-                R.id.nav_slideshow,
                 com.lelestacia.lelenimexml.feature.anime.R.id.anime_fragments,
-                com.lelestacia.lelenimexml.feature_others.R.id.nav_settings,
+                com.lelestacia.lelenimexml.feature.others.R.id.settingsFragment,
             ), drawerLayout
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navView.setCheckedItem(navController.graph.startDestinationId)
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -19,4 +19,8 @@
     <string name="insert_anime_title">Insert Anime Title Here…</string>
     <string name="search">Search</string>
     <string name="placeholder_title">%s\t:</string>
+    <string name="mal">MAL</string>
+    <string name="anime">Anime</string>
+    <string name="others">Others</string>
+    <string name="settings">Settings</string>
 </resources>

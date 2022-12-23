@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
     android:theme="@style/Theme.LeleNimeXML"
-    tools:context="com.lelestacia.lelenimexml.feature.others.SettingsFragment">
+    tools:context=".SettingsFragment">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_safety_mode_description"

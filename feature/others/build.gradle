@@ -1,16 +1,14 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
-    id 'androidx.navigation.safeargs.kotlin'
 }
 
-apply from:'../../shared_dependencies.gradle'
+apply from: '../../shared_dependencies.gradle'
 
 android {
-    namespace 'com.lelestacia.lelenimexml.feature.anime'
+    namespace 'com.lelestacia.lelenimexml.feature.others'
     compileSdk 33
 
     defaultConfig {
@@ -34,19 +32,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures {
+    buildFeatures{
         viewBinding true
     }
 }
 
 dependencies {
     implementation project(':core')
-}
-
-kapt {
-    correctErrorTypes true
-}
-
-hilt {
-    enableAggregatingTask = true
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

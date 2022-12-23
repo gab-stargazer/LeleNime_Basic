@@ -3,37 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
-    </group>
-    <item android:title="MAL">
+    <item android:title="@string/mal">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/anime_navigation"
                     android:icon="@drawable/ic_movie"
-                    android:title="Anime V2" />
+                    android:title="@string/anime" />
             </group>
         </menu>
     </item>
-    <item android:title="Other">
+    <item android:title="@string/others">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/settings_navigation"
                     android:icon="@drawable/ic_settings"
-                    android:title="Settings" />
+                    android:title="@string/settings" />
             </group>
         </menu>
     </item>
