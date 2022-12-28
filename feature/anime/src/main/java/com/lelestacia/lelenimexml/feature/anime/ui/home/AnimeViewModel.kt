@@ -3,14 +3,14 @@ package com.lelestacia.lelenimexml.feature.anime.ui.home
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.lelestacia.lelenimexml.feature.anime.domain.model.Anime
-import com.lelestacia.lelenimexml.feature.anime.domain.usecase.AnimeUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.IAnimeUseCase
+import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class AnimeViewModel @Inject constructor(
-    private val animeUseCase: AnimeUseCase
+    private val animeUseCase: IAnimeUseCase
 ) : ViewModel() {
 
     private val searchQuery = MutableLiveData("")

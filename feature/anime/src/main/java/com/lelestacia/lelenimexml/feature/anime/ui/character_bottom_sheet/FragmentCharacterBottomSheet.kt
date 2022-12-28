@@ -11,7 +11,7 @@ import coil.transform.RoundedCornersTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.FragmentCharacterBottomSheetBinding
-import com.lelestacia.lelenimexml.feature.anime.domain.util.ListToString
+import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.catch
 import retrofit2.HttpException

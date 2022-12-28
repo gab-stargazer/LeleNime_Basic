@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.ItemListAnimeBinding
-import com.lelestacia.lelenimexml.feature.anime.domain.model.Anime
 
 class ListAnimePagingAdapter(val onAnimeSelected: (Anime) -> Unit) :
     PagingDataAdapter<Anime, ListAnimePagingAdapter.ViewHolder>(DIFF_CALLBACK) {

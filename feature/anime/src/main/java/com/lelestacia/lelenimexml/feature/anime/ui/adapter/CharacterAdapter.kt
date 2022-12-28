@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.lelestacia.lelenimexml.feature.anime.databinding.ItemCardCharacterBinding
-import com.lelestacia.lelenimexml.feature.anime.domain.model.Character
+import com.lelestacia.lelenimexml.core.model.domain.character.Character
 
 class CharacterAdapter(val onCharacterSelected: (Int) -> Unit) :
     ListAdapter<Character, CharacterAdapter.ViewHolder>(DIFF_CALLBACK) {
