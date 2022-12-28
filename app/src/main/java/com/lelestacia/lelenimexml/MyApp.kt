@@ -3,8 +3,8 @@ package com.lelestacia.lelenimexml
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate.*
-import com.lelestacia.lelenimexml.core.utility.Constant.IS_DARK_MODE
-import com.lelestacia.lelenimexml.core.utility.Constant.USER_PREF
+import com.lelestacia.lelenimexml.core.common.Constant.IS_DARK_MODE
+import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 

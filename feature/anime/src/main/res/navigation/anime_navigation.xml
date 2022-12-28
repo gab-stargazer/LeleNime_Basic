@@ -24,6 +24,9 @@
             app:exitAnim="@anim/center_to_right"
             app:popEnterAnim="@anim/right_to_center"
             app:popExitAnim="@anim/center_to_left" />
+        <action
+            android:id="@+id/anime_to_favorite"
+            app:destination="@id/favorite_fragment" />
     </fragment>
 
     <fragment
@@ -59,5 +62,14 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/favorite_fragment"
+        android:name="com.lelestacia.lelenimexml.feature.anime.ui.favorite.FavoriteFragment"
+        android:label="Favorite Anime"
+        tools:layout="@layout/fragment_favorite">
+        <action
+            android:id="@+id/favorite_to_detail"
+            app:destination="@id/detail_anime_fragments" />
     </fragment>
 </navigation>

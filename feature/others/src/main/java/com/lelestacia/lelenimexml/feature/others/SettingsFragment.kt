@@ -8,9 +8,9 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.lelestacia.lelenimexml.core.utility.Constant.IS_DARK_MODE
-import com.lelestacia.lelenimexml.core.utility.Constant.IS_SFW
-import com.lelestacia.lelenimexml.core.utility.Constant.USER_PREF
+import com.lelestacia.lelenimexml.core.common.Constant.IS_DARK_MODE
+import com.lelestacia.lelenimexml.core.common.Constant.IS_SFW
+import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import com.lelestacia.lelenimexml.feature.others.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {

@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.google.android.material.snackbar.Snackbar
-import com.lelestacia.lelenimexml.core.utility.Constant.UNKNOWN
+import com.lelestacia.lelenimexml.core.common.Constant.UNKNOWN
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.FragmentDetailAnimeBinding
-import com.lelestacia.lelenimexml.feature.anime.domain.util.ListToString
+import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import com.lelestacia.lelenimexml.feature.anime.ui.adapter.CharacterAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.transformers.coil.BlurTransformation
@@ -59,41 +59,36 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
 
                 tvRankAndRating.text = getString(
                     R.string.rank_and_score, anime.rank.toString(), anime.score ?: UNKNOWN
-                )
-                /*End of Header Section*/
+                )/*End of Header Section*/
 
                 /*Body Section*/
                 tvTypeValue.text = getString(R.string.information_value, anime.type)
-                tvRatingValue.text =
-                    if (anime.rating.isEmpty()) UNKNOWN
-                    else getString(R.string.information_value, anime.rating)
+                tvRatingValue.text = if (anime.rating.isEmpty()) UNKNOWN
+                else getString(R.string.information_value, anime.rating)
 
-                tvEpisodeValue.text =
-                    if (anime.episodes != null)
-                        getString(R.string.information_value, anime.episodes.toString())
-                    else getString(R.string.information_value, UNKNOWN)
+                tvEpisodeValue.text = if (anime.episodes != null) getString(
+                    R.string.information_value,
+                    anime.episodes.toString()
+                )
+                else getString(R.string.information_value, UNKNOWN)
 
-                tvGenreValue.text =
-                    if (anime.genres.isEmpty()) UNKNOWN
-                    else getString(R.string.information_value, ListToString().invoke(anime.genres))
+                tvGenreValue.text = if (anime.genres.isEmpty()) UNKNOWN
+                else getString(R.string.information_value, ListToString().invoke(anime.genres))
 
                 tvStatusValue.text = getString(R.string.information_value, anime.status)
-                tvAiredValue.text =
-                    if (anime.season.isNullOrEmpty()) UNKNOWN
-                    else getString(
-                        R.string.information_value,
-                        "${anime.season.replaceFirstChar { it.uppercase() }} ${anime.year}"
-                    )
+                tvAiredValue.text = if (anime.season.isNullOrEmpty()) UNKNOWN
+                else getString(
+                    R.string.information_value, "${anime.season} ${anime.year}"
+                )
 
-                tvSynopsis.text = anime.synopsis ?: getString(R.string.no_information_by_mal)
-                /*End of Body Section*/
+                tvSynopsis.text = anime.synopsis
+                    ?: getString(R.string.no_information_by_mal)/*End of Body Section*/
 
                 /*Fab Section*/
                 fabFavorite.setImageResource(
                     if (anime.isFavorite) R.drawable.ic_favorite
                     else R.drawable.ic_favorite_hollow
-                )
-                /*End of Fab Section*/
+                )/*End of Fab Section*/
             }
         }
     }
@@ -107,22 +102,15 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
 
             rvCharacter.apply {
                 adapter = characterAdapter
-                layoutManager =
-                    LinearLayoutManager(
-                        requireContext(),
-                        RecyclerView.HORIZONTAL,
-                        false
-                    )
+                layoutManager = LinearLayoutManager(
+                    requireContext(), RecyclerView.HORIZONTAL, false
+                )
                 setHasFixedSize(true)
             }
 
-            viewModel
-                .getAnimeCharactersById(args.malID)
-                .catch { t ->
+            viewModel.getAnimeCharactersById(args.malID).catch { t ->
                     Snackbar.make(
-                        root,
-                        t.localizedMessage ?: "Something Went Wrong",
-                        Snackbar.LENGTH_LONG
+                        root, t.localizedMessage ?: "Something Went Wrong", Snackbar.LENGTH_LONG
                     ).show()
                 }.collect { characters ->
                     if (characters.isEmpty()) {

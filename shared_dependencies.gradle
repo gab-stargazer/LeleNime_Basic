@@ -23,6 +23,19 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
 
+    //Coil
+    implementation "io.coil-kt:coil:$coil_version"
+    implementation 'jp.wasabeef.transformers:coil:1.0.6'
+
+    //Timber
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
+    //Room database
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-paging:$room_version"
+
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
@@ -31,11 +44,4 @@ dependencies {
 
     //Paging3
     implementation "androidx.paging:paging-runtime:$paging_version"
-
-    //Coil
-    implementation "io.coil-kt:coil:$coil_version"
-    implementation 'jp.wasabeef.transformers:coil:1.0.6'
-
-    //Timber
-    implementation "com.jakewharton.timber:timber:$timber_version"
 }
