@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_top"
+    android:theme="@style/Theme.LeleNimeXML">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/menu"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        android:layout_marginTop="4dp"
+        app:cardBackgroundColor="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="@id/tv_menu"
+        app:layout_constraintStart_toStartOf="@id/tv_menu"
+        app:layout_constraintTop_toBottomOf="@id/tv_menu"
+        app:strokeWidth="0dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_to_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/transparent"
+        android:ellipsize="end"
+        android:gravity="start|center_vertical"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/tv_menu"
+        tools:text="Chainsaw-Man" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_add_remove_favorite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:textColor="?android:attr/textColorPrimary"
+        app:backgroundTint="@android:color/transparent"
+        app:cornerRadius="10dp"
+        app:iconTint="?android:attr/textColorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_to_detail"
+        tools:text="Add to Favorite" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="@string/share_anime"
+        android:textColor="?android:attr/textColorPrimary"
+        app:backgroundTint="@android:color/transparent"
+        app:cornerRadius="10dp"
+        app:icon="@drawable/ic_share"
+        app:iconTint="?android:attr/textColorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_add_remove_favorite" />
+</androidx.constraintlayout.widget.ConstraintLayout>

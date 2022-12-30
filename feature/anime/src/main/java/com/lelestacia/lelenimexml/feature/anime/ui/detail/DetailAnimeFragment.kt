@@ -41,7 +41,6 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
     private fun FragmentDetailAnimeBinding.setView() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.getAnimeByMalId(args.malID).collect { anime ->
-
                 /*Header Section*/
                 ivBackgroundAnime.load(anime.coverImages) {
                     transformations(BlurTransformation(requireContext()))
@@ -63,8 +62,9 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
 
                 /*Body Section*/
                 tvTypeValue.text = getString(R.string.information_value, anime.type)
-                tvRatingValue.text = if (anime.rating.isEmpty()) UNKNOWN
-                else getString(R.string.information_value, anime.rating)
+                tvRatingValue.text =
+                    if (anime.rating.isEmpty()) getString(R.string.information_value, UNKNOWN)
+                    else getString(R.string.information_value, anime.rating)
 
                 tvEpisodeValue.text = if (anime.episodes != null) getString(
                     R.string.information_value,
@@ -76,10 +76,15 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
                 else getString(R.string.information_value, ListToString().invoke(anime.genres))
 
                 tvStatusValue.text = getString(R.string.information_value, anime.status)
-                tvAiredValue.text = if (anime.season.isNullOrEmpty()) UNKNOWN
-                else getString(
-                    R.string.information_value, "${anime.season} ${anime.year}"
-                )
+                tvAiredValue.text =
+                    if (anime.season.isNullOrEmpty()) getString(R.string.information_value, UNKNOWN)
+                    else getString(
+                        R.string.information_value, "${
+                            (anime.season as String).replaceFirstChar { firstChar ->
+                                firstChar.uppercase()
+                            }
+                        } ${anime.year}"
+                    )
 
                 tvSynopsis.text = anime.synopsis
                     ?: getString(R.string.no_information_by_mal)/*End of Body Section*/
@@ -109,16 +114,16 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
             }
 
             viewModel.getAnimeCharactersById(args.malID).catch { t ->
-                    Snackbar.make(
-                        root, t.localizedMessage ?: "Something Went Wrong", Snackbar.LENGTH_LONG
-                    ).show()
-                }.collect { characters ->
-                    if (characters.isEmpty()) {
-                        tvHeaderCharacter.visibility = View.GONE
-                        return@collect
-                    }
-                    characterAdapter.submitList(characters)
+                Snackbar.make(
+                    root, t.localizedMessage ?: "Something Went Wrong", Snackbar.LENGTH_LONG
+                ).show()
+            }.collect { characters ->
+                if (characters.isEmpty()) {
+                    tvHeaderCharacter.visibility = View.GONE
+                    return@collect
                 }
+                characterAdapter.submitList(characters)
+            }
         }
     }
 

@@ -26,7 +26,11 @@
             app:popExitAnim="@anim/center_to_left" />
         <action
             android:id="@+id/anime_to_favorite"
-            app:destination="@id/favorite_fragment" />
+            app:destination="@id/favorite_fragment"
+            app:enterAnim="@anim/left_to_center"
+            app:exitAnim="@anim/center_to_right"
+            app:popEnterAnim="@anim/right_to_center"
+            app:popExitAnim="@anim/center_to_left" />
     </fragment>
 
     <fragment
@@ -43,9 +47,9 @@
     </fragment>
     <dialog
         android:id="@+id/fragmentCharacterBottomSheet"
-        android:name="com.lelestacia.lelenimexml.feature.anime.ui.character_bottom_sheet.FragmentCharacterBottomSheet"
+        android:name="com.lelestacia.lelenimexml.feature.anime.ui.bottom_sheet_character.FragmentCharacterBottomSheet"
         android:label="FragmentCharacterBottomSheet"
-        tools:layout="@layout/fragment_character_bottom_sheet" >
+        tools:layout="@layout/bottom_sheet_character">
         <argument
             android:name="characterId"
             app:argType="integer" />
@@ -62,6 +66,9 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/history_popup_menu"
+            app:destination="@id/popup_menu" />
     </fragment>
     <fragment
         android:id="@+id/favorite_fragment"
@@ -70,6 +77,29 @@
         tools:layout="@layout/fragment_favorite">
         <action
             android:id="@+id/favorite_to_detail"
-            app:destination="@id/detail_anime_fragments" />
+            app:destination="@id/detail_anime_fragments"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/favorite_popup_menu"
+            app:destination="@id/popup_menu" />
     </fragment>
+    <dialog
+        android:id="@+id/popup_menu"
+        android:name="com.lelestacia.lelenimexml.feature.anime.ui.bottom_sheet_menu.MenuBottomSheet"
+        android:label="MenuBottomSheet"
+        tools:layout="@layout/bottom_sheet_menu" >
+        <action
+            android:id="@+id/popup_to_detail"
+            app:destination="@id/detail_anime_fragments"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <argument
+            android:name="anime"
+            app:argType="com.lelestacia.lelenimexml.core.model.domain.anime.Anime" />
+    </dialog>
 </navigation>

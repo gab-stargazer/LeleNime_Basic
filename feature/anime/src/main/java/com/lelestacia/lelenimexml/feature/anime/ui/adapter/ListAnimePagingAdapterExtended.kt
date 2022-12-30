@@ -11,8 +11,10 @@ import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.ItemListAnimeBinding
 
-class ListAnimePagingAdapter(val onItemClicked: (Anime) -> Unit) :
-    PagingDataAdapter<Anime, ListAnimePagingAdapter.ViewHolder>(DIFF_CALLBACK) {
+class ListAnimePagingAdapterExtended(
+    val onItemClicked: (Anime) -> Unit,
+    val onItemLongClicked: (Anime) -> Unit
+) : PagingDataAdapter<Anime, ListAnimePagingAdapterExtended.ViewHolder>(DIFF_CALLBACK) {
 
     inner class ViewHolder(private val binding: ItemListAnimeBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -34,6 +36,10 @@ class ListAnimePagingAdapter(val onItemClicked: (Anime) -> Unit) :
                     .getString(R.string.status_item_anime, item.status)
                 root.setOnClickListener {
                     onItemClicked(item)
+                }
+                root.setOnLongClickListener {
+                    onItemLongClicked(item)
+                    true
                 }
             }
         }

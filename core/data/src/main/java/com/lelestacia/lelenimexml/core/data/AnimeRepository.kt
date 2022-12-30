@@ -74,6 +74,18 @@ class AnimeRepository @Inject constructor(
         localDataSource.insertOrUpdateAnime(animeEntity)
     }
 
+    override fun getAllFavoriteAnime(): Flow<PagingData<AnimeEntity>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 15,
+                initialLoadSize = 30,
+                prefetchDistance = 5
+            ),
+            pagingSourceFactory = {
+                localDataSource.getAllFavoriteAnime()
+            }
+        ).flow
+
     override suspend fun updateAnimeFavorite(malID: Int) {
         val anime = localDataSource.getAnimeByAnimeId(malID)
         anime?.let {

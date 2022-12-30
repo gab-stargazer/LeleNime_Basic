@@ -11,4 +11,5 @@ interface IAnimeUseCase {
     fun getAnimeHistory(): Flow<PagingData<Anime>>
     suspend fun insertOrUpdateNewAnimeToHistory(anime: Anime)
     suspend fun updateAnimeFavorite(malID: Int)
+    fun getAllFavoriteAnime(): Flow<PagingData<Anime>>
 }

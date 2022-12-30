@@ -12,5 +12,6 @@ interface IAnimeRepository {
     suspend fun getAnimeByAnimeId(animeID: Int): AnimeEntity?
     fun getAnimeHistory(): Flow<PagingData<AnimeEntity>>
     suspend fun insertAnimeToHistory(animeEntity: AnimeEntity)
+    fun getAllFavoriteAnime(): Flow<PagingData<AnimeEntity>>
     suspend fun updateAnimeFavorite(malID: Int)
 }

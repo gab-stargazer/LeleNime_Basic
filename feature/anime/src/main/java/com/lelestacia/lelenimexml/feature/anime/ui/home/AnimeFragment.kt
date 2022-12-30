@@ -164,9 +164,7 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.btn_favorite_menu -> {
-                Snackbar
-                    .make(binding.root, "Favorite Coming Soon", Snackbar.LENGTH_SHORT)
-                    .show()
+                findNavController().navigate(AnimeFragmentDirections.animeToFavorite())
                 true
             }
             R.id.btn_history_menu -> {

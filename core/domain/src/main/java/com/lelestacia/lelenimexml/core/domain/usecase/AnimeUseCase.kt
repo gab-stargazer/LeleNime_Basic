@@ -63,4 +63,9 @@ class AnimeUseCase @Inject constructor(
     override suspend fun updateAnimeFavorite(malID: Int) {
         animeRepository.updateAnimeFavorite(malID)
     }
+
+    override fun getAllFavoriteAnime(): Flow<PagingData<Anime>> =
+        animeRepository.getAllFavoriteAnime().map { pagingData ->
+            pagingData.map { it.asAnime() }
+        }
 }

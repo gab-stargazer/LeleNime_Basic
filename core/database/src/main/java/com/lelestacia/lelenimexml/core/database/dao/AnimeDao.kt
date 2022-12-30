@@ -19,6 +19,9 @@ interface AnimeDao {
     @Query("SELECT * FROM anime_table WHERE malId =:animeId")
     fun getAnimeByAnimeId(animeId: Int): AnimeEntity?
 
+    @Query("SELECT * FROM anime_table WHERE isFavorite = 1")
+    fun getAllFavoriteAnime(): PagingSource<Int, AnimeEntity>
+
     @Update
     suspend fun updateAnime(anime: AnimeEntity)
 }

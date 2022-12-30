@@ -14,6 +14,8 @@ interface ILocalDataSource {
     suspend fun getAnimeByAnimeId(animeID: Int): AnimeEntity?
     fun getAllAnimeHistory(): PagingSource<Int, AnimeEntity>
     fun getNewestAnimeDataByAnimeId(animeID: Int): Flow<AnimeEntity>
+
+    fun getAllFavoriteAnime(): PagingSource<Int, AnimeEntity>
     /*End Of Anime Section*/
 
     /*Start of Character Section*/

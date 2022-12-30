@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.feature.anime.ui.character_bottom_sheet
+package com.lelestacia.lelenimexml.feature.anime.ui.bottom_sheet_character
 
 import android.os.Bundle
 import android.view.View
@@ -10,7 +10,7 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.lelestacia.lelenimexml.feature.anime.R
-import com.lelestacia.lelenimexml.feature.anime.databinding.FragmentCharacterBottomSheetBinding
+import com.lelestacia.lelenimexml.feature.anime.databinding.BottomSheetCharacterBinding
 import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.catch
@@ -18,10 +18,10 @@ import retrofit2.HttpException
 
 @AndroidEntryPoint
 class FragmentCharacterBottomSheet :
-    BottomSheetDialogFragment(R.layout.fragment_character_bottom_sheet) {
+    BottomSheetDialogFragment(R.layout.bottom_sheet_character) {
 
     private val args: FragmentCharacterBottomSheetArgs by navArgs()
-    private val binding: FragmentCharacterBottomSheetBinding by viewBinding()
+    private val binding: BottomSheetCharacterBinding by viewBinding()
     private val viewModel: CharacterBottomSheetViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +58,7 @@ class FragmentCharacterBottomSheet :
         }
     }
 
-    private fun FragmentCharacterBottomSheetBinding.setNickName(
+    private fun BottomSheetCharacterBinding.setNickName(
         nickname: List<String>,
         characterInformation: String
     ) {
@@ -75,7 +75,7 @@ class FragmentCharacterBottomSheet :
         tvCharacterNickname.text = ListToString().invoke(nickname)
     }
 
-    private fun FragmentCharacterBottomSheetBinding.setRomajiName(
+    private fun BottomSheetCharacterBinding.setRomajiName(
         kanjiName: String
     ) {
         if (kanjiName.isEmpty()) tvCharacterRomaji.visibility = View.GONE
