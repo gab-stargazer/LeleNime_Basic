@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface IAnimeUseCase {
     fun getAiringAnime(): Flow<PagingData<Anime>>
     fun getAnimeByTitle(query: String): Flow<PagingData<Anime>>
-    suspend fun getAnimeByMalID(animeId: Int): Flow<Anime>
+    fun getAnimeByMalID(animeId: Int): Flow<Anime>
     fun getAnimeHistory(): Flow<PagingData<Anime>>
     suspend fun insertOrUpdateNewAnimeToHistory(anime: Anime)
     suspend fun updateAnimeFavorite(malID: Int)

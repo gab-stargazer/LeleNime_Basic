@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -18,6 +19,17 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    private const val hostName = "api.jikan.moe"
+
+    @Provides
+    @Singleton
+    fun provideSSL(): CertificatePinner = CertificatePinner
+        .Builder()
+        .add(hostName, "sha256/WxVeH3behrxKvQkDq0Rk1d7c8ZFEx/rxNV4XNhHszo8=")
+        .add(hostName, "sha256/jQJTbIh0grw0/1TkHSumWb+Fs0Ggogr621gT3PvPKG0=")
+        .add(hostName, "sha256/C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=")
+        .build()
+
     @Provides
     @Singleton
     fun provideLogger() =
@@ -27,8 +39,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttp(logger: HttpLoggingInterceptor) = OkHttpClient.Builder()
+    fun provideOkHttp(logger: HttpLoggingInterceptor, shaKey: CertificatePinner) = OkHttpClient
+        .Builder()
         .addInterceptor(logger)
+        .certificatePinner(shaKey)
         .build()
 
     @Provides

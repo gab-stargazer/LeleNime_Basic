@@ -14,7 +14,7 @@ class MenuBottomSheetViewModel @Inject constructor(
     private val animeUseCase: IAnimeUseCase
 ) : ViewModel() {
 
-    suspend fun getAnimeNewestData(malID: Int): Flow<Anime> =
+    fun getAnimeNewestData(malID: Int): Flow<Anime> =
         animeUseCase.getAnimeByMalID(malID)
 
     fun updateAnimeFavorite(malID: Int) {

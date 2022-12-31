@@ -49,7 +49,7 @@ class AnimeRepository @Inject constructor(
         ).flow
     }
 
-    override suspend fun getNewestAnimeDataByAnimeId(animeID: Int): Flow<AnimeEntity> {
+    override fun getNewestAnimeDataByAnimeId(animeID: Int): Flow<AnimeEntity> {
         return localDataSource.getNewestAnimeDataByAnimeId(animeID)
     }
 

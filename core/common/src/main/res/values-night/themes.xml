@@ -22,6 +22,7 @@
         <item name="trackColor">#1C1C1C</item>
         <item name="thumbTint">@color/blue</item>
         <item name="trackTint">#7A7A7A</item>
+        <item name="iconTint">?android:attr/textColorPrimary</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
 

@@ -13,9 +13,10 @@ class AnimeViewModel @Inject constructor(
     private val animeUseCase: IAnimeUseCase
 ) : ViewModel() {
 
-    private val searchQuery = MutableLiveData("")
+    private val _searchQuery = MutableLiveData("")
+    val searchQuery: LiveData<String> get() = _searchQuery
 
-    val getAnimeData: LiveData<PagingData<Anime>> = searchQuery
+    val getAnimeData: LiveData<PagingData<Anime>> = _searchQuery
         .distinctUntilChanged()
         .switchMap { query ->
             if (query.isEmpty()) animeUseCase
@@ -29,7 +30,7 @@ class AnimeViewModel @Inject constructor(
         }
 
     fun insertNewSearchQuery(newSearchQuery: String) {
-        searchQuery.value = newSearchQuery
+        _searchQuery.value = newSearchQuery
     }
 
     suspend fun insertOrUpdateAnimeToHistory(anime: Anime) {

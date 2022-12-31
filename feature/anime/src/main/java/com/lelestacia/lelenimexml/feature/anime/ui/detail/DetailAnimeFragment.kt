@@ -61,25 +61,20 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
                 )/*End of Header Section*/
 
                 /*Body Section*/
-                tvTypeValue.text = getString(R.string.information_value, anime.type)
-                tvRatingValue.text =
-                    if (anime.rating.isEmpty()) getString(R.string.information_value, UNKNOWN)
-                    else getString(R.string.information_value, anime.rating)
+                tvTypeValue.text = getText(anime.type)
+                tvRatingValue.text = getText(anime.rating)
 
-                tvEpisodeValue.text = if (anime.episodes != null) getString(
-                    R.string.information_value,
-                    anime.episodes.toString()
-                )
-                else getString(R.string.information_value, UNKNOWN)
+                tvEpisodeValue.text = if (anime.episodes != null) getText(anime.episodes.toString())
+                else getText(null)
 
-                tvGenreValue.text = if (anime.genres.isEmpty()) UNKNOWN
-                else getString(R.string.information_value, ListToString().invoke(anime.genres))
+                tvGenreValue.text = if (anime.genres.isEmpty()) getText(UNKNOWN)
+                else getText(ListToString().invoke(anime.genres))
 
-                tvStatusValue.text = getString(R.string.information_value, anime.status)
+                tvStatusValue.text = getText(anime.status)
                 tvAiredValue.text =
-                    if (anime.season.isNullOrEmpty()) getString(R.string.information_value, UNKNOWN)
-                    else getString(
-                        R.string.information_value, "${
+                    if (anime.season.isNullOrEmpty()) getText(null)
+                    else getText(
+                        "${
                             (anime.season as String).replaceFirstChar { firstChar ->
                                 firstChar.uppercase()
                             }
@@ -87,7 +82,8 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
                     )
 
                 tvSynopsis.text = anime.synopsis
-                    ?: getString(R.string.no_information_by_mal)/*End of Body Section*/
+                    ?: getString(R.string.no_information_by_mal)
+                /*End of Body Section*/
 
                 /*Fab Section*/
                 fabFavorite.setImageResource(
@@ -125,6 +121,11 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
                 characterAdapter.submitList(characters)
             }
         }
+    }
+
+    private fun getText(input: String?): String {
+        if (input.isNullOrEmpty()) return getString(R.string.information_value, UNKNOWN)
+        return getString(R.string.information_value, input)
     }
 
     override fun onClick(v: View?) {

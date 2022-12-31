@@ -21,6 +21,7 @@
         <item name="trackColor">@color/orange</item>
         <item name="thumbTint">@color/orange</item>
         <item name="trackTint">@color/yellow</item>
+        <item name="iconTint">?android:attr/textColorPrimary</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
 

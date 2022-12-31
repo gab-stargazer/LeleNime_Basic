@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface IAnimeRepository {
     fun seasonAnimePagingData(): Flow<PagingData<NetworkAnime>>
     fun searchAnimeByTitle(query: String): Flow<PagingData<NetworkAnime>>
-    suspend fun getNewestAnimeDataByAnimeId(animeID: Int): Flow<AnimeEntity>
+    fun getNewestAnimeDataByAnimeId(animeID: Int): Flow<AnimeEntity>
     suspend fun getAnimeByAnimeId(animeID: Int): AnimeEntity?
     fun getAnimeHistory(): Flow<PagingData<AnimeEntity>>
     suspend fun insertAnimeToHistory(animeEntity: AnimeEntity)

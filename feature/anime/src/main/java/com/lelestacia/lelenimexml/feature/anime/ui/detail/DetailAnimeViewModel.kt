@@ -19,7 +19,7 @@ class DetailAnimeViewModel @Inject constructor(
     fun getAnimeCharactersById(animeId: Int): Flow<List<Character>> =
         characterUseCase.getAnimeCharacterById(animeId)
 
-    suspend fun getAnimeByMalId(animeId: Int): Flow<Anime> =
+    fun getAnimeByMalId(animeId: Int): Flow<Anime> =
         animeUseCase.getAnimeByMalID(animeId)
 
     fun updateAnimeFavorite(malID: Int) {

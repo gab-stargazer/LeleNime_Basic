@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.navArgs
 import coil.load
 import coil.transform.RoundedCornersTransformation
@@ -26,15 +26,18 @@ class FragmentCharacterBottomSheet :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.getCharacterDetailByCharacterId(args.characterId).catch { t ->
+        viewModel
+            .getCharacterDetailByCharacterId(args.characterId)
+            .catch { t ->
                 binding.progressCircular.visibility = View.GONE
                 val errorMessage =
                     if (t is HttpException) "${t.code()} - ${t.message()}"
                     else t.localizedMessage
                 binding.tvError.text = errorMessage
                 binding.tvError.visibility = View.VISIBLE
-            }.collect { characterDetail ->
+            }
+            .asLiveData()
+            .observe(viewLifecycleOwner) { characterDetail ->
                 binding.apply {
                     progressCircular.visibility = View.GONE
                     ivCharacterImage.load(characterDetail.images) {
@@ -55,7 +58,6 @@ class FragmentCharacterBottomSheet :
                             .ifEmpty { getString(R.string.no_information_by_mal) }
                 }
             }
-        }
     }
 
     private fun BottomSheetCharacterBinding.setNickName(

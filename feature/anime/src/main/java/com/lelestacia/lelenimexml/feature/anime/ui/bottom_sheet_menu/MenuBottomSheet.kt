@@ -4,8 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
-import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -28,8 +29,10 @@ class MenuBottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet_menu),
         val malID = args.anime.malID
 
         binding.apply {
-            viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-                viewModel.getAnimeNewestData(malID).collect { anime ->
+            viewModel
+                .getAnimeNewestData(malID)
+                .asLiveData()
+                .observe(viewLifecycleOwner) { anime ->
                     if (anime.titleJapanese.isNullOrEmpty())
                         btnToDetail.text = anime.title
                     else
@@ -42,17 +45,16 @@ class MenuBottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet_menu),
 
                     if (anime.isFavorite) {
                         btnAddRemoveFavorite.setCompoundDrawablesWithIntrinsicBounds(
-                            ResourcesCompat.getDrawable(resources, R.drawable.ic_favorite, null),
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite),
                             null,
                             null,
                             null
                         )
                     } else {
                         btnAddRemoveFavorite.setCompoundDrawablesWithIntrinsicBounds(
-                            ResourcesCompat.getDrawable(
-                                resources,
-                                R.drawable.ic_favorite_hollow,
-                                null
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_favorite_hollow
                             ),
                             null,
                             null,
@@ -60,7 +62,6 @@ class MenuBottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet_menu),
                         )
                     }
                 }
-            }
 
             btnToDetail.setOnClickListener(this@MenuBottomSheet)
             btnAddRemoveFavorite.setOnClickListener(this@MenuBottomSheet)
