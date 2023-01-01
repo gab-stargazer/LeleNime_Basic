@@ -22,7 +22,7 @@ jobs:
       # Get Gradle Permission
       - run:
           name: Chmod Permission
-          command: sudo chmod +x ./gradlew
+          command: sudo chmod +x ./gradlew
 
       # Download Dependencies
       - run:
