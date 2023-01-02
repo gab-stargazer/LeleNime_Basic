@@ -1,7 +1,7 @@
 package com.lelestacia.lelenimexml.core.model.database.converter
 
 import androidx.room.TypeConverter
-import java.util.*
+import java.util.Date
 
 class DateConverter {
     @TypeConverter

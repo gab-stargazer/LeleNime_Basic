@@ -1,6 +1,11 @@
 package com.lelestacia.lelenimexml.feature.anime.ui.home
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.lelestacia.lelenimexml.core.domain.usecase.IAnimeUseCase
@@ -13,10 +18,10 @@ class AnimeViewModel @Inject constructor(
     private val animeUseCase: IAnimeUseCase
 ) : ViewModel() {
 
-    private val searchQuery = MutableLiveData("")
+    private val _searchQuery = MutableLiveData("")
+    val searchQuery: LiveData<String> get() = _searchQuery
 
-    val getAnimeData: LiveData<PagingData<Anime>> = searchQuery
-        .distinctUntilChanged()
+    val getAnimeData: LiveData<PagingData<Anime>> = _searchQuery
         .switchMap { query ->
             if (query.isEmpty()) animeUseCase
                 .getAiringAnime()
@@ -29,7 +34,7 @@ class AnimeViewModel @Inject constructor(
         }
 
     fun insertNewSearchQuery(newSearchQuery: String) {
-        searchQuery.value = newSearchQuery
+        _searchQuery.value = newSearchQuery
     }
 
     suspend fun insertOrUpdateAnimeToHistory(anime: Anime) {

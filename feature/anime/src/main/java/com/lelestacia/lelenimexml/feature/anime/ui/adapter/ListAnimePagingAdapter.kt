@@ -11,7 +11,7 @@ import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.ItemListAnimeBinding
 
-class ListAnimePagingAdapter(val onAnimeSelected: (Anime) -> Unit) :
+class ListAnimePagingAdapter(val onItemClicked: (Anime) -> Unit) :
     PagingDataAdapter<Anime, ListAnimePagingAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     inner class ViewHolder(private val binding: ItemListAnimeBinding) :
@@ -33,7 +33,7 @@ class ListAnimePagingAdapter(val onAnimeSelected: (Anime) -> Unit) :
                 tvStatusAnime.text = context
                     .getString(R.string.status_item_anime, item.status)
                 root.setOnClickListener {
-                    onAnimeSelected(item)
+                    onItemClicked(item)
                 }
             }
         }
