@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   android: circleci/android@1.0.3
-  gradle: circleci/gradle@3.0.0
+  gradle: circleci/gradle@7.4
 
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
