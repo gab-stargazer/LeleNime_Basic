@@ -23,6 +23,9 @@ jobs:
       - run:
           name: Chmod Permission
           command: sudo chmod +x ./gradlew
+          
+      - run:
+          command: gradle --configuration-cache
 
       # Download Dependencies
       - run:
