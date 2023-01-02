@@ -16,7 +16,7 @@ class FavoriteViewModel @Inject constructor(
     private val animeUseCase: IAnimeUseCase
 ) : ViewModel() {
 
-    val favoriteAnime : Flow<PagingData<Anime>> =
+    val favoriteAnime: Flow<PagingData<Anime>> =
         animeUseCase
             .getAllFavoriteAnime()
             .cachedIn(viewModelScope)

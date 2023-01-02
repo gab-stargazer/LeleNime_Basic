@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val animeUseCase: IAnimeUseCase
-)  : ViewModel() {
+) : ViewModel() {
 
     val recentlyViewedAnime = animeUseCase
         .getAnimeHistory()

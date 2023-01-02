@@ -17,7 +17,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MenuBottomSheet : BottomSheetDialogFragment(R.layout.bottom_sheet_menu),
+class MenuBottomSheet :
+    BottomSheetDialogFragment(R.layout.bottom_sheet_menu),
     View.OnClickListener {
 
     private val args by navArgs<MenuBottomSheetArgs>()

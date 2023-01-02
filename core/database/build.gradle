@@ -5,7 +5,7 @@ plugins {
     id 'com.google.dagger.hilt.android'
 }
 
-apply from:'../../shared_dependencies.gradle'
+apply from: '../../shared_dependencies.gradle'
 
 android {
     namespace 'com.lelestacia.lelenimexml.core.database'
@@ -20,9 +20,9 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += [
-                        "room.schemaLocation":"$projectDir/schemas".toString(),
-                        "room.incremental":"true",
-                        "room.expandProjection":"true"]
+                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
             }
         }
     }
@@ -43,7 +43,9 @@ android {
 }
 
 dependencies {
+    implementation project(':core:common')
     implementation project(':core:model')
+    implementation "net.zetetic:android-database-sqlcipher:$sqlcipher_version"
 }
 
 kapt {

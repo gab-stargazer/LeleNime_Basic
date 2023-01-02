@@ -46,7 +46,7 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.recentlyViewedAnime.collect { recentlyViewedAnime ->
-                historyAnimeAdapter.submitData(lifecycle, recentlyViewedAnime)
+                historyAnimeAdapter.submitData(viewLifecycleOwner.lifecycle, recentlyViewedAnime)
             }
         }
     }

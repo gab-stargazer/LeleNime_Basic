@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
         setSupportActionBar(binding.appBarMain.toolbar)
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -32,7 +31,8 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 com.lelestacia.lelenimexml.feature.anime.R.id.anime_fragments,
                 com.lelestacia.lelenimexml.feature.others.R.id.settingsFragment,
-            ), drawerLayout
+            ),
+            drawerLayout
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)

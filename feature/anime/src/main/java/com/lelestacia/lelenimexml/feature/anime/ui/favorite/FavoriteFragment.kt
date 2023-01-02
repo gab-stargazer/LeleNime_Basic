@@ -28,9 +28,9 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
                 val action = FavoriteFragmentDirections.favoriteToDetail(anime.malID)
                 findNavController().navigate(action)
             }, onItemLongClicked = { anime ->
-                val action = FavoriteFragmentDirections.favoritePopupMenu(anime)
-                findNavController().navigate(action)
-            }
+            val action = FavoriteFragmentDirections.favoritePopupMenu(anime)
+            findNavController().navigate(action)
+        }
         )
 
         val myLayoutManager =
@@ -45,7 +45,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.favoriteAnime.collect { favoriteAnime ->
-                favoriteAnimeAdapter.submitData(lifecycle, favoriteAnime)
+                favoriteAnimeAdapter.submitData(viewLifecycleOwner.lifecycle, favoriteAnime)
             }
         }
     }

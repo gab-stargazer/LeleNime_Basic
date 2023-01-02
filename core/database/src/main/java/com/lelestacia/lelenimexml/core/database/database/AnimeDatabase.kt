@@ -15,7 +15,8 @@ import com.lelestacia.lelenimexml.core.model.database.converter.StringConverter
     entities = [
         AnimeEntity::class,
         CharacterEntity::class,
-        CharacterAdditionalInformationEntity::class],
+        CharacterAdditionalInformationEntity::class
+    ],
     version = 1,
     exportSchema = true,
 )

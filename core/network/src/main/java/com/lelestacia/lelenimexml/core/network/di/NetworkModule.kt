@@ -4,6 +4,7 @@ import android.viewbinding.library.BuildConfig
 import com.lelestacia.lelenimexml.core.network.INetworkDataSource
 import com.lelestacia.lelenimexml.core.network.NetworkDataSource
 import com.lelestacia.lelenimexml.core.network.source.ApiService
+import com.lelestacia.lelenimexml.core.network.source.ApiService.Companion.HOSTNAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,15 +20,13 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val hostName = "api.jikan.moe"
-
     @Provides
     @Singleton
     fun provideSSL(): CertificatePinner = CertificatePinner
         .Builder()
-        .add(hostName, "sha256/WxVeH3behrxKvQkDq0Rk1d7c8ZFEx/rxNV4XNhHszo8=")
-        .add(hostName, "sha256/jQJTbIh0grw0/1TkHSumWb+Fs0Ggogr621gT3PvPKG0=")
-        .add(hostName, "sha256/C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=")
+        .add(HOSTNAME, "sha256/WxVeH3behrxKvQkDq0Rk1d7c8ZFEx/rxNV4XNhHszo8=")
+        .add(HOSTNAME, "sha256/jQJTbIh0grw0/1TkHSumWb+Fs0Ggogr621gT3PvPKG0=")
+        .add(HOSTNAME, "sha256/C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=")
         .build()
 
     @Provides

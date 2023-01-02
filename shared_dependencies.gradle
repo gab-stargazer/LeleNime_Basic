@@ -12,6 +12,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
+    //Leak Canary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+
     //ViewBinding
     implementation 'com.github.yogacp:android-viewbinding:1.0.0'
 

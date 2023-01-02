@@ -90,11 +90,12 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
 
         rvAnime.apply {
             layoutManager = myLayoutManager
-            adapter = seasonAnimeAdapter.withLoadStateFooter(
-                footer = FooterLoadStateAdapter {
-                    seasonAnimeAdapter.retry()
-                }
-            )
+            adapter = seasonAnimeAdapter
+                .withLoadStateFooter(
+                    footer = FooterLoadStateAdapter {
+                        seasonAnimeAdapter.retry()
+                    }
+                )
             addItemDecoration(DividerItemDecoration(context, myLayoutManager.orientation))
             setHasFixedSize(true)
         }
@@ -144,7 +145,7 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
         viewModel
             .getAnimeData
             .observe(viewLifecycleOwner) { animePagingData ->
-                seasonAnimeAdapter.submitData(lifecycle, animePagingData)
+                seasonAnimeAdapter.submitData(viewLifecycleOwner.lifecycle, animePagingData)
             }
 
         screenError

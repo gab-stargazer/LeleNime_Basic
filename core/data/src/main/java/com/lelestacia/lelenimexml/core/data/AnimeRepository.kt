@@ -8,8 +8,8 @@ import com.lelestacia.lelenimexml.core.common.Constant.IS_SFW
 import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import com.lelestacia.lelenimexml.core.database.ILocalDataSource
 import com.lelestacia.lelenimexml.core.model.database.AnimeEntity
-import com.lelestacia.lelenimexml.core.network.INetworkDataSource
 import com.lelestacia.lelenimexml.core.model.network.anime.NetworkAnime
+import com.lelestacia.lelenimexml.core.network.INetworkDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -57,7 +57,6 @@ class AnimeRepository @Inject constructor(
         return localDataSource.getAnimeByAnimeId(animeID)
     }
 
-
     override fun getAnimeHistory(): Flow<PagingData<AnimeEntity>> =
         Pager(
             config = PagingConfig(
@@ -89,9 +88,11 @@ class AnimeRepository @Inject constructor(
     override suspend fun updateAnimeFavorite(malID: Int) {
         val anime = localDataSource.getAnimeByAnimeId(malID)
         anime?.let {
-            localDataSource.updateAnime(anime.apply {
-                isFavorite = !isFavorite
-            })
+            localDataSource.updateAnime(
+                anime.apply {
+                    isFavorite = !isFavorite
+                }
+            )
         }
     }
 }

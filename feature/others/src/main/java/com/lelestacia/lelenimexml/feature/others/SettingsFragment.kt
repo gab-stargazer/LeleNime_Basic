@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatDelegate.*
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.lelestacia.lelenimexml.core.common.Constant.IS_DARK_MODE
@@ -38,11 +40,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         binding.tvSystemTheme.addTextChangedListener {
             binding.tvSystemTheme.setAdapter(adapter)
-            when(it.toString()) {
+            when (it.toString()) {
                 array[0] -> {
                     sharedPreferences.edit().putInt(IS_DARK_MODE, 0).apply()
                 }
-                array[1] ->  {
+                array[1] -> {
                     setDefaultNightMode(MODE_NIGHT_YES)
                     sharedPreferences.edit().putInt(IS_DARK_MODE, 1).apply()
                 }

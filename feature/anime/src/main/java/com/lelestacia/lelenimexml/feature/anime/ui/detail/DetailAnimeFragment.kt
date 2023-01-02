@@ -16,8 +16,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.core.common.Constant.UNKNOWN
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.FragmentDetailAnimeBinding
-import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import com.lelestacia.lelenimexml.feature.anime.ui.adapter.CharacterAdapter
+import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.transformers.coil.BlurTransformation
 import kotlinx.coroutines.flow.catch
@@ -75,9 +75,9 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
                     if (anime.season.isNullOrEmpty()) getText(null)
                     else getText(
                         "${
-                            (anime.season as String).replaceFirstChar { firstChar ->
-                                firstChar.uppercase()
-                            }
+                        (anime.season as String).replaceFirstChar { firstChar ->
+                            firstChar.uppercase()
+                        }
                         } ${anime.year}"
                     )
 

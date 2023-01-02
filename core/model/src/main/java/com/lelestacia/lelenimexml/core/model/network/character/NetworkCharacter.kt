@@ -23,5 +23,3 @@ data class NetworkCharacter(
         val name: String
     )
 }
-
-
