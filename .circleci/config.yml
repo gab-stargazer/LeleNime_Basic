@@ -12,10 +12,7 @@ jobs:
 
     steps:
       # Checkout the code as the first step.
-      - run:
-          name: Checkout Code
-          command: Checkout 
-
+      - checkout
       # Get Gradle Permission
       - run:
           name: Chmod Permission
