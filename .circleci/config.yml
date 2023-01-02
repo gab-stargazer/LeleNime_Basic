@@ -25,6 +25,7 @@ jobs:
           command: sudo chmod +x ./gradlew
           
       - run:
+          name: Enable Cache
           command: gradle --configuration-cache
 
       # Download Dependencies
