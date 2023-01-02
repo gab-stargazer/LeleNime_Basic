@@ -15,7 +15,7 @@ jobs:
           name: Chmod Permission
           command: sudo chmod +x ./gradlew
 
-      # Run Ktlint Format 
+      # Run Ktlint Format
       - run:
           name: Ktlint Format
           command: ./gradlew ktlintFormat
@@ -28,7 +28,7 @@ jobs:
       # Run Unit test
       - run:
           name: Unit Testing
-          command: ./gradlew test 
+          command: ./gradlew test
 
       # And finally run the release build
       - run:
