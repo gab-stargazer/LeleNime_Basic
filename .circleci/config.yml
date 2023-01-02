@@ -12,28 +12,14 @@ jobs:
 
     steps:
       # Checkout the code as the first step.
-      - checkout 
-      - restore_cache:
-          key: android-orb-v1-
+      - run:
+          name: Checkout Code
+          command: Checkout 
 
       # Get Gradle Permission
       - run:
           name: Chmod Permission
           command: sudo chmod +x ./gradlew
-          
-      - run:
-          name: Enable Cache
-          command: gradle --configuration-cache
-
-      # Download Dependencies
-      - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
-      - save_cache:
-          paths:
-            - ~/.android/build-cache
-            - ~/.android/cache
-          key: 'android-orb-v1-{{ epoch }}'
 
       # Run Ktlint Format 
       - run:
