@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  gradle: circleci/gradle@3.0.0
-
 jobs:
   build-and-test:
     # These next lines define the Android machine image executor.
@@ -27,6 +24,11 @@ jobs:
       - run:
           name: Ktlint Check
           command: ./gradlew ktlintCheck
+
+      # Run Unit test
+      - run:
+          name: Unit Testing
+          command: ./gradlew test 
 
       # And finally run the release build
       - run:
