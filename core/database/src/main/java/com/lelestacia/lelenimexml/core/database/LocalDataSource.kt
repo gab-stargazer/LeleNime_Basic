@@ -45,6 +45,10 @@ class LocalDataSource @Inject constructor(
         return animeDao.getNewestAnimeDataByAnimeId(animeID)
     }
 
+    override fun getAllFavoriteAnime(): PagingSource<Int, AnimeEntity> {
+        return animeDao.getAllFavoriteAnime()
+    }
+
     override suspend fun insertOrUpdateCharacter(character: List<CharacterEntity>) {
         withContext(ioDispatcher) {
             characterDao.insertOrUpdateCharacter(character)

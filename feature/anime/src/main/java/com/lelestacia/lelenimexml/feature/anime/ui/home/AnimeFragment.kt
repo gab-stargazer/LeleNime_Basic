@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.viewbinding.library.fragment.viewBinding
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -30,7 +31,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider {
+class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnClickListener {
 
     private val binding: FragmentAnimeBinding by viewBinding()
     private val viewModel by viewModels<AnimeViewModel>()
@@ -43,7 +44,34 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider {
             viewLifecycleOwner,
             Lifecycle.State.RESUMED
         )
-        binding.setData()
+        binding.apply {
+            setInformationText()
+            setData()
+            tvInformation.setOnClickListener(this@AnimeFragment)
+        }
+    }
+
+    private fun FragmentAnimeBinding.setInformationText() {
+        viewModel.searchQuery.observe(viewLifecycleOwner) { searchQuery ->
+            if (searchQuery.isEmpty()) {
+                tvInformation.text = getString(R.string.this_season)
+                tvInformation.setCompoundDrawablesWithIntrinsicBounds(
+                    null,
+                    null,
+                    null,
+                    null
+                )
+                return@observe
+            }
+
+            tvInformation.text = getString(R.string.searching_for, searchQuery)
+            tvInformation.setCompoundDrawablesWithIntrinsicBounds(
+                null,
+                null,
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_clear),
+                null
+            )
+        }
     }
 
     private fun FragmentAnimeBinding.setData() {
@@ -62,11 +90,12 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider {
 
         rvAnime.apply {
             layoutManager = myLayoutManager
-            adapter = seasonAnimeAdapter.withLoadStateFooter(
-                footer = FooterLoadStateAdapter {
-                    seasonAnimeAdapter.retry()
-                }
-            )
+            adapter = seasonAnimeAdapter
+                .withLoadStateFooter(
+                    footer = FooterLoadStateAdapter {
+                        seasonAnimeAdapter.retry()
+                    }
+                )
             addItemDecoration(DividerItemDecoration(context, myLayoutManager.orientation))
             setHasFixedSize(true)
         }
@@ -75,7 +104,6 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider {
             .loadStateFlow
             .asLiveData()
             .observe(viewLifecycleOwner) { loadState ->
-
                 with(loadState.refresh) {
                     when (this) {
                         LoadState.Loading -> {
@@ -96,11 +124,13 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider {
                                 Snackbar.LENGTH_SHORT
                             ).show()
                         }
+
                         is LoadState.NotLoading -> {
                             binding.showLoading(isLoading = false)
                             if (seasonAnimeAdapter.itemCount == 0)
                                 binding.showNotFound(isNotFound = true)
                         }
+
                         is LoadState.Error -> {
                             binding.showLoading(isLoading = false)
                             binding.showError(
@@ -115,7 +145,7 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider {
         viewModel
             .getAnimeData
             .observe(viewLifecycleOwner) { animePagingData ->
-                seasonAnimeAdapter.submitData(lifecycle, animePagingData)
+                seasonAnimeAdapter.submitData(viewLifecycleOwner.lifecycle, animePagingData)
             }
 
         screenError
@@ -146,6 +176,7 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider {
         menuInflater.inflate(R.menu.main_menu, menu)
         val myActionMenuItem = menu.findItem(R.id.btn_search_menu)
         val searchView = myActionMenuItem.actionView as SearchView
+        searchView.queryHint = getString(R.string.insert_anime_title)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
@@ -164,16 +195,25 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.btn_favorite_menu -> {
-                Snackbar
-                    .make(binding.root, "Favorite Coming Soon", Snackbar.LENGTH_SHORT)
-                    .show()
+                findNavController().navigate(AnimeFragmentDirections.animeToFavorite())
                 true
             }
+
             R.id.btn_history_menu -> {
                 findNavController().navigate(AnimeFragmentDirections.animeToHistory())
                 true
             }
+
             else -> false
+        }
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            binding.tvInformation.id -> {
+                if (binding.tvInformation.text == getString(R.string.this_season)) return
+                viewModel.insertNewSearchQuery("")
+            }
         }
     }
 }

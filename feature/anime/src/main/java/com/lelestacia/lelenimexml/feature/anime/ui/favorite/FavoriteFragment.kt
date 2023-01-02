@@ -1,19 +1,52 @@
 package com.lelestacia.lelenimexml.feature.anime.ui.favorite
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.lelestacia.lelenimexml.feature.anime.R
+import com.lelestacia.lelenimexml.feature.anime.databinding.FragmentFavoriteBinding
+import com.lelestacia.lelenimexml.feature.anime.ui.adapter.ListAnimePagingAdapterExtended
+import dagger.hilt.android.AndroidEntryPoint
 
-class FavoriteFragment : Fragment() {
+@AndroidEntryPoint
+class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+    private val binding: FragmentFavoriteBinding by viewBinding()
+    private val viewModel: FavoriteViewModel by viewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val favoriteAnimeAdapter = ListAnimePagingAdapterExtended(
+            onItemClicked = { anime ->
+                viewModel.insertOrUpdateAnime(anime)
+                val action = FavoriteFragmentDirections.favoriteToDetail(anime.malID)
+                findNavController().navigate(action)
+            }, onItemLongClicked = { anime ->
+            val action = FavoriteFragmentDirections.favoritePopupMenu(anime)
+            findNavController().navigate(action)
+        }
+        )
+
+        val myLayoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        binding.rvAnime.apply {
+            layoutManager = myLayoutManager
+            adapter = favoriteAnimeAdapter
+            addItemDecoration(DividerItemDecoration(context, myLayoutManager.orientation))
+            setHasFixedSize(true)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.favoriteAnime.collect { favoriteAnime ->
+                favoriteAnimeAdapter.submitData(viewLifecycleOwner.lifecycle, favoriteAnime)
+            }
+        }
     }
 }

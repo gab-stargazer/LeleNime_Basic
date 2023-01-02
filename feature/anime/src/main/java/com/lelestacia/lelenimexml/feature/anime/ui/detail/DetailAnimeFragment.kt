@@ -16,8 +16,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.core.common.Constant.UNKNOWN
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.FragmentDetailAnimeBinding
-import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import com.lelestacia.lelenimexml.feature.anime.ui.adapter.CharacterAdapter
+import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.transformers.coil.BlurTransformation
 import kotlinx.coroutines.flow.catch
@@ -41,7 +41,6 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
     private fun FragmentDetailAnimeBinding.setView() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.getAnimeByMalId(args.malID).collect { anime ->
-
                 /*Header Section*/
                 ivBackgroundAnime.load(anime.coverImages) {
                     transformations(BlurTransformation(requireContext()))
@@ -62,27 +61,29 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
                 )/*End of Header Section*/
 
                 /*Body Section*/
-                tvTypeValue.text = getString(R.string.information_value, anime.type)
-                tvRatingValue.text = if (anime.rating.isEmpty()) UNKNOWN
-                else getString(R.string.information_value, anime.rating)
+                tvTypeValue.text = getText(anime.type)
+                tvRatingValue.text = getText(anime.rating)
 
-                tvEpisodeValue.text = if (anime.episodes != null) getString(
-                    R.string.information_value,
-                    anime.episodes.toString()
-                )
-                else getString(R.string.information_value, UNKNOWN)
+                tvEpisodeValue.text = if (anime.episodes != null) getText(anime.episodes.toString())
+                else getText(null)
 
-                tvGenreValue.text = if (anime.genres.isEmpty()) UNKNOWN
-                else getString(R.string.information_value, ListToString().invoke(anime.genres))
+                tvGenreValue.text = if (anime.genres.isEmpty()) getText(UNKNOWN)
+                else getText(ListToString().invoke(anime.genres))
 
-                tvStatusValue.text = getString(R.string.information_value, anime.status)
-                tvAiredValue.text = if (anime.season.isNullOrEmpty()) UNKNOWN
-                else getString(
-                    R.string.information_value, "${anime.season} ${anime.year}"
-                )
+                tvStatusValue.text = getText(anime.status)
+                tvAiredValue.text =
+                    if (anime.season.isNullOrEmpty()) getText(null)
+                    else getText(
+                        "${
+                        (anime.season as String).replaceFirstChar { firstChar ->
+                            firstChar.uppercase()
+                        }
+                        } ${anime.year}"
+                    )
 
                 tvSynopsis.text = anime.synopsis
-                    ?: getString(R.string.no_information_by_mal)/*End of Body Section*/
+                    ?: getString(R.string.no_information_by_mal)
+                /*End of Body Section*/
 
                 /*Fab Section*/
                 fabFavorite.setImageResource(
@@ -109,17 +110,22 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
             }
 
             viewModel.getAnimeCharactersById(args.malID).catch { t ->
-                    Snackbar.make(
-                        root, t.localizedMessage ?: "Something Went Wrong", Snackbar.LENGTH_LONG
-                    ).show()
-                }.collect { characters ->
-                    if (characters.isEmpty()) {
-                        tvHeaderCharacter.visibility = View.GONE
-                        return@collect
-                    }
-                    characterAdapter.submitList(characters)
+                Snackbar.make(
+                    root, t.localizedMessage ?: "Something Went Wrong", Snackbar.LENGTH_LONG
+                ).show()
+            }.collect { characters ->
+                if (characters.isEmpty()) {
+                    tvHeaderCharacter.visibility = View.GONE
+                    return@collect
                 }
+                characterAdapter.submitList(characters)
+            }
         }
+    }
+
+    private fun getText(input: String?): String {
+        if (input.isNullOrEmpty()) return getString(R.string.information_value, UNKNOWN)
+        return getString(R.string.information_value, input)
     }
 
     override fun onClick(v: View?) {

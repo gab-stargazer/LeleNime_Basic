@@ -2,7 +2,10 @@ package com.lelestacia.lelenimexml
 
 import android.app.Application
 import android.content.Context
-import androidx.appcompat.app.AppCompatDelegate.*
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import com.lelestacia.lelenimexml.core.common.Constant.IS_DARK_MODE
 import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import dagger.hilt.android.HiltAndroidApp
@@ -18,7 +21,7 @@ class MyApp : Application() {
 
         val isDarkMode = getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
             .getInt(IS_DARK_MODE, 0)
-        when(isDarkMode) {
+        when (isDarkMode) {
             0 -> setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
             1 -> setDefaultNightMode(MODE_NIGHT_YES)
             2 -> setDefaultNightMode(MODE_NIGHT_NO)
