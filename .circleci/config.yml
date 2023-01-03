@@ -53,8 +53,7 @@ jobs:
           command: ./gradlew assembleDebug
 
       - store_artifacts:
-          path: app/debug
-          name: app-debug
+          path: app/build/reports
           destination: debug
       
       - store_artifacts:
