@@ -2,8 +2,11 @@ version: 2.1
 
 jobs:
   build-and-test:
+    working_directory: ~/code
     docker:
       - image: cimg/android:2022.04.1
+    environment:
+      JVM_OPTS: -Xmx3200m
 
     steps:
       # Checkout the code as the first step.
@@ -14,17 +17,17 @@ jobs:
           name: Chmod Permission
           command: sudo chmod +x ./gradlew
       
-      # - restore_cache:
-      #     key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
 
-      # - run:
-      #     name: Download Dependencies
-      #     command: ./gradlew androidDependencies
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
 
-      # - save_cache:
-      #     paths:
-      #       - ~/.gradle
-      #     key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
 
       # Run Ktlint Format
       - run:
@@ -47,8 +50,11 @@ jobs:
           command: ./gradlew assembleRelease
       
       - store_artifacts:
-          path: app/build/release
-          destination: release
+          path: app/build/reports
+          destination: reports
+
+      - store_test_results:
+          path: app/build/test-results
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
