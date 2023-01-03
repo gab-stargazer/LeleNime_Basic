@@ -49,13 +49,13 @@ jobs:
 
       # And finally run the release build
       - run:
-          name: Assemble release build
-          command: ./gradlew assembleRelease
+          name: Assemble debug build
+          command: ./gradlew assembleDebug
 
       - store_artifacts:
-          path: app/release
-          name: app-release
-          destination: release
+          path: app/debug
+          name: app-debug
+          destination: debug
       
       - store_artifacts:
           path: app/build/reports
