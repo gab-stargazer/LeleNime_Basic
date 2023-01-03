@@ -2,14 +2,14 @@ version: 2.1
 
 jobs:
   build-and-test:
-    # These next lines define the Android machine image executor.
-    # See: https://circleci.com/docs/2.0/executor-types/
+    working_directory: /tmp
     docker:
       - image: cimg/android:2022.04.1
 
     steps:
       # Checkout the code as the first step.
       - checkout
+
       # Get Gradle Permission
       - run:
           name: Chmod Permission
@@ -33,13 +33,16 @@ jobs:
       # And finally run the release build
       - run:
           name: Assemble release build
-          command: |
-            ./gradlew assembleRelease
+          command: ./gradlew assembleRelease
+      - store_artifacts:
+          path: /tmp/art-1
+          destination: artifact-file
+      - store_artifacts:
+          path: /tmp/artifacts
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  verify-then-build:
     jobs:
       - build-and-test
