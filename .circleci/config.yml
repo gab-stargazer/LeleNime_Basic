@@ -8,6 +8,18 @@ jobs:
     steps:
       # Checkout the code as the first step.
       - checkout
+      
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
 
       # Get Gradle Permission
       - run:
@@ -33,11 +45,10 @@ jobs:
       - run:
           name: Assemble release build
           command: ./gradlew assembleRelease
+      
       - store_artifacts:
-          path: /tmp/art-1
-          destination: artifact-file
-      - store_artifacts:
-          path: /tmp/artifacts
+          path: app/build/release
+          destination: release
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
