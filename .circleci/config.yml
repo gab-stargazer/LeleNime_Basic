@@ -2,7 +2,6 @@ version: 2.1
 
 jobs:
   build-and-test:
-    working_directory: /tmp
     docker:
       - image: cimg/android:2022.04.1
 
