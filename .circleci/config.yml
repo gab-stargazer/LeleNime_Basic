@@ -1,0 +1,45 @@
+version: 2.1
+
+jobs:
+  build-and-test:
+    # These next lines define the Android machine image executor.
+    # See: https://circleci.com/docs/2.0/executor-types/
+    docker:
+      - image: cimg/android:2022.04.1
+
+    steps:
+      # Checkout the code as the first step.
+      - checkout
+      # Get Gradle Permission
+      - run:
+          name: Chmod Permission
+          command: sudo chmod +x ./gradlew
+
+      # Run Ktlint Format
+      - run:
+          name: Ktlint Format
+          command: ./gradlew ktlintFormat
+
+      # Run Ktlint Check
+      - run:
+          name: Ktlint Check
+          command: ./gradlew ktlintCheck
+
+      # Run Unit test
+      - run:
+          name: Unit Testing
+          command: ./gradlew test
+
+      # And finally run the release build
+      - run:
+          name: Assemble release build
+          command: |
+            ./gradlew assembleRelease
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
+    jobs:
+      - build-and-test
