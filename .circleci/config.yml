@@ -8,6 +8,11 @@ jobs:
     steps:
       # Checkout the code as the first step.
       - checkout
+
+      # Get Gradle Permission
+      - run:
+          name: Chmod Permission
+          command: sudo chmod +x ./gradlew
       
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
@@ -20,11 +25,6 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-
-      # Get Gradle Permission
-      - run:
-          name: Chmod Permission
-          command: sudo chmod +x ./gradlew
 
       # Run Ktlint Format
       - run:
