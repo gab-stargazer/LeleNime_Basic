@@ -54,6 +54,8 @@ jobs:
 
       - store_artifacts:
           path: app/release
+          name: app-release
+          destination: release
       
       - store_artifacts:
           path: app/build/reports
