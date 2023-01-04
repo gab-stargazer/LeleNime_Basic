@@ -49,7 +49,7 @@ jobs:
 
       #  Store Test Result
       - store_test_results:
-              path: ~/code/core/data/build/reports/tests
+              path: ~/core/data/build/reports/test
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
