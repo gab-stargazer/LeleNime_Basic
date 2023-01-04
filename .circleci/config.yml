@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Chmod Permission
           command: sudo chmod +x ./gradlew
-      
+
       # - restore_cache:
       #     key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
 
@@ -38,7 +38,7 @@ jobs:
       - run:
           name: Ktlint Check
           command: ./gradlew ktlintCheck
-          
+   
       - store_test_results:
           path: app/build/test-ktlint
 
@@ -48,9 +48,6 @@ jobs:
           command: ./gradlew test
 
       #  Store Test Result
-      - store_test_results:
-              path: core/data/build/test-results
-
       - store_artifacts:
               path: core/data/build/reports/tests
 
