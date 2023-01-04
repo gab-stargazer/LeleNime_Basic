@@ -12,6 +12,7 @@ buildscript {
     ext.timber_version = "5.0.1"
     ext.glide_version = "4.14.2"
     ext.sqlcipher_version = "4.5.0"
+    ext.mockK_version = "1.13.3"
     repositories {
         // other repositories...
         mavenCentral()
