@@ -22,9 +22,7 @@ class DetailAnimeViewModel @Inject constructor(
     fun getAnimeByMalId(animeId: Int): Flow<Anime> =
         animeUseCase.getAnimeByMalID(animeId)
 
-    fun updateAnimeFavorite(malID: Int) {
-        viewModelScope.launch {
-            animeUseCase.updateAnimeFavorite(malID)
-        }
+    fun updateAnimeFavorite(malID: Int) = viewModelScope.launch {
+        animeUseCase.updateAnimeFavorite(malID)
     }
 }

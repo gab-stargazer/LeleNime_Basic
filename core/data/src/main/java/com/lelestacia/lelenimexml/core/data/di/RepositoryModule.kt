@@ -6,6 +6,7 @@ import com.lelestacia.lelenimexml.core.data.CharacterRepository
 import com.lelestacia.lelenimexml.core.data.IAnimeRepository
 import com.lelestacia.lelenimexml.core.data.ICharacterRepository
 import com.lelestacia.lelenimexml.core.database.ILocalDataSource
+import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
 import com.lelestacia.lelenimexml.core.network.INetworkDataSource
 import dagger.Module
 import dagger.Provides
@@ -21,12 +22,12 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideAnimeRepository(
-        @ApplicationContext mContext: Context,
         apiService: INetworkDataSource,
-        localDataSource: ILocalDataSource
+        localDataSource: ILocalDataSource,
+        userPref: UserPref
     ): IAnimeRepository =
         AnimeRepository(
-            apiService, localDataSource, mContext
+            apiService, localDataSource, userPref
         )
 
     @Provides

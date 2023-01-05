@@ -75,9 +75,7 @@ class MenuBottomSheet :
             binding.btnToDetail.id -> {
                 lifecycleScope.launch {
                     val anime = args.anime
-                    launch {
-                        viewModel.insertOrUpdateAnime(anime)
-                    }.join()
+                    viewModel.insertOrUpdateAnime(anime).join()
                     val action = MenuBottomSheetDirections.popupToDetail(anime.malID)
                     findNavController().navigate(action)
                 }

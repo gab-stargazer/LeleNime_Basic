@@ -5,10 +5,8 @@ import androidx.paging.map
 import com.lelestacia.lelenimexml.core.data.IAnimeRepository
 import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
 import com.lelestacia.lelenimexml.core.model.domain.anime.asAnime
-import com.lelestacia.lelenimexml.core.model.domain.anime.asEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import javax.inject.Inject
 
 class AnimeUseCase @Inject constructor(
@@ -44,20 +42,7 @@ class AnimeUseCase @Inject constructor(
             }
 
     override suspend fun insertOrUpdateNewAnimeToHistory(anime: Anime) {
-        val localAnime = animeRepository.getAnimeByAnimeId(anime.malID)
-
-        if (localAnime != null) {
-            val newAnime = anime.asEntity(
-                isFavorite = localAnime.isFavorite
-            )
-            animeRepository.insertAnimeToHistory(newAnime)
-            Timber.d("Anime Updated")
-            return
-        }
-
-        val newAnime = anime.asEntity()
-        animeRepository.insertAnimeToHistory(newAnime)
-        Timber.d("Anime Inserted")
+        animeRepository.insertAnimeToHistory(anime)
     }
 
     override suspend fun updateAnimeFavorite(malID: Int) {
@@ -68,4 +53,10 @@ class AnimeUseCase @Inject constructor(
         animeRepository.getAllFavoriteAnime().map { pagingData ->
             pagingData.map { it.asAnime() }
         }
+
+    override fun isSafeMode(): Boolean = animeRepository.isSafeMode()
+
+    override fun changeSafeMode(isSafeMode: Boolean) {
+        animeRepository.changeSafeMode(isSafeMode)
+    }
 }

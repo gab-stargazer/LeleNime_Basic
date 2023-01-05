@@ -1,22 +1,23 @@
 package com.lelestacia.lelenimexml.core.data
 
-import android.content.Context
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.lelestacia.lelenimexml.core.common.Constant.IS_SFW
-import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import com.lelestacia.lelenimexml.core.database.ILocalDataSource
+import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
 import com.lelestacia.lelenimexml.core.model.database.AnimeEntity
+import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
+import com.lelestacia.lelenimexml.core.model.domain.anime.asEntity
 import com.lelestacia.lelenimexml.core.model.network.anime.NetworkAnime
 import com.lelestacia.lelenimexml.core.network.INetworkDataSource
 import kotlinx.coroutines.flow.Flow
+import timber.log.Timber
 import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
     private val apiService: INetworkDataSource,
     private val localDataSource: ILocalDataSource,
-    private val mContext: Context
+    private val userPref: UserPref
 ) : IAnimeRepository {
 
     override fun seasonAnimePagingData(): Flow<PagingData<NetworkAnime>> {
@@ -34,8 +35,7 @@ class AnimeRepository @Inject constructor(
     }
 
     override fun searchAnimeByTitle(query: String): Flow<PagingData<NetworkAnime>> {
-        val isSafeMode = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
-            .getBoolean(IS_SFW, true)
+        val isSafeMode = userPref.isSafeMode()
         return Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -69,8 +69,22 @@ class AnimeRepository @Inject constructor(
             }
         ).flow
 
-    override suspend fun insertAnimeToHistory(animeEntity: AnimeEntity) {
-        localDataSource.insertOrUpdateAnime(animeEntity)
+    override suspend fun insertAnimeToHistory(anime: Anime) {
+        val localAnime = localDataSource.getAnimeByAnimeId(anime.malID)
+        val isExist = localAnime != null
+
+        if (isExist) {
+            val newAnime = anime.asEntity(
+                isFavorite = (localAnime as AnimeEntity).isFavorite
+            )
+            localDataSource.insertOrUpdateAnime(newAnime)
+            Timber.d("Anime Updated")
+            return
+        }
+
+        val newAnime = anime.asEntity()
+        localDataSource.insertOrUpdateAnime(newAnime)
+        Timber.d("Anime Inserted")
     }
 
     override fun getAllFavoriteAnime(): Flow<PagingData<AnimeEntity>> =
@@ -94,5 +108,11 @@ class AnimeRepository @Inject constructor(
                 }
             )
         }
+    }
+
+    override fun isSafeMode(): Boolean = userPref.isSafeMode()
+
+    override fun changeSafeMode(isSafeMode: Boolean) {
+        userPref.switchSafeMode(isSafeMode)
     }
 }

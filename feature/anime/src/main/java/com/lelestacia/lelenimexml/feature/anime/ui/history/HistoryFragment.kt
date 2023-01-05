@@ -44,9 +44,10 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
             setHasFixedSize(true)
         }
 
+        val viewLifecycle = viewLifecycleOwner.lifecycle
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.recentlyViewedAnime.collect { recentlyViewedAnime ->
-                historyAnimeAdapter.submitData(viewLifecycleOwner.lifecycle, recentlyViewedAnime)
+                historyAnimeAdapter.submitData(viewLifecycle, recentlyViewedAnime)
             }
         }
     }

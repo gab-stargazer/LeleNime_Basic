@@ -18,9 +18,7 @@ class HistoryViewModel @Inject constructor(
         .getAnimeHistory()
         .cachedIn(viewModelScope)
 
-    fun insertOrUpdateAnime(anime: Anime) {
-        viewModelScope.launch {
-            animeUseCase.insertOrUpdateNewAnimeToHistory(anime)
-        }
+    fun insertOrUpdateAnime(anime: Anime) = viewModelScope.launch {
+        animeUseCase.insertOrUpdateNewAnimeToHistory(anime)
     }
 }

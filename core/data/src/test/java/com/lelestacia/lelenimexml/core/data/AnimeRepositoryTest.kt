@@ -3,6 +3,8 @@ package com.lelestacia.lelenimexml.core.data
 import android.content.Context
 import com.lelestacia.lelenimexml.core.data.dummy.chainsawManEntity
 import com.lelestacia.lelenimexml.core.database.ILocalDataSource
+import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
+import com.lelestacia.lelenimexml.core.model.domain.anime.asAnime
 import com.lelestacia.lelenimexml.core.network.INetworkDataSource
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -37,7 +39,7 @@ class AnimeRepositoryTest {
     lateinit var networkDataSource: INetworkDataSource
 
     @MockK
-    lateinit var mContext: Context
+    lateinit var userPref: UserPref
 
     private lateinit var animeRepository: IAnimeRepository
     private lateinit var characterRepository: ICharacterRepository
@@ -45,7 +47,7 @@ class AnimeRepositoryTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        animeRepository = AnimeRepository(networkDataSource, localDataSource, mContext)
+        animeRepository = AnimeRepository(networkDataSource, localDataSource, userPref)
         characterRepository =
             CharacterRepository(networkDataSource, localDataSource, Dispatchers.Main)
     }
@@ -103,7 +105,7 @@ class AnimeRepositoryTest {
     @Test
     fun `Verify if anime was inserted`() = runTest {
         coEvery { localDataSource.insertOrUpdateAnime(chainsawManEntity) } answers { }
-        animeRepository.insertAnimeToHistory(chainsawManEntity)
+        animeRepository.insertAnimeToHistory(chainsawManEntity.asAnime())
         coVerify { localDataSource.insertOrUpdateAnime(chainsawManEntity) }
     }
 

@@ -17,13 +17,11 @@ class MenuBottomSheetViewModel @Inject constructor(
     fun getAnimeNewestData(malID: Int): Flow<Anime> =
         animeUseCase.getAnimeByMalID(malID)
 
-    fun updateAnimeFavorite(malID: Int) {
-        viewModelScope.launch {
-            animeUseCase.updateAnimeFavorite(malID)
-        }
+    fun updateAnimeFavorite(malID: Int) = viewModelScope.launch {
+        animeUseCase.updateAnimeFavorite(malID)
     }
 
-    suspend fun insertOrUpdateAnime(anime: Anime) {
+    fun insertOrUpdateAnime(anime: Anime) = viewModelScope.launch {
         animeUseCase.insertOrUpdateNewAnimeToHistory(anime)
     }
 }

@@ -77,9 +77,7 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
     private fun FragmentAnimeBinding.setData() {
         val seasonAnimeAdapter = ListAnimePagingAdapter { anime ->
             lifecycleScope.launch {
-                launch {
-                    viewModel.insertOrUpdateAnimeToHistory(anime)
-                }.join()
+                viewModel.insertOrUpdateAnimeToHistory(anime).join()
                 val action = AnimeFragmentDirections.animeToDetail(anime.malID)
                 findNavController().navigate(action)
             }
@@ -142,10 +140,11 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
                 }
             }
 
+        val viewLifecycle = viewLifecycleOwner.lifecycle
         viewModel
             .getAnimeData
             .observe(viewLifecycleOwner) { animePagingData ->
-                seasonAnimeAdapter.submitData(viewLifecycleOwner.lifecycle, animePagingData)
+                seasonAnimeAdapter.submitData(viewLifecycle, animePagingData)
             }
 
         screenError

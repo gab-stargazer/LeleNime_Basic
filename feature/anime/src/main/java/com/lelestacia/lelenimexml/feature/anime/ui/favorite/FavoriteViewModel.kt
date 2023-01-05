@@ -21,9 +21,7 @@ class FavoriteViewModel @Inject constructor(
             .getAllFavoriteAnime()
             .cachedIn(viewModelScope)
 
-    fun insertOrUpdateAnime(anime: Anime) {
-        viewModelScope.launch {
-            animeUseCase.insertOrUpdateNewAnimeToHistory(anime)
-        }
+    fun insertOrUpdateAnime(anime: Anime) = viewModelScope.launch {
+        animeUseCase.insertOrUpdateNewAnimeToHistory(anime)
     }
 }

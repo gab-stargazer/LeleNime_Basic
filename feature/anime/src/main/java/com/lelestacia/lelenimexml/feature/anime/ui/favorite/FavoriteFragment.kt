@@ -43,9 +43,10 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             setHasFixedSize(true)
         }
 
+        val viewLifecycle = viewLifecycleOwner.lifecycle
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.favoriteAnime.collect { favoriteAnime ->
-                favoriteAnimeAdapter.submitData(viewLifecycleOwner.lifecycle, favoriteAnime)
+                favoriteAnimeAdapter.submitData(viewLifecycle, favoriteAnime)
             }
         }
     }
