@@ -17,7 +17,7 @@ jobs:
           name: Run KtLint formatting tools
           command: ./gradlew ktlintFormat
       - run:
-          name: KtLint check for validation 
+          name: KtLint check for validation
           command: ./gradlew ktlintCheck
       - store_test_results:
           path: app/build/test-ktlint
