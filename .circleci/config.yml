@@ -21,6 +21,10 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
 
       - run:
+          name: Enable Gradle Cache
+          command: gradle --configuration-cache 
+
+      - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
 
