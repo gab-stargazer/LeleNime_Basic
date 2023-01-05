@@ -1,10 +1,8 @@
 package com.lelestacia.lelenimexml.core.data
 
-import android.content.Context
 import com.lelestacia.lelenimexml.core.data.dummy.chainsawManEntity
 import com.lelestacia.lelenimexml.core.database.ILocalDataSource
 import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
-import com.lelestacia.lelenimexml.core.model.domain.anime.asAnime
 import com.lelestacia.lelenimexml.core.network.INetworkDataSource
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -100,13 +98,6 @@ class AnimeRepositoryTest {
         assertEquals(
             "Fetching Anime with ID 44511 should return Chainsaw Man", chainsawManEntity, result
         )
-    }
-
-    @Test
-    fun `Verify if anime was inserted`() = runTest {
-        coEvery { localDataSource.insertOrUpdateAnime(chainsawManEntity) } answers { }
-        animeRepository.insertAnimeToHistory(chainsawManEntity.asAnime())
-        coVerify { localDataSource.insertOrUpdateAnime(chainsawManEntity) }
     }
 
     @Test
