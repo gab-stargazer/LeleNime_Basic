@@ -9,53 +9,23 @@ jobs:
       JVM_OPTS: -Xmx3200m
 
     steps:
-      # Checkout the code as the first step.
       - checkout
-
-      # Get Gradle Permission
       - run:
-          name: Chmod Permission
+          name: Get Gradle Permission
           command: sudo chmod +x ./gradlew
-
-      # - restore_cache:
-      #     key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-
-      # - run:
-      #     name: Enable Gradle Cache
-      #     command: gradle --configuration-cache help
-
-      # - run:
-      #     name: Download Dependencies
-      #     command: ./gradlew androidDependencies
-
-      # - save_cache:
-      #     paths:
-      #       - ~/.gradle
-      #     key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-
-      # Run Ktlint Format
       - run:
-          name: Ktlint Format
+          name: Run KtLint formatting tools
           command: ./gradlew ktlintFormat
-
-      # Run Ktlint Check
       - run:
-          name: Ktlint Check
+          name: KtLint check for validation 
           command: ./gradlew ktlintCheck
-
       - store_test_results:
           path: app/build/test-ktlint
-
-      # Run Unit test
       - run:
-          name: Unit Testing
+          name: Run Unit Test from all modules
           command: ./gradlew test
-
-      #  Store Test Result
       - store_artifacts:
               path: core/data/build/reports/tests
-
-      #  Run gradle build debug apk
       - run:
           name: Gradle Build Debug APK
           command: ./gradlew assembleDebug
