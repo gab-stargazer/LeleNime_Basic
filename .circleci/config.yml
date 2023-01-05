@@ -22,7 +22,7 @@ jobs:
 
       - run:
           name: Enable Gradle Cache
-          command: gradle --configuration-cache 
+          command: gradle --configuration-cache help
 
       - run:
           name: Download Dependencies
