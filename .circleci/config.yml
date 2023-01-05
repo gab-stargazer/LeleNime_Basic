@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  test:
+  test-then-build:
     working_directory: ~/code
     docker:
       - image: cimg/android:2022.04.1
@@ -51,9 +51,16 @@ jobs:
       - store_artifacts:
               path: core/data/build/reports/tests
 
+      #  Run gradle build debug apk
+      - run:
+          name: Gradle Build Debug APK
+          command: ./gradlew assembleDebug
+      - store_artifacts:
+              path: app/build/outputs/apk
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   verify-flow:
     jobs:
-      - test
+      - test-then-build
