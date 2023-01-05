@@ -24,3 +24,5 @@
     public static *** bind(android.view.View);
     public static *** inflate(android.view.LayoutInflater);
 }
+
+-keep class com.lelestacia.lelenimexml.MainActivity

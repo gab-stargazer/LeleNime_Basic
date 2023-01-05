@@ -25,6 +25,7 @@ dependencies {
     //Coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
 
     //Coil
     implementation "io.coil-kt:coil:$coil_version"
@@ -47,4 +48,7 @@ dependencies {
 
     //Paging3
     implementation "androidx.paging:paging-runtime:$paging_version"
+
+    //Mockk Unit Test
+    testImplementation "io.mockk:mockk:$mockK_version"
 }
