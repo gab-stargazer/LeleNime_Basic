@@ -22,7 +22,9 @@ class UserPref(mContext: Context) {
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
-    fun isSafeMode(): Boolean = preferences.getBoolean(IS_SFW, true)
+    fun isSafeMode(): Boolean = preferences
+        .getBoolean(IS_SFW, true)
+
     fun switchSafeMode(isSafeMode: Boolean) {
         preferences.edit()
             .putBoolean(IS_SFW, isSafeMode)

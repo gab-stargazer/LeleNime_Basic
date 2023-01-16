@@ -2,8 +2,10 @@ package com.lelestacia.lelenimexml.core.database.di
 
 import android.content.Context
 import androidx.room.Room
-import com.lelestacia.lelenimexml.core.database.ILocalDataSource
-import com.lelestacia.lelenimexml.core.database.LocalDataSource
+import com.lelestacia.lelenimexml.core.database.AnimeLocalDataSource
+import com.lelestacia.lelenimexml.core.database.CharacterLocalDataSource
+import com.lelestacia.lelenimexml.core.database.IAnimeLocalDataSource
+import com.lelestacia.lelenimexml.core.database.ICharacterLocalDataSource
 import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
 import com.lelestacia.lelenimexml.core.database.dao.CharacterDao
 import com.lelestacia.lelenimexml.core.database.database.AnimeDatabase
@@ -35,7 +37,10 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideRoomDatabase(@ApplicationContext context: Context, @Named("Password") password: String): AnimeDatabase =
+    fun provideRoomDatabase(
+        @ApplicationContext context: Context,
+        @Named("Password") password: String
+    ): AnimeDatabase =
         Room
             .databaseBuilder(
                 context, AnimeDatabase::class.java, "anime.db"
@@ -54,6 +59,11 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideLocalDataSource(animeDao: AnimeDao, characterDao: CharacterDao): ILocalDataSource =
-        LocalDataSource(animeDao, characterDao)
+    fun provideAnimeDataSource(animeDao: AnimeDao): IAnimeLocalDataSource =
+        AnimeLocalDataSource(animeDao)
+
+    @Provides
+    @Singleton
+    fun provideCharacterDataSource(characterDao: CharacterDao): ICharacterLocalDataSource =
+        CharacterLocalDataSource(characterDao)
 }

@@ -11,6 +11,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.lelestacia.lelenimexml.databinding.ActivityMainBinding
+import com.lelestacia.lelenimexml.feature.anime.R.id.anime_fragments
+import com.lelestacia.lelenimexml.feature.others.R.id.settingsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,8 +31,8 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                com.lelestacia.lelenimexml.feature.anime.R.id.anime_fragments,
-                com.lelestacia.lelenimexml.feature.others.R.id.settingsFragment,
+                anime_fragments,
+                settingsFragment,
             ),
             drawerLayout
         )

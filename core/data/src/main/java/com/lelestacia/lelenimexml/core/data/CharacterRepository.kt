@@ -2,7 +2,7 @@ package com.lelestacia.lelenimexml.core.data
 
 import com.lelestacia.lelenimexml.core.data.utility.asCharacterAdditionalInformationEntity
 import com.lelestacia.lelenimexml.core.data.utility.asCharacterEntity
-import com.lelestacia.lelenimexml.core.database.ILocalDataSource
+import com.lelestacia.lelenimexml.core.database.ICharacterLocalDataSource
 import com.lelestacia.lelenimexml.core.model.database.character.CharacterAdditionalInformationEntity
 import com.lelestacia.lelenimexml.core.model.database.character.CharacterDetailEntity
 import com.lelestacia.lelenimexml.core.model.database.character.CharacterEntity
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class CharacterRepository @Inject constructor(
     private val apiService: INetworkDataSource,
-    private val localDataSource: ILocalDataSource,
+    private val localDataSource: ICharacterLocalDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ICharacterRepository {
 

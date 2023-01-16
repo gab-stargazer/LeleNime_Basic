@@ -3,7 +3,7 @@ package com.lelestacia.lelenimexml.core.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.lelestacia.lelenimexml.core.database.ILocalDataSource
+import com.lelestacia.lelenimexml.core.database.IAnimeLocalDataSource
 import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
 import com.lelestacia.lelenimexml.core.model.database.AnimeEntity
 import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
     private val apiService: INetworkDataSource,
-    private val localDataSource: ILocalDataSource,
+    private val localDataSource: IAnimeLocalDataSource,
     private val userPref: UserPref
 ) : IAnimeRepository {
 
