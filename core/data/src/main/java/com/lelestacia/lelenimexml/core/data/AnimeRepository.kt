@@ -3,15 +3,16 @@ package com.lelestacia.lelenimexml.core.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
 import com.lelestacia.lelenimexml.core.database.IAnimeLocalDataSource
 import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
-import com.lelestacia.lelenimexml.core.model.database.AnimeEntity
-import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
-import com.lelestacia.lelenimexml.core.model.domain.anime.asEntity
-import com.lelestacia.lelenimexml.core.model.network.anime.NetworkAnime
+import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
+import com.lelestacia.lelenimexml.core.model.anime.Anime
+import com.lelestacia.lelenimexml.core.data.utility.asAnime
+import com.lelestacia.lelenimexml.core.data.utility.asEntity
 import com.lelestacia.lelenimexml.core.network.INetworkDataSource
 import kotlinx.coroutines.flow.Flow
-import timber.log.Timber
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
@@ -20,7 +21,7 @@ class AnimeRepository @Inject constructor(
     private val userPref: UserPref
 ) : IAnimeRepository {
 
-    override fun seasonAnimePagingData(): Flow<PagingData<NetworkAnime>> {
+    override fun seasonAnimePagingData(): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -31,10 +32,12 @@ class AnimeRepository @Inject constructor(
             pagingSourceFactory = {
                 apiService.getAiringAnime()
             }
-        ).flow
+        ).flow.map { pagingData ->
+            pagingData.map { it.asAnime() }
+        }
     }
 
-    override fun searchAnimeByTitle(query: String): Flow<PagingData<NetworkAnime>> {
+    override fun searchAnimeByTitle(query: String): Flow<PagingData<Anime>> {
         val isSafeMode = userPref.isSafeMode()
         return Pager(
             config = PagingConfig(
@@ -46,18 +49,20 @@ class AnimeRepository @Inject constructor(
             pagingSourceFactory = {
                 apiService.searchAnimeByTitle(query, isSafeMode)
             }
-        ).flow
+        ).flow.map { pagingData ->
+            pagingData.map { it.asAnime() }
+        }
     }
 
-    override fun getNewestAnimeDataByAnimeId(animeID: Int): Flow<AnimeEntity> {
-        return localDataSource.getNewestAnimeDataByAnimeId(animeID)
+    override fun getNewestAnimeDataByAnimeId(animeID: Int): Flow<Anime> {
+        return localDataSource.getNewestAnimeDataByAnimeId(animeID).map { it.asAnime() }
     }
 
-    override suspend fun getAnimeByAnimeId(animeID: Int): AnimeEntity? {
-        return localDataSource.getAnimeByAnimeId(animeID)
+    override suspend fun getAnimeByAnimeId(animeID: Int): Anime? {
+        return localDataSource.getAnimeByAnimeId(animeID)?.asAnime()
     }
 
-    override fun getAnimeHistory(): Flow<PagingData<AnimeEntity>> =
+    override fun getAnimeHistory(): Flow<PagingData<Anime>> =
         Pager(
             config = PagingConfig(
                 pageSize = 15,
@@ -67,7 +72,9 @@ class AnimeRepository @Inject constructor(
             pagingSourceFactory = {
                 localDataSource.getAllAnimeHistory()
             }
-        ).flow
+        ).flow.map { pagingData ->
+            pagingData.map { it.asAnime() }
+        }
 
     override suspend fun insertAnimeToHistory(anime: Anime) {
         val localAnime = localDataSource.getAnimeByAnimeId(anime.malID)
@@ -78,16 +85,14 @@ class AnimeRepository @Inject constructor(
                 isFavorite = (localAnime as AnimeEntity).isFavorite
             )
             localDataSource.insertOrUpdateAnime(newAnime)
-            Timber.d("Anime Updated")
             return
         }
 
         val newAnime = anime.asEntity()
         localDataSource.insertOrUpdateAnime(newAnime)
-        Timber.d("Anime Inserted")
     }
 
-    override fun getAllFavoriteAnime(): Flow<PagingData<AnimeEntity>> =
+    override fun getAllFavoriteAnime(): Flow<PagingData<Anime>> =
         Pager(
             config = PagingConfig(
                 pageSize = 15,
@@ -97,7 +102,9 @@ class AnimeRepository @Inject constructor(
             pagingSourceFactory = {
                 localDataSource.getAllFavoriteAnime()
             }
-        ).flow
+        ).flow.map { pagingData ->
+            pagingData.map { it.asAnime() }
+        }
 
     override suspend fun updateAnimeFavorite(malID: Int) {
         val anime = localDataSource.getAnimeByAnimeId(malID)

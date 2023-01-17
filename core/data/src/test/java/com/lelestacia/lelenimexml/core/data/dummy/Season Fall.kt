@@ -1,6 +1,7 @@
 package com.lelestacia.lelenimexml.core.data.dummy
 
-import com.lelestacia.lelenimexml.core.model.network.anime.NetworkAnime
+import com.lelestacia.lelenimexml.core.network.model.anime.NetworkAnime
+import java.util.*
 
 val chainsawManNetwork = NetworkAnime(
     malId = 44511,
@@ -24,7 +25,11 @@ val chainsawManNetwork = NetworkAnime(
     synopsis = "Denji is robbed of a normal teenage life, left with nothing but his deadbeat father's overwhelming debt. His only companion is his pet, the chainsaw devil Pochita, with whom he slays devils for money that inevitably ends up in the yakuza's pockets. All Denji can do is dream of a good, simple life: one with delicious food and a beautiful girlfriend by his side. But an act of greedy betrayal by the yakuza leads to Denji's brutal, untimely death, crushing all hope of him ever achieving happiness.\n\nRemarkably, an old contract allows Pochita to merge with the deceased Denji and bestow devil powers on him, changing him into a hybrid able to transform his body parts into chainsaws. Because Denji's new abilities pose a significant risk to society, the Public Safety Bureau's elite devil hunter Makima takes him in, letting him live as long as he obeys her command. Guided by the promise of a content life alongside an attractive woman, Denji devotes everything and fights with all his might to make his naive dreams a reality.\n\n[Written by MAL Rewrite]",
     season = "fall",
     year = 2022,
-    genres = listOf()
+    genres = listOf(),
+    aired = NetworkAnime.AiringInformation(
+        from = Date().toString(),
+        to = Date().toString(),
+    )
 )
 
 val mobPsychoNetwork = NetworkAnime(
@@ -49,5 +54,9 @@ val mobPsychoNetwork = NetworkAnime(
     synopsis = "After foiling a world-threatening plot, Shigeo \"Mob\" Kageyama returns to tackle the more exhausting aspects of his mundane life—starting with filling out his school's nerve-racking career form. Meanwhile, he continues to assist his mentor Arataka Reigen and the office's new recruit, Katsuya Serizawa, in solving paranormal cases of their clients. While continuing his duties, Mob also works on gaining more independence in his esper and human lives, as well as trying to integrate better with the people around him.\n\nHowever, new supernatural and ordinary challenges test Mob’s emotional stability and force him to confront the realities around him. As he strives to continue forward on the path to maturity, Mob must resolve his emotional crises and reassess the naivety he has held on for so long.\n\n[Written by MAL Rewrite]",
     season = "fall",
     year = 2022,
-    genres = listOf()
+    genres = listOf(),
+    aired = NetworkAnime.AiringInformation(
+        from = Date().toString(),
+        to = Date().toString(),
+    )
 )

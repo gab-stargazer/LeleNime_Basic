@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
+import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.ItemListAnimeBinding
 

@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.model.network.character
+package com.lelestacia.lelenimexml.core.network.model.character
 
 import com.google.gson.annotations.SerializedName
 

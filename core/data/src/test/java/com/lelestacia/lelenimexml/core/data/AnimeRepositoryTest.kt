@@ -68,7 +68,7 @@ class AnimeRepositoryTest {
 
     @Test
     fun `Anime ID 44511 should return Chainsaw-Man Anime Newest Data`() = runTest {
-        val chainsawManID = chainsawManEntity.malId
+        val chainsawManID = chainsawManEntity.animeID
         val newestData = flowOf(
             chainsawManEntity
         )
@@ -95,7 +95,7 @@ class AnimeRepositoryTest {
 
     @Test
     fun `Anime ID 44511 should return Chainsaw-Man Anime`() = runTest {
-        val chainsawManID = chainsawManEntity.malId
+        val chainsawManID = chainsawManEntity.animeID
         coEvery { animeLocalDataSource.getAnimeByAnimeId(animeID = chainsawManID) } answers { chainsawManEntity }
         val result = animeRepository.getAnimeByAnimeId(animeID = chainsawManID)
         coVerify { animeLocalDataSource.getAnimeByAnimeId(animeID = chainsawManID) }
@@ -116,8 +116,8 @@ class AnimeRepositoryTest {
             afterUpdate.isFavorite
         )
         coEvery { animeLocalDataSource.updateAnime(afterUpdate) } answers { }
-        coEvery { animeLocalDataSource.getAnimeByAnimeId(chainsawManEntity.malId) } answers { beforeUpdate }
-        animeRepository.updateAnimeFavorite(chainsawManEntity.malId)
+        coEvery { animeLocalDataSource.getAnimeByAnimeId(chainsawManEntity.animeID) } answers { beforeUpdate }
+        animeRepository.updateAnimeFavorite(chainsawManEntity.animeID)
         coVerify { animeLocalDataSource.updateAnime(afterUpdate) }
     }
 }

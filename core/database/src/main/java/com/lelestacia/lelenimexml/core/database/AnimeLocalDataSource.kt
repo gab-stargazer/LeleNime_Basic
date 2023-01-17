@@ -2,7 +2,7 @@ package com.lelestacia.lelenimexml.core.database
 
 import androidx.paging.PagingSource
 import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
-import com.lelestacia.lelenimexml.core.model.database.AnimeEntity
+import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

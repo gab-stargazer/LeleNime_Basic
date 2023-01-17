@@ -41,4 +41,5 @@
     <string name="favorite">Favorite</string>
     <string name="history">History</string>
     <string name="fetching_data_please_wait">Fetching Data, Please Wait</string>
+    <string name="season">Season</string>
 </resources>

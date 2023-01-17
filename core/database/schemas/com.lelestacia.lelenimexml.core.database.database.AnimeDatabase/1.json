@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "862bc5bb7cef1f8d7bb74b38b5a55b02",
+    "identityHash": "96e637f65a99f912d14f50b6d2d2c678",
     "entities": [
       {
         "tableName": "anime_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`malId` INTEGER NOT NULL, `coverImages` TEXT NOT NULL, `title` TEXT NOT NULL, `titleEnglish` TEXT, `titleJapanese` TEXT, `type` TEXT NOT NULL, `episodes` INTEGER, `status` TEXT NOT NULL, `rating` TEXT NOT NULL, `score` REAL, `scoredBy` INTEGER, `rank` INTEGER NOT NULL, `synopsis` TEXT, `season` TEXT, `year` INTEGER NOT NULL, `genres` TEXT NOT NULL, `lastViewed` INTEGER NOT NULL, `isFavorite` INTEGER NOT NULL DEFAULT false, `youtubeId` TEXT, `url` TEXT, `images` TEXT, PRIMARY KEY(`malId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`malId` INTEGER NOT NULL, `coverImages` TEXT NOT NULL, `title` TEXT NOT NULL, `titleEnglish` TEXT, `titleJapanese` TEXT, `type` TEXT NOT NULL, `episodes` INTEGER, `status` TEXT NOT NULL, `rating` TEXT NOT NULL, `score` REAL, `scoredBy` INTEGER, `rank` INTEGER NOT NULL, `synopsis` TEXT, `season` TEXT, `year` INTEGER NOT NULL, `genres` TEXT NOT NULL, `lastViewed` INTEGER NOT NULL, `startedDate` TEXT, `finishedDate` TEXT, `isFavorite` INTEGER NOT NULL, `youtubeId` TEXT, `url` TEXT, `images` TEXT, PRIMARY KEY(`malId`))",
         "fields": [
           {
             "fieldPath": "malId",
@@ -111,11 +111,22 @@
             "notNull": true
           },
           {
+            "fieldPath": "startedDate",
+            "columnName": "startedDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "finishedDate",
+            "columnName": "finishedDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "isFavorite",
             "columnName": "isFavorite",
             "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "false"
+            "notNull": true
           },
           {
             "fieldPath": "trailer.youtubeId",
@@ -245,7 +256,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '862bc5bb7cef1f8d7bb74b38b5a55b02')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '96e637f65a99f912d14f50b6d2d2c678')"
     ]
   }
 }

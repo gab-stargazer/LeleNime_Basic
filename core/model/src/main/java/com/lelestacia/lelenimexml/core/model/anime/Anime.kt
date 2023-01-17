@@ -1,17 +1,12 @@
-package com.lelestacia.lelenimexml.core.model.database
+package com.lelestacia.lelenimexml.core.model.anime
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.util.Date
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = "anime_table")
-data class AnimeEntity(
-    @PrimaryKey(autoGenerate = false)
-    val malId: Int,
+@Parcelize
+data class Anime(
+    val malID: Int,
     val coverImages: String,
-    @Embedded
     val trailer: Trailer?,
     val title: String,
     val titleEnglish: String?,
@@ -27,14 +22,14 @@ data class AnimeEntity(
     val season: String?,
     val year: Int,
     val genres: List<String>,
-    val lastViewed: Date,
-    @ColumnInfo(defaultValue = "false")
-    var isFavorite: Boolean
-) {
-
+    val isFavorite: Boolean,
+    val startedDate: String?,
+    val finishedDate: String?,
+) : Parcelable {
+    @Parcelize
     data class Trailer(
         val youtubeId: String?,
         val url: String?,
         val images: String?
-    )
+    ) : Parcelable
 }

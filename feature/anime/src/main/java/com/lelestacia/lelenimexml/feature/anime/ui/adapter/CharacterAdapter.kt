@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.lelestacia.lelenimexml.core.model.domain.character.Character
+import com.lelestacia.lelenimexml.core.model.character.Character
 import com.lelestacia.lelenimexml.feature.anime.databinding.ItemCardCharacterBinding
 
 class CharacterAdapter(val onCharacterSelected: (Int) -> Unit) :

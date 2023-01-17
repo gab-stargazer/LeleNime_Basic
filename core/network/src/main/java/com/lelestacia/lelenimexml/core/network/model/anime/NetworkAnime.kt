@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.model.network.anime
+package com.lelestacia.lelenimexml.core.network.model.anime
 
 import com.google.gson.annotations.SerializedName
 
@@ -37,6 +37,8 @@ data class NetworkAnime(
     val year: Int,
     @SerializedName("genres")
     val genres: List<Genre>,
+    @SerializedName("aired")
+    val aired: AiringInformation
 ) {
 
     data class Images(
@@ -80,5 +82,12 @@ data class NetworkAnime(
         val name: String,
         @SerializedName("url")
         val url: String
+    )
+
+    data class AiringInformation(
+        @SerializedName("from")
+        val from: String?,
+        @SerializedName("to")
+        val to: String?
     )
 }

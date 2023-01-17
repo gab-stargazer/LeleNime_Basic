@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.model.database.converter
+package com.lelestacia.lelenimexml.core.database.model.converter
 
 import androidx.room.TypeConverter
 import java.util.Date

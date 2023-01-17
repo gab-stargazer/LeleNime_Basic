@@ -71,15 +71,18 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
                 else getText(ListToString().invoke(anime.genres))
 
                 tvStatusValue.text = getText(anime.status)
-                tvAiredValue.text =
+
+                tvSeasonValue.text =
                     if (anime.season.isNullOrEmpty()) getText(null)
                     else getText(
                         "${
-                        (anime.season as String).replaceFirstChar { firstChar ->
-                            firstChar.uppercase()
-                        }
+                            (anime.season as String).replaceFirstChar { firstChar ->
+                                firstChar.uppercase()
+                            }
                         } ${anime.year}"
                     )
+
+
 
                 tvSynopsis.text = anime.synopsis
                     ?: getString(R.string.no_information_by_mal)

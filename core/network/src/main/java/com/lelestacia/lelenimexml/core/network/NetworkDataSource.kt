@@ -1,9 +1,9 @@
 package com.lelestacia.lelenimexml.core.network
 
 import androidx.paging.PagingSource
-import com.lelestacia.lelenimexml.core.model.network.anime.NetworkAnime
-import com.lelestacia.lelenimexml.core.model.network.character.NetworkCharacter
-import com.lelestacia.lelenimexml.core.model.network.character.NetworkCharacterDetail
+import com.lelestacia.lelenimexml.core.network.model.anime.NetworkAnime
+import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
+import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterDetail
 import com.lelestacia.lelenimexml.core.network.source.ApiService
 import com.lelestacia.lelenimexml.core.network.source.SearchAnimePaging
 import com.lelestacia.lelenimexml.core.network.source.SeasonAnimePaging

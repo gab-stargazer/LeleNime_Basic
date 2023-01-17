@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.model.database.converter
+package com.lelestacia.lelenimexml.core.database.model.converter
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
@@ -9,16 +9,20 @@ class StringConverter {
     @TypeConverter
     fun stringToList(stringParam: String): List<String> {
         val type = object : TypeToken<List<String>>() {}.type
-        if (stringParam.isEmpty())
-            return emptyList()
-        return Gson().fromJson(stringParam, type)
+        return if (stringParam.isEmpty()) {
+            emptyList()
+        } else {
+            Gson().fromJson(stringParam, type)
+        }
     }
 
     @TypeConverter
     fun listToString(listParam: List<String>): String {
         val type = object : TypeToken<List<String>>() {}.type
-        if (listParam.isEmpty())
-            return ""
-        return Gson().toJson(listParam, type)
+        return if (listParam.isEmpty()) {
+            ""
+        } else {
+            Gson().toJson(listParam, type)
+        }
     }
 }

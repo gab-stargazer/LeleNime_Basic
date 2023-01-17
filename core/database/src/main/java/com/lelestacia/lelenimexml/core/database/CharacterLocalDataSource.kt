@@ -1,9 +1,9 @@
 package com.lelestacia.lelenimexml.core.database
 
 import com.lelestacia.lelenimexml.core.database.dao.CharacterDao
-import com.lelestacia.lelenimexml.core.model.database.character.CharacterAdditionalInformationEntity
-import com.lelestacia.lelenimexml.core.model.database.character.CharacterDetailEntity
-import com.lelestacia.lelenimexml.core.model.database.character.CharacterEntity
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterProfile
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,19 +20,19 @@ class CharacterLocalDataSource @Inject constructor(
         }
     }
 
-    override suspend fun insertOrReplaceAdditionalInformation(additionalInformation: CharacterAdditionalInformationEntity) {
+    override suspend fun insertOrReplaceAdditionalInformation(additionalInformation: CharacterInformationEntity) {
         withContext(ioDispatcher) {
             characterDao.insertOrReplaceAdditionalInformation(additionalInformation)
         }
     }
 
-    override suspend fun getCharacterAdditionalInformationById(characterID: Int): CharacterAdditionalInformationEntity? {
+    override suspend fun getCharacterAdditionalInformationById(characterID: Int): CharacterInformationEntity? {
         return withContext(ioDispatcher) {
             characterDao.getCharacterAdditionalInformationById(characterID)
         }
     }
 
-    override suspend fun getCharacterFullProfile(characterID: Int): CharacterDetailEntity {
+    override suspend fun getCharacterFullProfile(characterID: Int): CharacterProfile {
         return withContext(ioDispatcher) {
             characterDao.getCharacterFullProfile(characterID)
         }
