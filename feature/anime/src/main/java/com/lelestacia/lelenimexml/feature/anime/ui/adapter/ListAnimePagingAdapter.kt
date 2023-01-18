@@ -58,7 +58,7 @@ class ListAnimePagingAdapter(val onItemClicked: (Anime) -> Unit) :
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Anime>() {
             override fun areItemsTheSame(oldItem: Anime, newItem: Anime): Boolean =
-                oldItem.malID == newItem.malID
+                oldItem.animeID == newItem.animeID
 
             override fun areContentsTheSame(oldItem: Anime, newItem: Anime): Boolean =
                 oldItem == newItem

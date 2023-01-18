@@ -29,16 +29,16 @@ fun NetworkCharacter.asEntity(animeID: Int): CharacterEntity =
 
 fun CharacterEntity.asCharacter(): Character =
     Character(
-        characterMalId = characterID,
+        characterID = characterID,
         images = characterImage,
         name = characterName,
         role = characterName,
-        favoriteBy = characterFavorite
+        favorite = characterFavorite
     )
 
 fun CharacterProfile.asCharacterDetail(): CharacterDetail =
     CharacterDetail(
-        characterMalId = character.characterID,
+        characterID = character.characterID,
         name = character.characterName,
         characterKanjiName = additionalInformation.characterKanjiName,
         characterNickNames = additionalInformation.characterNickNames,

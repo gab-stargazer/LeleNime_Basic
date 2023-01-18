@@ -2,6 +2,7 @@ package com.lelestacia.lelenimexml.feature.anime.ui.detail
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,6 +15,9 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.core.common.Constant.UNKNOWN
+import com.lelestacia.lelenimexml.core.common.DateParser
+import com.lelestacia.lelenimexml.core.common.R.anim.fade_in
+import com.lelestacia.lelenimexml.core.common.R.anim.fade_out
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.FragmentDetailAnimeBinding
 import com.lelestacia.lelenimexml.feature.anime.ui.adapter.CharacterAdapter
@@ -23,7 +27,8 @@ import jp.wasabeef.transformers.coil.BlurTransformation
 import kotlinx.coroutines.flow.catch
 
 @AndroidEntryPoint
-class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnClickListener {
+class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnClickListener,
+    View.OnScrollChangeListener {
 
     private val viewModel by viewModels<DetailAnimeViewModel>()
     private val args by navArgs<DetailAnimeFragmentArgs>()
@@ -35,6 +40,7 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
             setView()
             setCharacters()
             fabFavorite.setOnClickListener(this@DetailAnimeFragment)
+            scrollContent.setOnScrollChangeListener(this@DetailAnimeFragment)
         }
     }
 
@@ -53,12 +59,15 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
                 }
 
                 tvAnimeTitle.text = anime.title
-                if (anime.titleJapanese.isNullOrEmpty()) tvAnimeTitleJapanese.visibility = View.GONE
+                if (anime.titleJapanese.isNullOrEmpty() || anime.titleJapanese == anime.title || anime.titleJapanese == anime.titleEnglish)
+                    tvAnimeTitleJapanese.visibility = View.GONE
                 else tvAnimeTitleJapanese.text = anime.titleJapanese
 
                 tvRankAndRating.text = getString(
                     R.string.rank_and_score, anime.rank.toString(), anime.score ?: UNKNOWN
-                )/*End of Header Section*/
+                )
+                tvUserRated.text = getString(R.string.rated_by, anime.scoredBy ?: 0)
+                /*End of Header Section*/
 
                 /*Body Section*/
                 tvTypeValue.text = getText(anime.type)
@@ -82,7 +91,9 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
                         } ${anime.year}"
                     )
 
-
+                val parser = DateParser()
+                tvAiredValue.text =
+                    getText("${parser(anime.startedDate)} - ${parser(anime.finishedDate)}")
 
                 tvSynopsis.text = anime.synopsis
                     ?: getString(R.string.no_information_by_mal)
@@ -135,6 +146,50 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
         when (v?.id) {
             binding.fabFavorite.id -> {
                 viewModel.updateAnimeFavorite(args.malID)
+            }
+        }
+    }
+
+    override fun onScrollChange(
+        v: View?,
+        scrollX: Int,
+        scrollY: Int,
+        oldScrollX: Int,
+        oldScrollY: Int
+    ) {
+        when (v?.id) {
+            binding.scrollContent.id -> {
+                if (scrollY == 0 && binding.fabFavorite.visibility == View.GONE) {
+                    binding.fabFavorite.apply {
+                        startAnimation(
+                            AnimationUtils.loadAnimation(
+                                requireContext(),
+                                fade_in
+                            )
+                        )
+                        visibility = View.VISIBLE
+                    }
+                } else if (scrollY > oldScrollY && binding.fabFavorite.visibility == View.VISIBLE) {
+                    binding.fabFavorite.apply {
+                        startAnimation(
+                            AnimationUtils.loadAnimation(
+                                requireContext(),
+                                fade_out
+                            )
+                        )
+                        visibility = View.GONE
+                    }
+                } else if (scrollY < oldScrollY && binding.fabFavorite.visibility == View.GONE) {
+                    binding.fabFavorite.apply {
+                        startAnimation(
+                            AnimationUtils.loadAnimation(
+                                requireContext(),
+                                fade_in
+                            )
+                        )
+                        visibility = View.VISIBLE
+                    }
+                }
             }
         }
     }

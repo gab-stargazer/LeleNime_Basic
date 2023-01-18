@@ -1,7 +1,7 @@
 package com.lelestacia.lelenimexml.core.model.character
 
 data class CharacterDetail(
-    val characterMalId: Int,
+    val characterID: Int,
     val name: String,
     val characterKanjiName: String,
     val characterNickNames: List<String>,

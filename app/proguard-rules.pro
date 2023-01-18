@@ -20,6 +20,9 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keep class * implements android.viewbinding.library.activity.ActivityViewBindingDelegate
+-keep class * implements android.viewbinding.library.activity.ActivityBindingKt
+
 -keep class * implements androidx.viewbinding.ViewBinding {
     public static *** bind(android.view.View);
     public static *** inflate(android.view.LayoutInflater);

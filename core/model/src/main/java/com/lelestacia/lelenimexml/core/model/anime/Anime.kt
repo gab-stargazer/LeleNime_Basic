@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Anime(
-    val malID: Int,
+    val animeID: Int,
     val coverImages: String,
     val trailer: Trailer?,
     val title: String,
@@ -25,11 +25,11 @@ data class Anime(
     val isFavorite: Boolean,
     val startedDate: String?,
     val finishedDate: String?,
-) : Parcelable {
+) :Parcelable {
     @Parcelize
     data class Trailer(
         val youtubeId: String?,
         val url: String?,
         val images: String?
-    ) : Parcelable
+    ): Parcelable
 }

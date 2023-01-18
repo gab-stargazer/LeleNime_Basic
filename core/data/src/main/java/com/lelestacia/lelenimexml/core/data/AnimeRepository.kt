@@ -77,7 +77,7 @@ class AnimeRepository @Inject constructor(
         }
 
     override suspend fun insertAnimeToHistory(anime: Anime) {
-        val localAnime = localDataSource.getAnimeByAnimeId(anime.malID)
+        val localAnime = localDataSource.getAnimeByAnimeId(anime.animeID)
         val isExist = localAnime != null
 
         if (isExist) {

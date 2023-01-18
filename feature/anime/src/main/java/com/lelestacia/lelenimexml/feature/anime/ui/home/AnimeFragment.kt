@@ -78,7 +78,7 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
         val seasonAnimeAdapter = ListAnimePagingAdapter { anime ->
             lifecycleScope.launch {
                 viewModel.insertOrUpdateAnimeToHistory(anime).join()
-                val action = AnimeFragmentDirections.animeToDetail(anime.malID)
+                val action = AnimeFragmentDirections.animeToDetail(anime.animeID)
                 findNavController().navigate(action)
             }
         }

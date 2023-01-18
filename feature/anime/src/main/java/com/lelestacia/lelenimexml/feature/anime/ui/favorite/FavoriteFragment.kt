@@ -25,7 +25,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         val favoriteAnimeAdapter = ListAnimePagingAdapterExtended(
             onItemClicked = { anime ->
                 viewModel.insertOrUpdateAnime(anime)
-                val action = FavoriteFragmentDirections.favoriteToDetail(anime.malID)
+                val action = FavoriteFragmentDirections.favoriteToDetail(anime.animeID)
                 findNavController().navigate(action)
             }, onItemLongClicked = { anime ->
             val action = FavoriteFragmentDirections.favoritePopupMenu(anime)

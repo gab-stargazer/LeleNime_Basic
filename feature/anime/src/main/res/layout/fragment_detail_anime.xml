@@ -97,6 +97,18 @@
                 app:layout_constraintTop_toTopOf="@id/tv_rank_and_rating"
                 app:tint="?android:attr/textColorPrimary" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_user_rated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintEnd_toEndOf="@id/iv_icon_score"
+                app:layout_constraintStart_toStartOf="@id/tv_rank_and_rating"
+                app:layout_constraintTop_toBottomOf="@id/iv_icon_score"
+                tools:text="@string/rated_by" />
+
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_type_holder"
@@ -109,7 +121,7 @@
                 android:textColor="?android:attr/textColorPrimary"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_rank_and_rating" />
+                app:layout_constraintTop_toBottomOf="@id/tv_user_rated" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_type_value"

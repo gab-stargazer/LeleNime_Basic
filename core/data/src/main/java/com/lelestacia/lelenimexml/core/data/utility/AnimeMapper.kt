@@ -7,7 +7,7 @@ import java.util.Date
 
 fun NetworkAnime.asAnime(): Anime =
     Anime(
-        malID = malId,
+        animeID = malId,
         coverImages = images.webp.largeImageUrl,
         trailer = Anime.Trailer(
             youtubeId = trailer?.youtubeId,
@@ -36,7 +36,7 @@ fun NetworkAnime.asAnime(): Anime =
     )
 
 fun AnimeEntity.asAnime(): Anime = Anime(
-    malID = animeID,
+    animeID = animeID,
     coverImages = coverImages,
     trailer = Anime.Trailer(
         youtubeId = trailer?.youtubeId,
@@ -64,7 +64,7 @@ fun AnimeEntity.asAnime(): Anime = Anime(
 
 fun Anime.asEntity(isFavorite: Boolean = false): AnimeEntity =
     AnimeEntity(
-        animeID = malID,
+        animeID = animeID,
         coverImages = coverImages,
         trailer = AnimeEntity.Trailer(
             youtubeId = trailer?.youtubeId,
