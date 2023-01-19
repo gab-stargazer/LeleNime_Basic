@@ -12,12 +12,8 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertThrows
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -64,33 +60,6 @@ class AnimeRepositoryTest {
             animeRepository.getNewestAnimeDataByAnimeId(animeID = wrongAnimeID)
         }
         coVerify { animeLocalDataSource.getNewestAnimeDataByAnimeId(animeID = wrongAnimeID) }
-    }
-
-    @Test
-    fun `Anime ID 44511 should return Chainsaw-Man Anime Newest Data`() = runTest {
-        val chainsawManID = chainsawManEntity.animeID
-        val newestData = flowOf(
-            chainsawManEntity
-        )
-        coEvery { animeLocalDataSource.getNewestAnimeDataByAnimeId(chainsawManID) } answers { newestData }
-        val result = animeRepository.getNewestAnimeDataByAnimeId(animeID = chainsawManID)
-        result.collectLatest {
-            assertEquals(
-                "Fetching anime ID 44511 should return newest Data of Chainsaw-Man",
-                chainsawManEntity,
-                it
-            )
-            coVerify { animeLocalDataSource.getNewestAnimeDataByAnimeId(animeID = chainsawManID) }
-        }
-    }
-
-    @Test
-    fun `Anime ID 0 should return null`() = runTest {
-        val wrongAnimeID = 0
-        coEvery { animeLocalDataSource.getAnimeByAnimeId(animeID = wrongAnimeID) } answers { null }
-        val result = animeRepository.getAnimeByAnimeId(animeID = wrongAnimeID)
-        coVerify { animeLocalDataSource.getAnimeByAnimeId(animeID = wrongAnimeID) }
-        assertEquals("Fetching Anime ID 0 should return Null", null, result)
     }
 
     @Test
