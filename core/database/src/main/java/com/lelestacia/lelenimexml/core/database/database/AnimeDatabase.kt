@@ -6,8 +6,8 @@ import androidx.room.TypeConverters
 import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
 import com.lelestacia.lelenimexml.core.database.dao.CharacterDao
 import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.database.model.converter.DateConverter
 import com.lelestacia.lelenimexml.core.database.model.converter.StringConverter
 

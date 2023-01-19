@@ -1,9 +1,9 @@
 package com.lelestacia.lelenimexml.core.database
 
 import com.lelestacia.lelenimexml.core.database.dao.CharacterDao
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterProfile
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

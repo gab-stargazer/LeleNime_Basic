@@ -4,12 +4,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.lelestacia.lelenimexml.core.database.IAnimeLocalDataSource
-import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
-import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
-import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.data.utility.asAnime
 import com.lelestacia.lelenimexml.core.data.utility.asEntity
+import com.lelestacia.lelenimexml.core.database.IAnimeLocalDataSource
+import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
+import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
+import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.network.INetworkDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

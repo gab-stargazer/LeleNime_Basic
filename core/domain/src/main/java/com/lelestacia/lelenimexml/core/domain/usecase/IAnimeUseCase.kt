@@ -12,6 +12,6 @@ interface IAnimeUseCase {
     suspend fun insertOrUpdateNewAnimeToHistory(anime: Anime)
     suspend fun updateAnimeFavorite(malID: Int)
     fun getAllFavoriteAnime(): Flow<PagingData<Anime>>
-    fun isSafeMode():Boolean
+    fun isSafeMode(): Boolean
     fun changeSafeMode(isSafeMode: Boolean)
 }

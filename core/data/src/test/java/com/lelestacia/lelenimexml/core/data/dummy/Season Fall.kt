@@ -1,7 +1,7 @@
 package com.lelestacia.lelenimexml.core.data.dummy
 
 import com.lelestacia.lelenimexml.core.network.model.anime.NetworkAnime
-import java.util.*
+import java.util.Date
 
 val chainsawManNetwork = NetworkAnime(
     malId = 44511,

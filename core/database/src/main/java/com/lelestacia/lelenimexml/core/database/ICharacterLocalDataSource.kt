@@ -1,8 +1,8 @@
 package com.lelestacia.lelenimexml.core.database
 
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterProfile
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
 
 interface ICharacterLocalDataSource {
     suspend fun insertOrUpdateCharacter(character: List<CharacterEntity>)

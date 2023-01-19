@@ -27,11 +27,11 @@ data class Anime(
     val isFavorite: Boolean,
     val startedDate: String?,
     val finishedDate: String?,
-) :Parcelable {
+) : Parcelable {
     @Parcelize
     data class Trailer(
         val youtubeId: String?,
         val url: String?,
         val images: String?
-    ): Parcelable
+    ) : Parcelable
 }

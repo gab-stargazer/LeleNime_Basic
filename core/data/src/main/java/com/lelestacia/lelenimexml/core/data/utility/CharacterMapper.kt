@@ -1,10 +1,10 @@
 package com.lelestacia.lelenimexml.core.data.utility
 
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterProfile
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
-import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import com.lelestacia.lelenimexml.core.model.character.Character
+import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterDetail
 

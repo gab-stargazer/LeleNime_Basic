@@ -14,5 +14,5 @@ interface IAnimeRepository {
     fun getAllFavoriteAnime(): Flow<PagingData<Anime>>
     suspend fun updateAnimeFavorite(malID: Int)
     fun isSafeMode(): Boolean
-    fun changeSafeMode(isSafeMode:Boolean)
+    fun changeSafeMode(isSafeMode: Boolean)
 }

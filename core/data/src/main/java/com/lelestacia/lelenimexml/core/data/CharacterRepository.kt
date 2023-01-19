@@ -4,8 +4,8 @@ import com.lelestacia.lelenimexml.core.data.utility.asCharacter
 import com.lelestacia.lelenimexml.core.data.utility.asCharacterDetail
 import com.lelestacia.lelenimexml.core.data.utility.asEntity
 import com.lelestacia.lelenimexml.core.database.ICharacterLocalDataSource
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.model.character.Character
 import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import com.lelestacia.lelenimexml.core.network.INetworkDataSource
@@ -38,9 +38,11 @@ class CharacterRepository @Inject constructor(
             localCharacter = localDataSource.getAllCharacterFromAnimeById(animeID)
         }
 
-        emit(localCharacter.map {
-            it.asCharacter()
-        })
+        emit(
+            localCharacter.map {
+                it.asCharacter()
+            }
+        )
     }.flowOn(ioDispatcher)
 
     override fun getCharacterDetailById(characterID: Int): Flow<CharacterDetail> = flow {

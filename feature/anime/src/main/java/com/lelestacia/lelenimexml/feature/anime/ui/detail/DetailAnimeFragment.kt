@@ -27,7 +27,9 @@ import jp.wasabeef.transformers.coil.BlurTransformation
 import kotlinx.coroutines.flow.catch
 
 @AndroidEntryPoint
-class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnClickListener,
+class DetailAnimeFragment :
+    Fragment(R.layout.fragment_detail_anime),
+    View.OnClickListener,
     View.OnScrollChangeListener {
 
     private val viewModel by viewModels<DetailAnimeViewModel>()
@@ -85,9 +87,9 @@ class DetailAnimeFragment : Fragment(R.layout.fragment_detail_anime), View.OnCli
                     if (anime.season.isNullOrEmpty()) getText(null)
                     else getText(
                         "${
-                            (anime.season as String).replaceFirstChar { firstChar ->
-                                firstChar.uppercase()
-                            }
+                        (anime.season as String).replaceFirstChar { firstChar ->
+                            firstChar.uppercase()
+                        }
                         } ${anime.year}"
                     )
 

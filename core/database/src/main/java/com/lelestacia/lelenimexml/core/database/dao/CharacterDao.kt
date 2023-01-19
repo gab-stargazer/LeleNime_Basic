@@ -5,9 +5,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterProfile
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
 
 @Dao
 interface CharacterDao {
