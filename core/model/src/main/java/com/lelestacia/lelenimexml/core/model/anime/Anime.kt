@@ -1,8 +1,10 @@
 package com.lelestacia.lelenimexml.core.model.anime
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 
+@Keep
 @Parcelize
 data class Anime(
     val animeID: Int,

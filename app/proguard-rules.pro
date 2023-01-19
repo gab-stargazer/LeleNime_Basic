@@ -30,7 +30,7 @@
 -allowaccessmodification
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
 
-# Commoon Android related
+# Common Android related
 -dontwarn android.app.**
 -dontwarn android.support.**
 -dontwarn android.view.**
@@ -89,7 +89,7 @@
 -keep class * extends com.google.gson.reflect.TypeToken
 -dontnote com.google.gson.annotations.SerializedName
 -dontnote com.google.gson.annotations.Expose
--keep,allowobfuscation @interface com.google.gson.annotations.*
+-keep,allowobfuscation interface com.google.gson.annotations.*
 -keep,allowshrinking,allowoptimization class com.google.gson.stream.** { *; }
 -keepclassmembers,allowobfuscation class * {
  @com.google.gson.annotations.SerializedName <fields>;
@@ -113,3 +113,11 @@
     public static *** bind(android.view.View);
     public static *** inflate(android.view.LayoutInflater);
 }
+
+-keepnames class * implements android.os.Parcelable {
+  public static final ** CREATOR;
+}
+
+-keepnames @kotlinx.parcelize.Parcelize public class * { *; }
+
+-printconfiguration build/outputs/fullProguardConfig.pro
