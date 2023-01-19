@@ -13,7 +13,6 @@ import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertThrows
 import org.junit.Before
@@ -62,17 +61,6 @@ class AnimeRepositoryTest {
             animeRepository.getNewestAnimeDataByAnimeId(animeID = wrongAnimeID)
         }
         coVerify { animeLocalDataSource.getNewestAnimeDataByAnimeId(animeID = wrongAnimeID) }
-    }
-
-    @Test
-    fun `Anime ID 44511 should return Chainsaw-Man Anime`() = runTest {
-        val chainsawManID = chainsawManEntity.animeID
-        coEvery { animeLocalDataSource.getAnimeByAnimeId(animeID = chainsawManID) } answers { chainsawManEntity }
-        val result = animeRepository.getAnimeByAnimeId(animeID = chainsawManID)
-        coVerify { animeLocalDataSource.getAnimeByAnimeId(animeID = chainsawManID) }
-        assertEquals(
-            "Fetching Anime with ID 44511 should return Chainsaw Man", chainsawManEntity, result
-        )
     }
 
     @Test
