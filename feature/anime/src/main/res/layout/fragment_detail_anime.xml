@@ -45,13 +45,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textStyle="bold"
                 android:transitionName="tv_anime_title"
                 app:layout_constraintEnd_toEndOf="@+id/iv_cover_anime"
+                app:layout_constraintHorizontal_bias="0.229"
                 app:layout_constraintStart_toStartOf="@+id/iv_cover_anime"
                 app:layout_constraintTop_toBottomOf="@+id/iv_cover_anime"
                 tools:text="Chainsaw-Man" />
@@ -96,6 +97,18 @@
                 app:layout_constraintTop_toTopOf="@id/tv_rank_and_rating"
                 app:tint="?android:attr/textColorPrimary" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_user_rated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintEnd_toEndOf="@id/iv_icon_score"
+                app:layout_constraintStart_toStartOf="@id/tv_rank_and_rating"
+                app:layout_constraintTop_toBottomOf="@id/iv_icon_score"
+                tools:text="@string/rated_by" />
+
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_type_holder"
@@ -108,7 +121,7 @@
                 android:textColor="?android:attr/textColorPrimary"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_rank_and_rating" />
+                app:layout_constraintTop_toBottomOf="@id/tv_user_rated" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_type_value"
@@ -217,6 +230,18 @@
                 tools:text=":\tCurrently Airing" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_season_holder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/season"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/tv_status_holder"
+                app:layout_constraintTop_toBottomOf="@id/tv_status_holder" />
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_aired_holder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -227,17 +252,28 @@
                 android:textColor="?android:attr/textColorPrimary"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_status_holder" />
+                app:layout_constraintTop_toBottomOf="@id/tv_season_holder" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_season_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/tv_season_holder"
+                app:layout_constraintStart_toStartOf="@id/tv_episode_value"
+                app:layout_constraintTop_toTopOf="@id/tv_season_holder"
+                tools:text=": Winter 2023" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_aired_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_aired_holder"
                 app:layout_constraintStart_toStartOf="@id/tv_episode_value"
-                app:layout_constraintTop_toBottomOf="@id/tv_status_value"
+                app:layout_constraintTop_toTopOf="@id/tv_aired_holder"
                 tools:text=":\t2022-10-12T00:00:00+00:00" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -289,9 +325,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:backgroundTint="?attr/colorPrimary"
+        android:contentDescription="@string/add_to_favorite"
         android:src="@drawable/ic_favorite_hollow"
         app:layout_anchor="@id/scroll_content"
         app:layout_anchorGravity="bottom|right|end"
-        app:tint="@color/white"
-        android:contentDescription="@string/add_to_favorite" />
+        app:tint="@color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

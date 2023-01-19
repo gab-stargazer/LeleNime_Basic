@@ -5,17 +5,17 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
 import com.lelestacia.lelenimexml.core.database.dao.CharacterDao
-import com.lelestacia.lelenimexml.core.model.database.AnimeEntity
-import com.lelestacia.lelenimexml.core.model.database.character.CharacterAdditionalInformationEntity
-import com.lelestacia.lelenimexml.core.model.database.character.CharacterEntity
-import com.lelestacia.lelenimexml.core.model.database.converter.DateConverter
-import com.lelestacia.lelenimexml.core.model.database.converter.StringConverter
+import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
+import com.lelestacia.lelenimexml.core.database.model.converter.DateConverter
+import com.lelestacia.lelenimexml.core.database.model.converter.StringConverter
 
 @Database(
     entities = [
         AnimeEntity::class,
         CharacterEntity::class,
-        CharacterAdditionalInformationEntity::class
+        CharacterInformationEntity::class
     ],
     version = 1,
     exportSchema = true,

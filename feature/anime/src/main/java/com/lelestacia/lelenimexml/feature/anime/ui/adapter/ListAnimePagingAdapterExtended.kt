@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
+import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.ItemListAnimeBinding
 
@@ -64,7 +64,7 @@ class ListAnimePagingAdapterExtended(
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Anime>() {
             override fun areItemsTheSame(oldItem: Anime, newItem: Anime): Boolean =
-                oldItem.malID == newItem.malID
+                oldItem.animeID == newItem.animeID
 
             override fun areContentsTheSame(oldItem: Anime, newItem: Anime): Boolean =
                 oldItem == newItem

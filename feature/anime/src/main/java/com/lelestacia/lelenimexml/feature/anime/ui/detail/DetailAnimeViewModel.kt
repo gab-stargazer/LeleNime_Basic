@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lelestacia.lelenimexml.core.domain.usecase.IAnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.ICharacterUseCase
-import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
-import com.lelestacia.lelenimexml.core.model.domain.character.Character
+import com.lelestacia.lelenimexml.core.model.anime.Anime
+import com.lelestacia.lelenimexml.core.model.character.Character
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -22,9 +22,7 @@ class DetailAnimeViewModel @Inject constructor(
     fun getAnimeByMalId(animeId: Int): Flow<Anime> =
         animeUseCase.getAnimeByMalID(animeId)
 
-    fun updateAnimeFavorite(malID: Int) {
-        viewModelScope.launch {
-            animeUseCase.updateAnimeFavorite(malID)
-        }
+    fun updateAnimeFavorite(malID: Int) = viewModelScope.launch {
+        animeUseCase.updateAnimeFavorite(malID)
     }
 }

@@ -1,14 +1,9 @@
 package com.lelestacia.lelenimexml.core.domain.usecase
 
 import androidx.paging.PagingData
-import androidx.paging.map
 import com.lelestacia.lelenimexml.core.data.IAnimeRepository
-import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
-import com.lelestacia.lelenimexml.core.model.domain.anime.asAnime
-import com.lelestacia.lelenimexml.core.model.domain.anime.asEntity
+import com.lelestacia.lelenimexml.core.model.anime.Anime
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import javax.inject.Inject
 
 class AnimeUseCase @Inject constructor(
@@ -16,48 +11,19 @@ class AnimeUseCase @Inject constructor(
 ) : IAnimeUseCase {
 
     override fun getAiringAnime(): Flow<PagingData<Anime>> =
-        animeRepository
-            .seasonAnimePagingData()
-            .map { pagingData ->
-                pagingData.map { it.asAnime() }
-            }
+        animeRepository.seasonAnimePagingData()
 
     override fun getAnimeByTitle(query: String): Flow<PagingData<Anime>> =
-        animeRepository
-            .searchAnimeByTitle(query)
-            .map { pagingData ->
-                pagingData.map { it.asAnime() }
-            }
+        animeRepository.searchAnimeByTitle(query)
 
     override fun getAnimeByMalID(animeId: Int): Flow<Anime> =
-        animeRepository
-            .getNewestAnimeDataByAnimeId(animeId)
-            .map { entity ->
-                entity.asAnime()
-            }
+        animeRepository.getNewestAnimeDataByAnimeId(animeId)
 
     override fun getAnimeHistory(): Flow<PagingData<Anime>> =
-        animeRepository
-            .getAnimeHistory()
-            .map { pagingData ->
-                pagingData.map { it.asAnime() }
-            }
+        animeRepository.getAnimeHistory()
 
     override suspend fun insertOrUpdateNewAnimeToHistory(anime: Anime) {
-        val localAnime = animeRepository.getAnimeByAnimeId(anime.malID)
-
-        if (localAnime != null) {
-            val newAnime = anime.asEntity(
-                isFavorite = localAnime.isFavorite
-            )
-            animeRepository.insertAnimeToHistory(newAnime)
-            Timber.d("Anime Updated")
-            return
-        }
-
-        val newAnime = anime.asEntity()
-        animeRepository.insertAnimeToHistory(newAnime)
-        Timber.d("Anime Inserted")
+        animeRepository.insertAnimeToHistory(anime)
     }
 
     override suspend fun updateAnimeFavorite(malID: Int) {
@@ -65,7 +31,11 @@ class AnimeUseCase @Inject constructor(
     }
 
     override fun getAllFavoriteAnime(): Flow<PagingData<Anime>> =
-        animeRepository.getAllFavoriteAnime().map { pagingData ->
-            pagingData.map { it.asAnime() }
-        }
+        animeRepository.getAllFavoriteAnime()
+
+    override fun isSafeMode(): Boolean = animeRepository.isSafeMode()
+
+    override fun changeSafeMode(isSafeMode: Boolean) {
+        animeRepository.changeSafeMode(isSafeMode)
+    }
 }

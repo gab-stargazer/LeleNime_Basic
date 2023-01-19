@@ -1,10 +1,10 @@
 package com.lelestacia.lelenimexml.core.network.source
 
-import com.lelestacia.lelenimexml.core.model.network.GenericPaginationResponse
-import com.lelestacia.lelenimexml.core.model.network.GenericResponse
-import com.lelestacia.lelenimexml.core.model.network.anime.NetworkAnime
-import com.lelestacia.lelenimexml.core.model.network.character.NetworkCharacter
-import com.lelestacia.lelenimexml.core.model.network.character.NetworkCharacterDetail
+import com.lelestacia.lelenimexml.core.network.model.GenericPaginationResponse
+import com.lelestacia.lelenimexml.core.network.model.GenericResponse
+import com.lelestacia.lelenimexml.core.network.model.anime.NetworkAnime
+import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
+import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterDetail
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

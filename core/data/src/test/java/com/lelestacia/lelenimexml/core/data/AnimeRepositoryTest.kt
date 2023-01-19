@@ -1,8 +1,9 @@
 package com.lelestacia.lelenimexml.core.data
 
-import android.content.Context
 import com.lelestacia.lelenimexml.core.data.dummy.chainsawManEntity
-import com.lelestacia.lelenimexml.core.database.ILocalDataSource
+import com.lelestacia.lelenimexml.core.database.IAnimeLocalDataSource
+import com.lelestacia.lelenimexml.core.database.ICharacterLocalDataSource
+import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
 import com.lelestacia.lelenimexml.core.network.INetworkDataSource
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -31,13 +32,16 @@ class AnimeRepositoryTest {
     val mockRule = MockKRule(this)
 
     @MockK
-    lateinit var localDataSource: ILocalDataSource
+    lateinit var animeLocalDataSource: IAnimeLocalDataSource
+
+    @MockK
+    lateinit var characterLocalDataSource: ICharacterLocalDataSource
 
     @MockK
     lateinit var networkDataSource: INetworkDataSource
 
     @MockK
-    lateinit var mContext: Context
+    lateinit var userPref: UserPref
 
     private lateinit var animeRepository: IAnimeRepository
     private lateinit var characterRepository: ICharacterRepository
@@ -45,30 +49,30 @@ class AnimeRepositoryTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        animeRepository = AnimeRepository(networkDataSource, localDataSource, mContext)
+        animeRepository = AnimeRepository(networkDataSource, animeLocalDataSource, userPref)
         characterRepository =
-            CharacterRepository(networkDataSource, localDataSource, Dispatchers.Main)
+            CharacterRepository(networkDataSource, characterLocalDataSource, Dispatchers.Main)
     }
 
     @Test
     fun `Anime ID 0 should throw NPE`() = runTest {
         val wrongAnimeID = 0
-        coEvery { localDataSource.getNewestAnimeDataByAnimeId(animeID = wrongAnimeID) } throws NullPointerException()
+        coEvery { animeLocalDataSource.getNewestAnimeDataByAnimeId(animeID = wrongAnimeID) } throws NullPointerException()
         assertThrows(
             NullPointerException::class.java
         ) {
             animeRepository.getNewestAnimeDataByAnimeId(animeID = wrongAnimeID)
         }
-        coVerify { localDataSource.getNewestAnimeDataByAnimeId(animeID = wrongAnimeID) }
+        coVerify { animeLocalDataSource.getNewestAnimeDataByAnimeId(animeID = wrongAnimeID) }
     }
 
     @Test
     fun `Anime ID 44511 should return Chainsaw-Man Anime Newest Data`() = runTest {
-        val chainsawManID = chainsawManEntity.malId
+        val chainsawManID = chainsawManEntity.animeID
         val newestData = flowOf(
             chainsawManEntity
         )
-        coEvery { localDataSource.getNewestAnimeDataByAnimeId(chainsawManID) } answers { newestData }
+        coEvery { animeLocalDataSource.getNewestAnimeDataByAnimeId(chainsawManID) } answers { newestData }
         val result = animeRepository.getNewestAnimeDataByAnimeId(animeID = chainsawManID)
         result.collectLatest {
             assertEquals(
@@ -76,35 +80,28 @@ class AnimeRepositoryTest {
                 chainsawManEntity,
                 it
             )
-            coVerify { localDataSource.getNewestAnimeDataByAnimeId(animeID = chainsawManID) }
+            coVerify { animeLocalDataSource.getNewestAnimeDataByAnimeId(animeID = chainsawManID) }
         }
     }
 
     @Test
     fun `Anime ID 0 should return null`() = runTest {
         val wrongAnimeID = 0
-        coEvery { localDataSource.getAnimeByAnimeId(animeID = wrongAnimeID) } answers { null }
+        coEvery { animeLocalDataSource.getAnimeByAnimeId(animeID = wrongAnimeID) } answers { null }
         val result = animeRepository.getAnimeByAnimeId(animeID = wrongAnimeID)
-        coVerify { localDataSource.getAnimeByAnimeId(animeID = wrongAnimeID) }
+        coVerify { animeLocalDataSource.getAnimeByAnimeId(animeID = wrongAnimeID) }
         assertEquals("Fetching Anime ID 0 should return Null", null, result)
     }
 
     @Test
     fun `Anime ID 44511 should return Chainsaw-Man Anime`() = runTest {
-        val chainsawManID = chainsawManEntity.malId
-        coEvery { localDataSource.getAnimeByAnimeId(animeID = chainsawManID) } answers { chainsawManEntity }
+        val chainsawManID = chainsawManEntity.animeID
+        coEvery { animeLocalDataSource.getAnimeByAnimeId(animeID = chainsawManID) } answers { chainsawManEntity }
         val result = animeRepository.getAnimeByAnimeId(animeID = chainsawManID)
-        coVerify { localDataSource.getAnimeByAnimeId(animeID = chainsawManID) }
+        coVerify { animeLocalDataSource.getAnimeByAnimeId(animeID = chainsawManID) }
         assertEquals(
             "Fetching Anime with ID 44511 should return Chainsaw Man", chainsawManEntity, result
         )
-    }
-
-    @Test
-    fun `Verify if anime was inserted`() = runTest {
-        coEvery { localDataSource.insertOrUpdateAnime(chainsawManEntity) } answers { }
-        animeRepository.insertAnimeToHistory(chainsawManEntity)
-        coVerify { localDataSource.insertOrUpdateAnime(chainsawManEntity) }
     }
 
     @Test
@@ -118,9 +115,9 @@ class AnimeRepositoryTest {
             beforeUpdate.isFavorite,
             afterUpdate.isFavorite
         )
-        coEvery { localDataSource.updateAnime(afterUpdate) } answers { }
-        coEvery { localDataSource.getAnimeByAnimeId(chainsawManEntity.malId) } answers { beforeUpdate }
-        animeRepository.updateAnimeFavorite(chainsawManEntity.malId)
-        coVerify { localDataSource.updateAnime(afterUpdate) }
+        coEvery { animeLocalDataSource.updateAnime(afterUpdate) } answers { }
+        coEvery { animeLocalDataSource.getAnimeByAnimeId(chainsawManEntity.animeID) } answers { beforeUpdate }
+        animeRepository.updateAnimeFavorite(chainsawManEntity.animeID)
+        coVerify { animeLocalDataSource.updateAnime(afterUpdate) }
     }
 }

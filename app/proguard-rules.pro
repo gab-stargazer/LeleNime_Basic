@@ -47,11 +47,6 @@
 -dontwarn javax.annotation.**
 -dontwarn kotlin.Unit
 
--keep class * implements androidx.viewbinding.ViewBinding {
-    public static *** bind(android.view.View);
-    public static *** inflate(android.view.LayoutInflater);
-}
-
 # Kotlin Coroutine related
 -keep class kotlin.coroutines.Continuation
 
@@ -113,3 +108,8 @@
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 -dontwarn org.codehaus.mojo.animal_sniffer.*
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
+
+-keep class * implements androidx.viewbinding.ViewBinding {
+    public static *** bind(android.view.View);
+    public static *** inflate(android.view.LayoutInflater);
+}

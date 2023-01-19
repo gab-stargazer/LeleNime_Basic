@@ -1,12 +1,13 @@
 package com.lelestacia.lelenimexml.feature.anime.ui.adapter
 
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.lelestacia.lelenimexml.core.model.domain.character.Character
+import com.lelestacia.lelenimexml.core.model.character.Character
 import com.lelestacia.lelenimexml.feature.anime.databinding.ItemCardCharacterBinding
 
 class CharacterAdapter(val onCharacterSelected: (Int) -> Unit) :
@@ -16,10 +17,14 @@ class CharacterAdapter(val onCharacterSelected: (Int) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Character) {
+            var lastClickTime = 0L
             binding.apply {
                 ivCharacterImage.load(item.images)
                 root.setOnClickListener {
-                    onCharacterSelected(item.characterMalId)
+                    if (SystemClock.elapsedRealtime() - lastClickTime < 500) return@setOnClickListener
+
+                    lastClickTime = SystemClock.elapsedRealtime()
+                    onCharacterSelected(item.characterID)
                 }
             }
         }
@@ -40,7 +45,7 @@ class CharacterAdapter(val onCharacterSelected: (Int) -> Unit) :
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Character>() {
             override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean =
-                oldItem.characterMalId == newItem.characterMalId
+                oldItem.characterID == newItem.characterID
 
             override fun areContentsTheSame(
                 oldItem: Character,

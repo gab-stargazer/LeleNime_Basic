@@ -25,7 +25,7 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
         val historyAnimeAdapter = ListAnimePagingAdapterExtended(
             onItemClicked = { anime ->
                 viewModel.insertOrUpdateAnime(anime)
-                val action = HistoryFragmentDirections.historyToDetail(anime.malID)
+                val action = HistoryFragmentDirections.historyToDetail(anime.animeID)
                 findNavController().navigate(action)
             },
             onItemLongClicked = { anime ->
@@ -44,9 +44,10 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
             setHasFixedSize(true)
         }
 
+        val viewLifecycle = viewLifecycleOwner.lifecycle
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.recentlyViewedAnime.collect { recentlyViewedAnime ->
-                historyAnimeAdapter.submitData(viewLifecycleOwner.lifecycle, recentlyViewedAnime)
+                historyAnimeAdapter.submitData(viewLifecycle, recentlyViewedAnime)
             }
         }
     }

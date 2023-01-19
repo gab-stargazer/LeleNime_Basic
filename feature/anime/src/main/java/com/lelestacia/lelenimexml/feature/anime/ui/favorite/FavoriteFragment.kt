@@ -25,7 +25,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         val favoriteAnimeAdapter = ListAnimePagingAdapterExtended(
             onItemClicked = { anime ->
                 viewModel.insertOrUpdateAnime(anime)
-                val action = FavoriteFragmentDirections.favoriteToDetail(anime.malID)
+                val action = FavoriteFragmentDirections.favoriteToDetail(anime.animeID)
                 findNavController().navigate(action)
             }, onItemLongClicked = { anime ->
             val action = FavoriteFragmentDirections.favoritePopupMenu(anime)
@@ -43,9 +43,10 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             setHasFixedSize(true)
         }
 
+        val viewLifecycle = viewLifecycleOwner.lifecycle
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.favoriteAnime.collect { favoriteAnime ->
-                favoriteAnimeAdapter.submitData(viewLifecycleOwner.lifecycle, favoriteAnime)
+                favoriteAnimeAdapter.submitData(viewLifecycle, favoriteAnime)
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.lelestacia.lelenimexml.core.domain.usecase
 
 import androidx.paging.PagingData
-import com.lelestacia.lelenimexml.core.model.domain.anime.Anime
+import com.lelestacia.lelenimexml.core.model.anime.Anime
 import kotlinx.coroutines.flow.Flow
 
 interface IAnimeUseCase {
@@ -12,4 +12,6 @@ interface IAnimeUseCase {
     suspend fun insertOrUpdateNewAnimeToHistory(anime: Anime)
     suspend fun updateAnimeFavorite(malID: Int)
     fun getAllFavoriteAnime(): Flow<PagingData<Anime>>
+    fun isSafeMode():Boolean
+    fun changeSafeMode(isSafeMode: Boolean)
 }

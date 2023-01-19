@@ -2,22 +2,16 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "862bc5bb7cef1f8d7bb74b38b5a55b02",
+    "identityHash": "0b1997b3c47318cc5ec188546a559b8d",
     "entities": [
       {
-        "tableName": "anime_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`malId` INTEGER NOT NULL, `coverImages` TEXT NOT NULL, `title` TEXT NOT NULL, `titleEnglish` TEXT, `titleJapanese` TEXT, `type` TEXT NOT NULL, `episodes` INTEGER, `status` TEXT NOT NULL, `rating` TEXT NOT NULL, `score` REAL, `scoredBy` INTEGER, `rank` INTEGER NOT NULL, `synopsis` TEXT, `season` TEXT, `year` INTEGER NOT NULL, `genres` TEXT NOT NULL, `lastViewed` INTEGER NOT NULL, `isFavorite` INTEGER NOT NULL DEFAULT false, `youtubeId` TEXT, `url` TEXT, `images` TEXT, PRIMARY KEY(`malId`))",
+        "tableName": "anime",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `title_english` TEXT, `title_japanese` TEXT, `image` TEXT NOT NULL, `rank` INTEGER NOT NULL, `score` REAL, `scored_by` INTEGER, `type` TEXT NOT NULL, `rating` TEXT NOT NULL, `episodes` INTEGER, `genres` TEXT NOT NULL, `status` TEXT NOT NULL, `season` TEXT, `year` INTEGER NOT NULL, `started_date` TEXT, `finished_date` TEXT, `synopsis` TEXT, `favorite` INTEGER NOT NULL, `last_viewed` INTEGER NOT NULL, `youtubeId` TEXT, `url` TEXT, `images` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
-            "fieldPath": "malId",
-            "columnName": "malId",
+            "fieldPath": "animeID",
+            "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "coverImages",
-            "columnName": "coverImages",
-            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -28,38 +22,26 @@
           },
           {
             "fieldPath": "titleEnglish",
-            "columnName": "titleEnglish",
+            "columnName": "title_english",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "titleJapanese",
-            "columnName": "titleJapanese",
+            "columnName": "title_japanese",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "type",
-            "columnName": "type",
+            "fieldPath": "coverImages",
+            "columnName": "image",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "episodes",
-            "columnName": "episodes",
+            "fieldPath": "rank",
+            "columnName": "rank",
             "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "status",
-            "columnName": "status",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "rating",
-            "columnName": "rating",
-            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -70,21 +52,39 @@
           },
           {
             "fieldPath": "scoredBy",
-            "columnName": "scoredBy",
+            "columnName": "scored_by",
             "affinity": "INTEGER",
             "notNull": false
           },
           {
-            "fieldPath": "rank",
-            "columnName": "rank",
-            "affinity": "INTEGER",
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "synopsis",
-            "columnName": "synopsis",
+            "fieldPath": "rating",
+            "columnName": "rating",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "episodes",
+            "columnName": "episodes",
+            "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "genres",
+            "columnName": "genres",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "season",
@@ -99,23 +99,34 @@
             "notNull": true
           },
           {
-            "fieldPath": "genres",
-            "columnName": "genres",
+            "fieldPath": "startedDate",
+            "columnName": "started_date",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "finishedDate",
+            "columnName": "finished_date",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "synopsis",
+            "columnName": "synopsis",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isFavorite",
+            "columnName": "favorite",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "lastViewed",
-            "columnName": "lastViewed",
+            "columnName": "last_viewed",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "isFavorite",
-            "columnName": "isFavorite",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "false"
           },
           {
             "fieldPath": "trailer.youtubeId",
@@ -138,7 +149,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "malId"
+            "id"
           ],
           "autoGenerate": false
         },
@@ -146,50 +157,50 @@
         "foreignKeys": []
       },
       {
-        "tableName": "character_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`animeId` INTEGER NOT NULL, `characterId` INTEGER NOT NULL, `characterName` TEXT NOT NULL, `characterImage` TEXT NOT NULL, `role` TEXT NOT NULL, `favoriteBy` INTEGER NOT NULL, PRIMARY KEY(`animeId`, `characterId`))",
+        "tableName": "character",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `anime_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `image` TEXT NOT NULL, `role` TEXT NOT NULL, `favorite` INTEGER NOT NULL, PRIMARY KEY(`id`, `anime_id`))",
         "fields": [
           {
-            "fieldPath": "animeId",
-            "columnName": "animeId",
+            "fieldPath": "characterID",
+            "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "characterId",
-            "columnName": "characterId",
+            "fieldPath": "animeID",
+            "columnName": "anime_id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "characterName",
-            "columnName": "characterName",
+            "columnName": "name",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "characterImage",
-            "columnName": "characterImage",
+            "columnName": "image",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "role",
+            "fieldPath": "characterRole",
             "columnName": "role",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "favoriteBy",
-            "columnName": "favoriteBy",
+            "fieldPath": "characterFavorite",
+            "columnName": "favorite",
             "affinity": "INTEGER",
             "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "animeId",
-            "characterId"
+            "id",
+            "anime_id"
           ],
           "autoGenerate": false
         },
@@ -197,46 +208,51 @@
         "foreignKeys": []
       },
       {
-        "tableName": "character_additional_information_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`characterId` INTEGER NOT NULL, `characterKanjiName` TEXT NOT NULL, `characterNickNames` TEXT NOT NULL, `characterFavoriteCount` INTEGER NOT NULL, `characterInformation` TEXT NOT NULL, PRIMARY KEY(`characterId`, `characterKanjiName`))",
+        "tableName": "character_information",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `character_id` INTEGER NOT NULL, `kanji_name` TEXT NOT NULL, `nickname` TEXT NOT NULL, `favorite` INTEGER NOT NULL, `story` TEXT NOT NULL)",
         "fields": [
           {
-            "fieldPath": "characterId",
-            "columnName": "characterId",
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "characterID",
+            "columnName": "character_id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "characterKanjiName",
-            "columnName": "characterKanjiName",
+            "columnName": "kanji_name",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "characterNickNames",
-            "columnName": "characterNickNames",
+            "columnName": "nickname",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "characterFavoriteCount",
-            "columnName": "characterFavoriteCount",
+            "fieldPath": "characterFavorite",
+            "columnName": "favorite",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "characterInformation",
-            "columnName": "characterInformation",
+            "columnName": "story",
             "affinity": "TEXT",
             "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "characterId",
-            "characterKanjiName"
+            "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -245,7 +261,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '862bc5bb7cef1f8d7bb74b38b5a55b02')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b1997b3c47318cc5ec188546a559b8d')"
     ]
   }
 }

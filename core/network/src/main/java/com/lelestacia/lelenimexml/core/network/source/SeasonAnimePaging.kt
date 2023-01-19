@@ -2,7 +2,7 @@ package com.lelestacia.lelenimexml.core.network.source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.lelestacia.lelenimexml.core.model.network.anime.NetworkAnime
+import com.lelestacia.lelenimexml.core.network.model.anime.NetworkAnime
 import kotlinx.coroutines.delay
 import timber.log.Timber
 

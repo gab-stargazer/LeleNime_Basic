@@ -49,6 +49,9 @@ dependencies {
     //Paging3
     implementation "androidx.paging:paging-runtime:$paging_version"
 
+    //CryptoPref
+    implementation "androidx.security:security-crypto:$crypto_pref_version"
+
     //Mockk Unit Test
     testImplementation "io.mockk:mockk:$mockK_version"
 }

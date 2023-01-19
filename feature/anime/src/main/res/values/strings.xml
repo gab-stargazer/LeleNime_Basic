@@ -4,7 +4,6 @@
 
     <!--Utility-->
     <string name="not_found">No Result Found</string>
-    <string name="no_nickname">This character has no nicknames</string>
     <string name="no_information_by_mal">No information provided by the MAL Website</string>
 
     <!--Detail Screen-->
@@ -16,6 +15,7 @@
     <string name="genre">Genre</string>
     <string name="aired">Aired</string>
     <string name="rank_and_score">#%s - %s</string>
+    <string name="rated_by">Rated by %d people</string>
     <string name="information_value">:\t%s</string>
     <string name="sample_lorem">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</string>
     <string name="characters_holder">Characters\t:</string>
@@ -34,10 +34,13 @@
     <string name="menu_to_detail">%s - %s</string>
     <string name="add_to_favorite">Add to favorite</string>
     <string name="remove_from_favorite">Remove from favorite</string>
-    <string name="remove_from_history">Remove from history</string>
     <string name="share_anime">Share Anime</string>
 
     <!--Main Page-->
     <string name="this_season">This Season</string>
     <string name="searching_for">Searching for %s</string>
+    <string name="favorite">Favorite</string>
+    <string name="history">History</string>
+    <string name="fetching_data_please_wait">Fetching Data, Please Wait</string>
+    <string name="season">Season</string>
 </resources>

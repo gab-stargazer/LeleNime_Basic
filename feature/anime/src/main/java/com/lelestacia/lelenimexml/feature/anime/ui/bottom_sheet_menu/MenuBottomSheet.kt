@@ -27,7 +27,7 @@ class MenuBottomSheet :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val malID = args.anime.malID
+        val malID = args.anime.animeID
 
         binding.apply {
             viewModel
@@ -75,21 +75,19 @@ class MenuBottomSheet :
             binding.btnToDetail.id -> {
                 lifecycleScope.launch {
                     val anime = args.anime
-                    launch {
-                        viewModel.insertOrUpdateAnime(anime)
-                    }.join()
-                    val action = MenuBottomSheetDirections.popupToDetail(anime.malID)
+                    viewModel.insertOrUpdateAnime(anime).join()
+                    val action = MenuBottomSheetDirections.popupToDetail(anime.animeID)
                     findNavController().navigate(action)
                 }
             }
 
             binding.btnAddRemoveFavorite.id -> {
-                viewModel.updateAnimeFavorite(args.anime.malID)
+                viewModel.updateAnimeFavorite(args.anime.animeID)
                 requireActivity().onBackPressedDispatcher
             }
 
             binding.btnShare.id -> {
-                val malID = args.anime.malID
+                val malID = args.anime.animeID
                 val sendIntent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_TEXT, "myanimelist.net/anime/$malID")

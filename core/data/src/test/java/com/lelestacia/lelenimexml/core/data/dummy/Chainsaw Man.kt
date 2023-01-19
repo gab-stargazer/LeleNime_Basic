@@ -1,10 +1,10 @@
 package com.lelestacia.lelenimexml.core.data.dummy
 
-import com.lelestacia.lelenimexml.core.model.database.AnimeEntity
+import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
 import java.util.Date
 
 val chainsawManEntity = AnimeEntity(
-    malId = 44511,
+    animeID = 44511,
     coverImages = "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg",
     trailer = null,
     title = "Chainsaw Man",
@@ -22,5 +22,7 @@ val chainsawManEntity = AnimeEntity(
     year = 2022,
     genres = listOf(),
     isFavorite = false,
-    lastViewed = Date()
+    lastViewed = Date(),
+    startedDate = Date().toString(),
+    finishedDate = Date().toString(),
 )

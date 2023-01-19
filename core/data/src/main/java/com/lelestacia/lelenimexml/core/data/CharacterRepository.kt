@@ -1,11 +1,13 @@
 package com.lelestacia.lelenimexml.core.data
 
-import com.lelestacia.lelenimexml.core.data.utility.asCharacterAdditionalInformationEntity
-import com.lelestacia.lelenimexml.core.data.utility.asCharacterEntity
-import com.lelestacia.lelenimexml.core.database.ILocalDataSource
-import com.lelestacia.lelenimexml.core.model.database.character.CharacterAdditionalInformationEntity
-import com.lelestacia.lelenimexml.core.model.database.character.CharacterDetailEntity
-import com.lelestacia.lelenimexml.core.model.database.character.CharacterEntity
+import com.lelestacia.lelenimexml.core.data.utility.asCharacter
+import com.lelestacia.lelenimexml.core.data.utility.asCharacterDetail
+import com.lelestacia.lelenimexml.core.data.utility.asEntity
+import com.lelestacia.lelenimexml.core.database.ICharacterLocalDataSource
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
+import com.lelestacia.lelenimexml.core.model.character.Character
+import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import com.lelestacia.lelenimexml.core.network.INetworkDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -17,11 +19,11 @@ import javax.inject.Inject
 
 class CharacterRepository @Inject constructor(
     private val apiService: INetworkDataSource,
-    private val localDataSource: ILocalDataSource,
+    private val localDataSource: ICharacterLocalDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ICharacterRepository {
 
-    override fun getAnimeCharactersById(animeID: Int): Flow<List<CharacterEntity>> = flow {
+    override fun getAnimeCharactersById(animeID: Int): Flow<List<Character>> = flow {
         var localCharacter: List<CharacterEntity> =
             localDataSource.getAllCharacterFromAnimeById(animeID)
 
@@ -30,17 +32,19 @@ class CharacterRepository @Inject constructor(
             delay(200)
             val apiResponse = apiService.getCharactersByAnimeID(animeID)
                 .map { characterResponse ->
-                    characterResponse.asCharacterEntity(animeID)
+                    characterResponse.asEntity(animeID)
                 }
             localDataSource.insertOrUpdateCharacter(apiResponse)
             localCharacter = localDataSource.getAllCharacterFromAnimeById(animeID)
         }
 
-        emit(localCharacter)
+        emit(localCharacter.map {
+            it.asCharacter()
+        })
     }.flowOn(ioDispatcher)
 
-    override fun getCharacterDetailById(characterID: Int): Flow<CharacterDetailEntity> = flow {
-        val localCharacterAdditionalInfo: CharacterAdditionalInformationEntity? =
+    override fun getCharacterDetailById(characterID: Int): Flow<CharacterDetail> = flow {
+        val localCharacterAdditionalInfo: CharacterInformationEntity? =
             localDataSource.getCharacterAdditionalInformationById(characterID)
 
         val shouldFetchNetwork = localCharacterAdditionalInfo == null
@@ -49,10 +53,10 @@ class CharacterRepository @Inject constructor(
             val apiResponse = apiService
                 .getCharacterDetailByCharacterID(characterID)
 
-            val additionalInformationEntity = apiResponse.asCharacterAdditionalInformationEntity()
+            val additionalInformationEntity = apiResponse.asEntity()
             localDataSource.insertOrReplaceAdditionalInformation(additionalInformationEntity)
         }
 
-        emit(localDataSource.getCharacterFullProfile(characterID))
+        emit(localDataSource.getCharacterFullProfile(characterID).asCharacterDetail())
     }.flowOn(ioDispatcher)
 }
