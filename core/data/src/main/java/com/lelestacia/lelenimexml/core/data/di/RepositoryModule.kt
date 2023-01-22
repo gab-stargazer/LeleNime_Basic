@@ -1,16 +1,18 @@
 package com.lelestacia.lelenimexml.core.data.di
 
-import com.lelestacia.lelenimexml.core.data.AnimeRepository
-import com.lelestacia.lelenimexml.core.data.CharacterRepository
-import com.lelestacia.lelenimexml.core.data.IAnimeRepository
-import com.lelestacia.lelenimexml.core.data.ICharacterRepository
+import android.content.Context
+import com.lelestacia.lelenimexml.core.data.impl.anime.AnimeRepository
+import com.lelestacia.lelenimexml.core.data.impl.anime.IAnimeRepository
+import com.lelestacia.lelenimexml.core.data.impl.character.CharacterRepository
+import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
 import com.lelestacia.lelenimexml.core.database.IAnimeLocalDataSource
 import com.lelestacia.lelenimexml.core.database.ICharacterLocalDataSource
-import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
-import com.lelestacia.lelenimexml.core.network.INetworkDataSource
+import com.lelestacia.lelenimexml.core.network.INetworkAnimeService
+import com.lelestacia.lelenimexml.core.network.INetworkCharacterService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -21,22 +23,24 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideAnimeRepository(
-        apiService: INetworkDataSource,
+        apiService: INetworkAnimeService,
         localDataSource: IAnimeLocalDataSource,
-        userPref: UserPref
+        @ApplicationContext mContext: Context
     ): IAnimeRepository =
         AnimeRepository(
-            apiService, localDataSource, userPref
+            apiService = apiService,
+            localDataSource = localDataSource,
+            mContext = mContext
         )
 
     @Provides
     @Singleton
     fun provideCharacterRepository(
-        apiService: INetworkDataSource,
+        apiService: INetworkCharacterService,
         localDataSource: ICharacterLocalDataSource
     ): ICharacterRepository =
         CharacterRepository(
-            apiService,
-            localDataSource
+            apiService = apiService,
+            localDataSource = localDataSource
         )
 }

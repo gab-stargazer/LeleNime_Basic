@@ -38,86 +38,86 @@ class DetailAnimeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setView()
+        setCharacters()
         binding.apply {
-            setView()
-            setCharacters()
             fabFavorite.setOnClickListener(this@DetailAnimeFragment)
             scrollContent.setOnScrollChangeListener(this@DetailAnimeFragment)
         }
     }
 
-    private fun FragmentDetailAnimeBinding.setView() {
+    private fun setView() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.getAnimeByMalId(args.malID).collect { anime ->
-                /*Header Section*/
-                ivBackgroundAnime.load(anime.coverImages) {
-                    transformations(BlurTransformation(requireContext()))
-                    build()
-                }
+                binding.headerSection.apply {
+                    ivBackgroundAnime.load(anime.coverImages) {
+                        transformations(BlurTransformation(requireContext()))
+                        build()
+                    }
+                    ivCoverAnime.load(anime.coverImages) {
+                        transformations(RoundedCornersTransformation(15f))
+                        build()
+                    }
 
-                ivCoverAnime.load(anime.coverImages) {
-                    transformations(RoundedCornersTransformation(15f))
-                    build()
-                }
+                    tvAnimeTitle.text = anime.title
+                    tvAnimeTitleJapanese.text = anime.titleJapanese
+                    if (anime.titleJapanese.isNullOrEmpty() || anime.titleJapanese == anime.title || anime.titleJapanese == anime.titleEnglish)
+                        tvAnimeTitleJapanese.visibility = View.GONE
+                    else tvAnimeTitleJapanese.text = anime.titleJapanese
 
-                tvAnimeTitle.text = anime.title
-                if (anime.titleJapanese.isNullOrEmpty() || anime.titleJapanese == anime.title || anime.titleJapanese == anime.titleEnglish)
-                    tvAnimeTitleJapanese.visibility = View.GONE
-                else tvAnimeTitleJapanese.text = anime.titleJapanese
-
-                tvRankAndRating.text = getString(
-                    R.string.rank_and_score, anime.rank.toString(), anime.score ?: UNKNOWN
-                )
-                tvUserRated.text = getString(R.string.rated_by, anime.scoredBy ?: 0)
-                /*End of Header Section*/
-
-                /*Body Section*/
-                tvTypeValue.text = getText(anime.type)
-                tvRatingValue.text = getText(anime.rating)
-
-                tvEpisodeValue.text = if (anime.episodes != null) getText(anime.episodes.toString())
-                else getText(null)
-
-                tvGenreValue.text = if (anime.genres.isEmpty()) getText(UNKNOWN)
-                else getText(ListToString().invoke(anime.genres))
-
-                tvStatusValue.text = getText(anime.status)
-
-                tvSeasonValue.text =
-                    if (anime.season.isNullOrEmpty()) getText(null)
-                    else getText(
-                        "${
-                        (anime.season as String).replaceFirstChar { firstChar ->
-                            firstChar.uppercase()
-                        }
-                        } ${anime.year}"
+                    tvRankAndRating.text = getString(
+                        R.string.rank_and_score, anime.rank.toString(), anime.score ?: UNKNOWN
                     )
+                    tvUserRated.text = getString(R.string.rated_by, anime.scoredBy ?: 0)
+                }
 
-                val parser = DateParser()
-                tvAiredValue.text =
-                    getText("${parser(anime.startedDate)} - ${parser(anime.finishedDate)}")
+                binding.bodySection.apply {
+                    tvTypeValue.text = getText(anime.type)
+                    tvRatingValue.text = getText(anime.rating)
 
-                tvSynopsis.text = anime.synopsis
-                    ?: getString(R.string.no_information_by_mal)
-                /*End of Body Section*/
+                    tvEpisodeValue.text =
+                        if (anime.episodes != null) getText(anime.episodes.toString())
+                        else getText(null)
 
-                /*Fab Section*/
-                fabFavorite.setImageResource(
+                    tvGenreValue.text = if (anime.genres.isEmpty()) getText(UNKNOWN)
+                    else getText(ListToString().invoke(anime.genres))
+
+                    tvStatusValue.text = getText(anime.status)
+
+                    tvSeasonValue.text =
+                        if (anime.season.isNullOrEmpty()) getText(null)
+                        else getText(
+                            "${
+                            (anime.season as String).replaceFirstChar { firstChar ->
+                                firstChar.uppercase()
+                            }
+                            } ${anime.year}"
+                        )
+
+                    val parser = DateParser()
+                    tvAiredValue.text =
+                        getText("${parser(anime.startedDate)} - ${parser(anime.finishedDate)}")
+
+                    tvSynopsis.text = anime.synopsis
+                        ?: getString(R.string.no_information_by_mal)
+                }
+
+                binding.fabFavorite.setImageResource(
                     if (anime.isFavorite) R.drawable.ic_favorite
                     else R.drawable.ic_favorite_hollow
-                )/*End of Fab Section*/
+                )
             }
         }
     }
 
-    private fun FragmentDetailAnimeBinding.setCharacters() {
+    private fun setCharacters() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             val characterAdapter = CharacterAdapter { characterId ->
                 val action = DetailAnimeFragmentDirections.getCharacterDetail(characterId)
                 findNavController().navigate(action)
             }
 
-            rvCharacter.apply {
+            binding.characterSection.rvCharacter.apply {
                 adapter = characterAdapter
                 layoutManager = LinearLayoutManager(
                     requireContext(), RecyclerView.HORIZONTAL, false
@@ -127,11 +127,11 @@ class DetailAnimeFragment :
 
             viewModel.getAnimeCharactersById(args.malID).catch { t ->
                 Snackbar.make(
-                    root, t.localizedMessage ?: "Something Went Wrong", Snackbar.LENGTH_LONG
+                    binding.root, t.localizedMessage ?: "Something Went Wrong", Snackbar.LENGTH_LONG
                 ).show()
             }.collect { characters ->
                 if (characters.isEmpty()) {
-                    tvHeaderCharacter.visibility = View.GONE
+                    binding.characterSection.root.visibility = View.GONE
                     return@collect
                 }
                 characterAdapter.submitList(characters)

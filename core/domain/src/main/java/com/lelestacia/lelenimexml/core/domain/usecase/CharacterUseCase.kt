@@ -1,6 +1,7 @@
 package com.lelestacia.lelenimexml.core.domain.usecase
 
-import com.lelestacia.lelenimexml.core.data.ICharacterRepository
+import com.lelestacia.lelenimexml.core.common.Resource
+import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
 import com.lelestacia.lelenimexml.core.model.character.Character
 import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,6 @@ class CharacterUseCase @Inject constructor(
     override fun getAnimeCharacterById(animeID: Int): Flow<List<Character>> =
         characterRepository.getAnimeCharactersById(animeID)
 
-    override fun getCharacterInformationByCharacterId(characterID: Int): Flow<CharacterDetail> =
+    override fun getCharacterInformationByCharacterId(characterID: Int): Flow<Resource<CharacterDetail>> =
         characterRepository.getCharacterDetailById(characterID)
 }

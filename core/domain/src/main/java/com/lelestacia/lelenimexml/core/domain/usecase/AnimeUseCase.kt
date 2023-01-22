@@ -1,7 +1,7 @@
 package com.lelestacia.lelenimexml.core.domain.usecase
 
 import androidx.paging.PagingData
-import com.lelestacia.lelenimexml.core.data.IAnimeRepository
+import com.lelestacia.lelenimexml.core.data.impl.anime.IAnimeRepository
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

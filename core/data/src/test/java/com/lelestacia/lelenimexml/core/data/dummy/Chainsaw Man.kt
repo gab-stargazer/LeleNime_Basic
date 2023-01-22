@@ -1,6 +1,12 @@
 package com.lelestacia.lelenimexml.core.data.dummy
 
+import com.lelestacia.lelenimexml.core.data.utility.asEntity
 import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
+import com.lelestacia.lelenimexml.core.database.model.character.CharacterProfile
+import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
+import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterDetail
+import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterImage
 import java.util.Date
 
 val chainsawManEntity = AnimeEntity(
@@ -25,4 +31,67 @@ val chainsawManEntity = AnimeEntity(
     lastViewed = Date(),
     startedDate = Date().toString(),
     finishedDate = Date().toString(),
+)
+
+val chainsawManCharacters = listOf(
+    NetworkCharacter(
+        characterData = NetworkCharacter.CharacterResponseData(
+            characterMalId = 170732,
+            images = NetworkCharacterImage(
+                NetworkCharacterImage.Webp(
+                    imageUrl = "https://cdn.myanimelist.net/images/characters/3/492407.webp?s=4d8e9a01dac6a5d891c3ed434187fba9"
+                )
+            ),
+            name = "Denji"
+        ),
+        role = "Main",
+        favoriteBy = 13968
+    ),
+    NetworkCharacter(
+        characterData = NetworkCharacter.CharacterResponseData(
+            characterMalId = 170735,
+            images = NetworkCharacterImage(
+                NetworkCharacterImage.Webp(
+                    imageUrl = "https://cdn.myanimelist.net/images/characters/10/492791.webp?s=bcd7cca0e5126478eb2417666188adc7"
+                )
+            ),
+            name = "Hayakawa, Aki"
+        ),
+        role = "Main",
+        favoriteBy = 6872
+    ),
+    NetworkCharacter(
+        characterData = NetworkCharacter.CharacterResponseData(
+            characterMalId = 170733,
+            images = NetworkCharacterImage(
+                NetworkCharacterImage.Webp(
+                    imageUrl = "https://cdn.myanimelist.net/images/characters/7/494969.webp?s=02622d6ffa487b8d6d7503af4792a106"
+                )
+            ),
+            name = "Power"
+        ),
+        role = "Main",
+        favoriteBy = 18586
+    )
+)
+
+val powerCharacterDetail = NetworkCharacterDetail(
+    characterMalId = 170733,
+    characterName = "Power",
+    characterKanjiName = "パワー",
+    characterNickNames = listOf("Blood Devil"),
+    characterFavoriteCount = 19730,
+    characterInformation = "Power is a fiend and Public Safety Devil Hunter, part of Makima's squad. She's a work partner and good friend with Denji. They share an apartment alongside Aki Hayakawa. She lacks manners and often lies to avoid punishment. She's very fond of her pet cat Nyako to the point she was willing to sacrifice Denji's life to save Nyako who had been captured by a bat demon.\n\n(Source: Chainsaw Man Wiki)"
+)
+
+val powerProfile = CharacterProfile(
+    character = CharacterEntity(
+        characterID = 170733,
+        animeID = 44511,
+        characterName = "Power",
+        characterImage = "https://cdn.myanimelist.net/images/characters/7/494969.webp?s=02622d6ffa487b8d6d7503af4792a106",
+        characterRole = "Main",
+        characterFavorite = 19730
+    ),
+    additionalInformation = powerCharacterDetail.asEntity()
 )

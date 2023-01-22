@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.data
+package com.lelestacia.lelenimexml.core.data.impl.anime
 
 import androidx.paging.PagingData
 import com.lelestacia.lelenimexml.core.model.anime.Anime

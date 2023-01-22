@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_type_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/type"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_rating_holder"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_type_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/information_value"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/tv_type_holder"
+        app:layout_constraintStart_toStartOf="@+id/tv_rating_value"
+        app:layout_constraintTop_toTopOf="@id/tv_type_holder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_rating_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/rating"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_episode_holder"
+        app:layout_constraintTop_toBottomOf="@id/tv_type_holder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_rating_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/information_value"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_rating_holder"
+        app:layout_constraintStart_toStartOf="@id/tv_episode_value"
+        app:layout_constraintTop_toTopOf="@+id/tv_rating_holder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_episode_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/episode_detail"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_rating_holder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_episode_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/information_value"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/tv_episode_holder"
+        app:layout_constraintStart_toEndOf="@id/tv_episode_holder"
+        app:layout_constraintTop_toTopOf="@id/tv_episode_holder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_genre_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/genre"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_episode_holder"
+        app:layout_constraintTop_toBottomOf="@id/tv_episode_holder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_genre_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/tv_genre_holder"
+        app:layout_constraintStart_toStartOf="@+id/tv_episode_value"
+        app:layout_constraintTop_toTopOf="@id/tv_genre_holder"
+        tools:text=":\tHorror, Action" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_status_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/status_detail"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_genre_holder"
+        app:layout_constraintTop_toBottomOf="@id/tv_genre_holder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_status_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/tv_status_holder"
+        app:layout_constraintStart_toStartOf="@+id/tv_genre_value"
+        app:layout_constraintTop_toTopOf="@id/tv_status_holder"
+        tools:text=":\tCurrently Airing" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_season_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/season"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/tv_status_holder"
+        app:layout_constraintTop_toBottomOf="@id/tv_status_holder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_aired_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/aired"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_season_holder"
+        app:layout_constraintTop_toBottomOf="@id/tv_season_holder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_season_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/tv_season_holder"
+        app:layout_constraintStart_toStartOf="@+id/tv_status_value"
+        app:layout_constraintTop_toTopOf="@id/tv_season_holder"
+        tools:text=": Winter 2023" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_aired_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_aired_holder"
+        app:layout_constraintStart_toStartOf="@+id/tv_season_value"
+        app:layout_constraintTop_toTopOf="@id/tv_aired_holder"
+        tools:text=":\t2022-10-12T00:00:00+00:00" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_synopsis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:justificationMode="inter_word"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/tv_aired_holder"
+        tools:text="@string/sample_lorem" />
+</androidx.constraintlayout.widget.ConstraintLayout>

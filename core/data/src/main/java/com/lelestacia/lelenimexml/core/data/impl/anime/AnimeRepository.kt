@@ -1,25 +1,31 @@
-package com.lelestacia.lelenimexml.core.data
+package com.lelestacia.lelenimexml.core.data.impl.anime
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.lelestacia.lelenimexml.core.common.Constant.IS_NSFW
+import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import com.lelestacia.lelenimexml.core.data.utility.asAnime
 import com.lelestacia.lelenimexml.core.data.utility.asEntity
 import com.lelestacia.lelenimexml.core.database.IAnimeLocalDataSource
 import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
-import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
 import com.lelestacia.lelenimexml.core.model.anime.Anime
-import com.lelestacia.lelenimexml.core.network.INetworkDataSource
+import com.lelestacia.lelenimexml.core.network.INetworkAnimeService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
-    private val apiService: INetworkDataSource,
+    private val apiService: INetworkAnimeService,
     private val localDataSource: IAnimeLocalDataSource,
-    private val userPref: UserPref
+    mContext: Context
 ) : IAnimeRepository {
+
+    private val sharedPreferences: SharedPreferences = mContext
+        .getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
 
     override fun seasonAnimePagingData(): Flow<PagingData<Anime>> {
         return Pager(
@@ -38,7 +44,7 @@ class AnimeRepository @Inject constructor(
     }
 
     override fun searchAnimeByTitle(query: String): Flow<PagingData<Anime>> {
-        val isSafeMode = userPref.isSafeMode()
+        val isSafeMode = sharedPreferences.getBoolean(IS_NSFW, false)
         return Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -117,9 +123,13 @@ class AnimeRepository @Inject constructor(
         }
     }
 
-    override fun isSafeMode(): Boolean = userPref.isSafeMode()
+    override fun isSafeMode(): Boolean {
+        return sharedPreferences.getBoolean(IS_NSFW, false)
+    }
 
     override fun changeSafeMode(isSafeMode: Boolean) {
-        userPref.switchSafeMode(isSafeMode)
+        sharedPreferences.edit()
+            .putBoolean(IS_NSFW, isSafeMode)
+            .apply()
     }
 }
