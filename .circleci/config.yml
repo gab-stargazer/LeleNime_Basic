@@ -15,10 +15,10 @@ jobs:
           command: sudo chmod +x ./gradlew
       - run:
           name: Run KtLint formatting tools
-          command: ./gradlew ktlintFormat
+          command: ./gradlew ktlintFormat --stacktrace
       - run:
           name: KtLint check for validation
-          command: ./gradlew ktlintCheck
+          command: ./gradlew ktlintCheck --stacktrace
       - store_test_results:
           path: app/build/test-ktlint
       - run:
