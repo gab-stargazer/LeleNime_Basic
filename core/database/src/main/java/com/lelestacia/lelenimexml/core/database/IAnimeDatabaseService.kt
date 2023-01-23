@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
 import kotlinx.coroutines.flow.Flow
 
-interface IAnimeLocalDataSource {
+interface IAnimeDatabaseService {
     suspend fun insertOrUpdateAnime(anime: AnimeEntity)
     suspend fun updateAnime(anime: AnimeEntity)
     suspend fun getAnimeByAnimeId(animeID: Int): AnimeEntity?

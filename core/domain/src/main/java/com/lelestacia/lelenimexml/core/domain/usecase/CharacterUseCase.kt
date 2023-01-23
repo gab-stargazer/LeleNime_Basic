@@ -10,7 +10,7 @@ import javax.inject.Inject
 class CharacterUseCase @Inject constructor(
     private val characterRepository: ICharacterRepository
 ) : ICharacterUseCase {
-    override fun getAnimeCharacterById(animeID: Int): Flow<List<Character>> =
+    override fun getAnimeCharacterById(animeID: Int): Flow<Resource<List<Character>>> =
         characterRepository.getAnimeCharactersById(animeID)
 
     override fun getCharacterInformationByCharacterId(characterID: Int): Flow<Resource<CharacterDetail>> =

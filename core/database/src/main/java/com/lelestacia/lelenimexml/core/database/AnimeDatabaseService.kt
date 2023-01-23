@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class AnimeLocalDataSource @Inject constructor(
+class AnimeDatabaseService @Inject constructor(
     private val animeDao: AnimeDao,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : IAnimeLocalDataSource {
+) : IAnimeDatabaseService {
 
     override suspend fun insertOrUpdateAnime(anime: AnimeEntity) {
         withContext(ioDispatcher) {

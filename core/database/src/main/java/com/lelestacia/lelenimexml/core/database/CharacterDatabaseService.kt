@@ -9,10 +9,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class CharacterLocalDataSource @Inject constructor(
+class CharacterDatabaseService @Inject constructor(
     private val characterDao: CharacterDao,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-) : ICharacterLocalDataSource {
+) : ICharacterDatabaseService {
 
     override suspend fun insertOrUpdateCharacter(character: List<CharacterEntity>) {
         withContext(ioDispatcher) {

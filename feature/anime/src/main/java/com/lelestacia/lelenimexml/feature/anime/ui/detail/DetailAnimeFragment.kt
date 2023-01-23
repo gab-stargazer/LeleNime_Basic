@@ -13,18 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.core.common.Constant.UNKNOWN
 import com.lelestacia.lelenimexml.core.common.DateParser
 import com.lelestacia.lelenimexml.core.common.R.anim.fade_in
 import com.lelestacia.lelenimexml.core.common.R.anim.fade_out
+import com.lelestacia.lelenimexml.core.common.Resource
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.FragmentDetailAnimeBinding
 import com.lelestacia.lelenimexml.feature.anime.ui.adapter.CharacterAdapter
 import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.transformers.coil.BlurTransformation
-import kotlinx.coroutines.flow.catch
 
 @AndroidEntryPoint
 class DetailAnimeFragment :
@@ -38,6 +37,7 @@ class DetailAnimeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getAnimeCharactersById(animeId = args.malID)
         setView()
         setCharacters()
         binding.apply {
@@ -111,37 +111,61 @@ class DetailAnimeFragment :
     }
 
     private fun setCharacters() {
+        val characterAdapter = CharacterAdapter { characterId ->
+            val action = DetailAnimeFragmentDirections.getCharacterDetail(characterId)
+            findNavController().navigate(action)
+        }
+
+        binding.characterSection.rvCharacter.apply {
+            adapter = characterAdapter
+            layoutManager = LinearLayoutManager(
+                requireContext(), RecyclerView.HORIZONTAL, false
+            )
+            setHasFixedSize(true)
+        }
+
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            val characterAdapter = CharacterAdapter { characterId ->
-                val action = DetailAnimeFragmentDirections.getCharacterDetail(characterId)
-                findNavController().navigate(action)
-            }
+            viewModel.characters.collect { resourceOfCharacters ->
+                when (resourceOfCharacters) {
+                    is Resource.Error -> {
+                        binding.characterSection.apply {
+                            progressCircular.visibility = View.GONE
+                            tvHeaderCharacter.visibility = View.GONE
+                            rvCharacter.visibility = View.GONE
 
-            binding.characterSection.rvCharacter.apply {
-                adapter = characterAdapter
-                layoutManager = LinearLayoutManager(
-                    requireContext(), RecyclerView.HORIZONTAL, false
-                )
-                setHasFixedSize(true)
-            }
-
-            viewModel.getAnimeCharactersById(args.malID).catch { t ->
-                Snackbar.make(
-                    binding.root, t.localizedMessage ?: "Something Went Wrong", Snackbar.LENGTH_LONG
-                ).show()
-            }.collect { characters ->
-                if (characters.isEmpty()) {
-                    binding.characterSection.root.visibility = View.GONE
-                    return@collect
+                            tvErrorMessage.text = resourceOfCharacters.message
+                            tvErrorMessage.visibility = View.VISIBLE
+                            btnRetry.visibility = View.VISIBLE
+                            btnRetry.setOnClickListener {
+                                viewModel.getAnimeCharactersById(animeId = args.malID)
+                            }
+                        }
+                    }
+                    is Resource.Success -> {
+                        characterAdapter.submitList(resourceOfCharacters.data)
+                        binding.characterSection.progressCircular.visibility = View.GONE
+                    }
+                    is Resource.Loading -> {
+                        binding.characterSection.apply {
+                            val isBtnRetryVisible = btnRetry.visibility == View.VISIBLE
+                            if (isBtnRetryVisible) {
+                                progressCircular.visibility = View.VISIBLE
+                                tvHeaderCharacter.visibility = View.VISIBLE
+                                rvCharacter.visibility = View.VISIBLE
+                                btnRetry.visibility = View.GONE
+                                tvErrorMessage.visibility = View.GONE
+                            }
+                        }
+                    }
+                    else -> Unit
                 }
-                characterAdapter.submitList(characters)
             }
         }
     }
 
     private fun getText(input: String?): String {
-        if (input.isNullOrEmpty()) return getString(R.string.information_value, UNKNOWN)
-        return getString(R.string.information_value, input)
+        return if (input.isNullOrEmpty()) getString(R.string.information_value, UNKNOWN)
+        else getString(R.string.information_value, input)
     }
 
     override fun onClick(v: View?) {

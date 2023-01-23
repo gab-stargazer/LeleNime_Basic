@@ -6,7 +6,7 @@ import com.lelestacia.lelenimexml.core.common.Resource
 import com.lelestacia.lelenimexml.core.data.utility.asCharacter
 import com.lelestacia.lelenimexml.core.data.utility.asCharacterDetail
 import com.lelestacia.lelenimexml.core.data.utility.asEntity
-import com.lelestacia.lelenimexml.core.database.ICharacterLocalDataSource
+import com.lelestacia.lelenimexml.core.database.ICharacterDatabaseService
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.model.character.Character
@@ -27,30 +27,42 @@ import javax.inject.Inject
 
 class CharacterRepository @Inject constructor(
     private val apiService: INetworkCharacterService,
-    private val localDataSource: ICharacterLocalDataSource,
+    private val localDataSource: ICharacterDatabaseService,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ICharacterRepository {
 
-    override fun getAnimeCharactersById(animeID: Int): Flow<List<Character>> = flow {
-        var localCharacter: List<CharacterEntity> =
-            localDataSource.getAllCharacterFromAnimeById(animeID)
+    override fun getAnimeCharactersById(animeID: Int): Flow<Resource<List<Character>>> =
+        flow<Resource<List<Character>>> {
+            var localCharacter: List<CharacterEntity> =
+                localDataSource.getAllCharacterFromAnimeById(animeID)
 
-        val shouldFetchNetwork = localCharacter.isEmpty()
-        if (shouldFetchNetwork) {
-            delay(200)
-            val apiResponse = apiService.getCharactersByAnimeID(animeID).map { characterResponse ->
-                characterResponse.asEntity(animeID)
+            val shouldFetchNetwork = localCharacter.isEmpty()
+            if (shouldFetchNetwork) {
+                val apiResponse =
+                    apiService.getCharactersByAnimeID(animeID).map { characterResponse ->
+                        characterResponse.asEntity(animeID)
+                    }
+                delay(200)
+                localDataSource.insertOrUpdateCharacter(apiResponse)
+                localCharacter = localDataSource.getAllCharacterFromAnimeById(animeID)
             }
-            localDataSource.insertOrUpdateCharacter(apiResponse)
-            localCharacter = localDataSource.getAllCharacterFromAnimeById(animeID)
-        }
 
-        emit(
-            localCharacter.map {
-                it.asCharacter()
-            }
-        )
-    }.flowOn(ioDispatcher)
+            emit(
+                Resource.Success(
+                    localCharacter.map {
+                        it.asCharacter()
+                    }
+                )
+            )
+        }.onStart { emit(Resource.Loading) }
+            .catch { t ->
+                when (t) {
+                    is HttpException -> {
+                        emit(Resource.Error(null, parseHttpError(t)))
+                    }
+                    else -> emit(Resource.Error(null, t.message))
+                }
+            }.flowOn(ioDispatcher)
 
     override fun getCharacterDetailById(characterID: Int): Flow<Resource<CharacterDetail>> =
         flow<Resource<CharacterDetail>> {
@@ -62,9 +74,9 @@ class CharacterRepository @Inject constructor(
             if (shouldFetchNetwork) {
                 val apiResponse = apiService.getCharacterDetailByCharacterID(characterID)
                 Timber.d("Response: $apiResponse")
-                delay(200)
                 val additionalInformationEntity = apiResponse.asEntity()
                 localDataSource.insertOrReplaceAdditionalInformation(additionalInformationEntity)
+                delay(500)
             }
 
             val characterDetail =

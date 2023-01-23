@@ -10,7 +10,7 @@ import com.lelestacia.lelenimexml.core.common.Constant.IS_NSFW
 import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import com.lelestacia.lelenimexml.core.data.utility.asAnime
 import com.lelestacia.lelenimexml.core.data.utility.asEntity
-import com.lelestacia.lelenimexml.core.database.IAnimeLocalDataSource
+import com.lelestacia.lelenimexml.core.database.IAnimeDatabaseService
 import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.network.INetworkAnimeService
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
     private val apiService: INetworkAnimeService,
-    private val localDataSource: IAnimeLocalDataSource,
+    private val localDataSource: IAnimeDatabaseService,
     mContext: Context
 ) : IAnimeRepository {
 

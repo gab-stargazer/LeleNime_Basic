@@ -2,10 +2,10 @@ package com.lelestacia.lelenimexml.core.database.di
 
 import android.content.Context
 import androidx.room.Room
-import com.lelestacia.lelenimexml.core.database.AnimeLocalDataSource
-import com.lelestacia.lelenimexml.core.database.CharacterLocalDataSource
-import com.lelestacia.lelenimexml.core.database.IAnimeLocalDataSource
-import com.lelestacia.lelenimexml.core.database.ICharacterLocalDataSource
+import com.lelestacia.lelenimexml.core.database.AnimeDatabaseService
+import com.lelestacia.lelenimexml.core.database.CharacterDatabaseService
+import com.lelestacia.lelenimexml.core.database.IAnimeDatabaseService
+import com.lelestacia.lelenimexml.core.database.ICharacterDatabaseService
 import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
 import com.lelestacia.lelenimexml.core.database.dao.CharacterDao
 import com.lelestacia.lelenimexml.core.database.database.AnimeDatabase
@@ -45,11 +45,11 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideAnimeDataSource(animeDao: AnimeDao): IAnimeLocalDataSource =
-        AnimeLocalDataSource(animeDao)
+    fun provideAnimeDataSource(animeDao: AnimeDao): IAnimeDatabaseService =
+        AnimeDatabaseService(animeDao)
 
     @Provides
     @Singleton
-    fun provideCharacterDataSource(characterDao: CharacterDao): ICharacterLocalDataSource =
-        CharacterLocalDataSource(characterDao)
+    fun provideCharacterDataSource(characterDao: CharacterDao): ICharacterDatabaseService =
+        CharacterDatabaseService(characterDao)
 }

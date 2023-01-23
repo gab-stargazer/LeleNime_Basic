@@ -8,7 +8,7 @@ import com.lelestacia.lelenimexml.core.data.impl.character.CharacterRepository
 import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
 import com.lelestacia.lelenimexml.core.data.utility.asCharacterDetail
 import com.lelestacia.lelenimexml.core.data.utility.asEntity
-import com.lelestacia.lelenimexml.core.database.ICharacterLocalDataSource
+import com.lelestacia.lelenimexml.core.database.ICharacterDatabaseService
 import com.lelestacia.lelenimexml.core.network.INetworkCharacterService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -41,7 +41,7 @@ class CharacterRepositoryTest {
     lateinit var apiService: INetworkCharacterService
 
     @MockK
-    lateinit var databaseService: ICharacterLocalDataSource
+    lateinit var databaseService: ICharacterDatabaseService
 
     @Before
     fun setup() {
@@ -133,7 +133,7 @@ class CharacterRepositoryTest {
         coEvery { databaseService.insertOrReplaceAdditionalInformation(powerCharacterDetail.asEntity()) } returns Unit
         coEvery { databaseService.getCharacterFullProfile(characterID) } returns powerProfile
         val flowEmission =
-            characterRepository.getCharacterDetailById(characterID).take(2).toList()
+            characterRepository.getCharacterDetailById(characterID).toList()
         Assert.assertEquals("Emission should be Loading", Resource.Loading, flowEmission[0])
         Assert.assertEquals(
             "Emission should be Result",
@@ -163,7 +163,7 @@ class CharacterRepositoryTest {
         coEvery { databaseService.insertOrReplaceAdditionalInformation(powerCharacterDetail.asEntity()) } returns Unit
         coEvery { databaseService.getCharacterFullProfile(characterID) } returns powerProfile
         val flowEmission =
-            characterRepository.getCharacterDetailById(characterID).take(2).toList()
+            characterRepository.getCharacterDetailById(characterID).toList()
         Assert.assertEquals("Emission should be Loading", Resource.Loading, flowEmission[0])
         Assert.assertEquals(
             "Emission should be Result",
