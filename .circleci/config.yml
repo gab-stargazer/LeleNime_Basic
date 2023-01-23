@@ -16,6 +16,8 @@ jobs:
       - run:
           name: Run KtLint formatting tools
           command: ./gradlew ktlintFormat --stacktrace
+      - store_artifacts:
+          path: core/network/build/reports/ktlint
       - run:
           name: KtLint check for validation
           command: ./gradlew ktlintCheck --stacktrace
