@@ -23,7 +23,7 @@ jobs:
           path: app/build/test-ktlint
       - run:
           name: Run Unit Test from all modules
-          command: ./gradlew test --debug
+          command: ./gradlew test --info
       - store_artifacts:
               path: core/data/build/reports/tests
       - run:
