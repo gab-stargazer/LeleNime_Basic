@@ -5,6 +5,7 @@ import com.lelestacia.lelenimexml.core.data.impl.anime.AnimeRepository
 import com.lelestacia.lelenimexml.core.data.impl.anime.IAnimeRepository
 import com.lelestacia.lelenimexml.core.data.impl.character.CharacterRepository
 import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
+import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
 import com.lelestacia.lelenimexml.core.database.IAnimeDatabaseService
 import com.lelestacia.lelenimexml.core.database.ICharacterDatabaseService
 import com.lelestacia.lelenimexml.core.network.INetworkAnimeService
@@ -35,12 +36,18 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideJikanHttpErrorParser(): JikanErrorParserUtil = JikanErrorParserUtil()
+
+    @Provides
+    @Singleton
     fun provideCharacterRepository(
         apiService: INetworkCharacterService,
-        localDataSource: ICharacterDatabaseService
+        localDataSource: ICharacterDatabaseService,
+        errorParserUtil: JikanErrorParserUtil
     ): ICharacterRepository =
         CharacterRepository(
             apiService = apiService,
-            localDataSource = localDataSource
+            localDataSource = localDataSource,
+            errorParser = errorParserUtil
         )
 }

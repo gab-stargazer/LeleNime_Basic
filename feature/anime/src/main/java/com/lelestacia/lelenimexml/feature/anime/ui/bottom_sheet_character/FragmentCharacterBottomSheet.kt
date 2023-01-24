@@ -37,10 +37,10 @@ class FragmentCharacterBottomSheet :
             viewModel.character.collect { resourceOfCharacter ->
                 when (resourceOfCharacter) {
                     is Resource.Error -> {
-                        //  Handle UI when data still exist but Error occured
+                        //  Handle UI when data still exist but Error happened
                         val data: CharacterDetail? = resourceOfCharacter.data
                         data?.let { characterDetail ->
-                            showData(characterDetail = characterDetail)
+                            setContentView(characterDetail = characterDetail)
                             Snackbar
                                 .make(
                                     binding.root,
@@ -52,62 +52,61 @@ class FragmentCharacterBottomSheet :
                         }
 
                         //  Handle the Error
-                        val message = resourceOfCharacter.message ?: UNKNOWN
-                        showError(errorMessage = message)
+                        val errorMessage = resourceOfCharacter.message ?: UNKNOWN
+                        showError(errorMessage = errorMessage)
                     }
                     is Resource.Success -> resourceOfCharacter.data?.let { characterDetail ->
-                        showData(characterDetail = characterDetail)
+                        //  Handle the data and display it properly
+                        setContentView(characterDetail = characterDetail)
                     }
-                    else -> {
-                        val isLoading = binding.layoutLoading.root.visibility == View.VISIBLE
-                        if (isLoading) return@collect
-                        reloadUI()
+                    is Resource.Loading -> {
+                        //  Start loading at this state
+                        beginDelayedTransition(binding.root)
+                        binding.layoutLoading.root.visibility = View.VISIBLE
                     }
+                    is Resource.None -> Unit
                 }
             }
         }
     }
 
-    private fun showData(characterDetail: CharacterDetail) {
-        beginDelayedTransition(binding.root, AutoTransition())
-        binding.apply {
-            setContentView(characterDetail = characterDetail)
-            layoutLoading.root.visibility = View.GONE
-            layoutContent.root.visibility = View.VISIBLE
-        }
-    }
-
     private fun showError(errorMessage: String) {
-        beginDelayedTransition(
-            binding.root,
-            AutoTransition()
-        )
-        binding.apply {
-            setErrorView(errorMessage = errorMessage)
-            layoutError.root.visibility = View.VISIBLE
-            layoutLoading.root.visibility = View.GONE
-        }
-    }
-
-    private fun reloadUI() {
-        beginDelayedTransition(
-            binding.root,
-            AutoTransition()
-        )
-        binding.apply {
-            layoutError.root.visibility = View.GONE
-            endTransitions(binding.root)
+        binding.layoutError.apply {
             beginDelayedTransition(
                 binding.root,
                 AutoTransition()
             )
-            layoutLoading.root.visibility = View.VISIBLE
+            beginDelayedTransition(
+                binding.layoutLoading.root,
+                AutoTransition()
+            )
+            binding.layoutLoading.root.visibility = View.GONE
+            root.visibility = View.VISIBLE
+            endTransitions(binding.root)
+
+            beginDelayedTransition(root)
+            tvErrorMessage.text = errorMessage
+            btnRetryConnection.setOnClickListener {
+                beginDelayedTransition(binding.root)
+                binding.layoutLoading.root.visibility = View.VISIBLE
+                root.visibility = View.GONE
+                viewModel.getCharacterDetailByID(characterID = args.characterId)
+            }
+            endTransitions(root)
         }
     }
 
-    private fun BottomSheetCharacterBinding.setContentView(characterDetail: CharacterDetail) {
-        layoutContent.apply {
+    private fun setContentView(characterDetail: CharacterDetail) {
+        binding.layoutContent.apply {
+            beginDelayedTransition(
+                binding.root,
+                AutoTransition()
+            )
+            binding.layoutLoading.root.visibility = View.GONE
+            root.visibility = View.VISIBLE
+            endTransitions(binding.root)
 
+            beginDelayedTransition(root)
             ivCharacterImage.load(characterDetail.images) {
                 transformations(RoundedCornersTransformation(15f))
                 build()
@@ -118,7 +117,7 @@ class FragmentCharacterBottomSheet :
             ivFavorite.visibility = View.VISIBLE
 
             val characterRomajiName = characterDetail.characterKanjiName
-            with(layoutContent.tvCharacterRomaji) {
+            with(tvCharacterRomaji) {
                 if (characterRomajiName.isEmpty()) {
                     visibility = View.GONE
                 } else {
@@ -130,10 +129,15 @@ class FragmentCharacterBottomSheet :
                 characterDetail.characterNickNames,
                 characterDetail.characterInformation
             )
+            endTransitions(root)
 
+            val length = characterDetail.characterInformation.length
+            val duration: Long =
+                if (length > 150) 500
+                else 750
             beginDelayedTransition(
                 tvCharacterInformation.rootView as ViewGroup,
-                AutoTransition()
+                AutoTransition().setDuration(duration)
             )
             tvCharacterInformation.text =
                 characterDetail
@@ -142,21 +146,11 @@ class FragmentCharacterBottomSheet :
         }
     }
 
-    private fun BottomSheetCharacterBinding.setErrorView(errorMessage: String) {
-        layoutError.apply {
-            val characterID = args.characterId
-            tvErrorMessage.text = errorMessage
-            btnRetryConnection.setOnClickListener {
-                viewModel.getCharacterDetailByID(characterID)
-            }
-        }
-    }
-
-    private fun BottomSheetCharacterBinding.setNickName(
+    private fun setNickName(
         nickname: List<String>,
         characterInformation: String
     ) {
-        layoutContent.apply {
+        binding.layoutContent.apply {
             val nicknameIsNotDifferent = characterInformation
                 .contains(nickname.joinToString().toRegex())
             if (nickname.isEmpty() || nicknameIsNotDifferent) {

@@ -38,6 +38,8 @@ dependencies {
     implementation project(':core:common')
     implementation project(':core:data')
     implementation project(':core:model')
+    implementation project(path: ':core:common')
+    implementation project(path: ':core:common')
 }
 
 kapt {

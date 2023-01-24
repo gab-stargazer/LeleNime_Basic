@@ -12,7 +12,14 @@
     <color name="orange">#FAAB78</color>
 
     <color name="navy">#453C67</color>
-    <color name="blue">#6D67E4</color>
     <color name="light_blue">#46C2CB</color>
     <color name="dark_mode_yellow">#F2F7A1</color>
+
+    <!--Light Mode-->
+    <color name="light_primary">#444aa2</color>
+    <color name="light_background">#e1e1e9</color>
+
+    <!--Dark Mode-->
+    <color name="blue">#6D67E4</color>
+    <color name="dark_background">#1C1C1C</color>
 </resources>

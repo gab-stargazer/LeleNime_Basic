@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
-    app:shimmer_repeat_delay="250"
     app:shimmer_auto_start="true"
-    app:shimmer_duration="750"
-    app:shimmer_dropoff="0.25"
     app:shimmer_clip_to_children="true"
     app:shimmer_colored="?android:attr/textColorPrimary"
+    app:shimmer_dropoff="0.25"
+    app:shimmer_duration="750"
+    app:shimmer_repeat_delay="250"
     tools:background="?attr/backgroundColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -69,10 +69,11 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/tv_character_information"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="?android:attr/textColorPrimary"
             android:minHeight="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_character_nickname" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.facebook.shimmer.ShimmerFrameLayout>

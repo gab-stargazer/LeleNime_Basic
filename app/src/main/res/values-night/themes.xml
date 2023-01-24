@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="Theme.LeleNimeXML" parent="Theme.Material3.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -12,9 +12,8 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <!-- Customize your theme here. -->
-        <item name="backgroundColor">#1C1C1C</item>
+        <item name="backgroundColor">@color/dark_background</item>
         <item name="itemIconTint">?android:attr/textColorPrimary</item>
-        <item name="colorSecondaryContainer">@color/navy</item>
         <item name="colorOnSurfaceVariant">#D8D8D8</item>
         <item name="cardBackgroundColor">@color/navy</item>
         <item name="background">@color/beige</item>
@@ -24,6 +23,9 @@
         <item name="trackTint">#7A7A7A</item>
         <item name="iconTint">?android:attr/textColorPrimary</item>
         <item name="android:windowContentTransitions">true</item>
+
+        <item name="colorSurface">@color/dark_background</item>
+        <item name="colorSecondaryContainer">?attr/colorPrimary</item>
     </style>
 
     <style name="Theme.LeleNimeXML.NoActionBar">

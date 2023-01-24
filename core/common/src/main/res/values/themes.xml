@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.LeleNimeXML" parent="Theme.Material3.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimary">@color/purple_blue</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <!-- Customize your theme here. -->
-        <item name="backgroundColor">@color/beige</item>
+        <item name="backgroundColor">@color/white</item>
         <item name="itemIconTint">?android:attr/textColorPrimary</item>
         <item name="colorSecondaryContainer">@color/beige</item>
         <item name="colorOnSurfaceVariant">#454545</item>
