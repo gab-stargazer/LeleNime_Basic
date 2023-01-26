@@ -28,13 +28,19 @@ import com.lelestacia.lelenimexml.feature.anime.ui.adapter.FooterLoadStateAdapte
 import com.lelestacia.lelenimexml.feature.anime.ui.adapter.ListAnimePagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnClickListener {
 
     private val binding: FragmentAnimeBinding by viewBinding()
     private val viewModel by viewModels<AnimeViewModel>()
+    private val animeAdapter = ListAnimePagingAdapter { anime ->
+        lifecycleScope.launch {
+            viewModel.insertOrUpdateAnimeToHistory(anime).join()
+            val action = AnimeFragmentDirections.animeToDetail(anime.animeID)
+            findNavController().navigate(action)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,30 +81,22 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
     }
 
     private fun FragmentAnimeBinding.setData() {
-        val seasonAnimeAdapter = ListAnimePagingAdapter { anime ->
-            lifecycleScope.launch {
-                viewModel.insertOrUpdateAnimeToHistory(anime).join()
-                val action = AnimeFragmentDirections.animeToDetail(anime.animeID)
-                findNavController().navigate(action)
-            }
-        }
-
         val myLayoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         rvAnime.apply {
             layoutManager = myLayoutManager
-            adapter = seasonAnimeAdapter
+            adapter = animeAdapter
                 .withLoadStateFooter(
                     footer = FooterLoadStateAdapter {
-                        seasonAnimeAdapter.retry()
+                        animeAdapter.retry()
                     }
                 )
             addItemDecoration(DividerItemDecoration(context, myLayoutManager.orientation))
             setHasFixedSize(true)
         }
 
-        seasonAnimeAdapter
+        animeAdapter
             .loadStateFlow
             .asLiveData()
             .observe(viewLifecycleOwner) { loadState ->
@@ -111,7 +109,7 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
                             )
                             binding.showNotFound(isNotFound = false)
 
-                            if (seasonAnimeAdapter.itemCount == 0) {
+                            if (animeAdapter.itemCount == 0) {
                                 binding.showLoading(isLoading = true)
                                 return@observe
                             }
@@ -125,7 +123,7 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
 
                         is LoadState.NotLoading -> {
                             binding.showLoading(isLoading = false)
-                            if (seasonAnimeAdapter.itemCount == 0)
+                            if (animeAdapter.itemCount == 0)
                                 binding.showNotFound(isNotFound = true)
                         }
 
@@ -144,13 +142,13 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
         viewModel
             .getAnimeData
             .observe(viewLifecycleOwner) { animePagingData ->
-                seasonAnimeAdapter.submitData(viewLifecycle, animePagingData)
+                animeAdapter.submitData(viewLifecycle, animePagingData)
             }
 
         screenError
             .btnRetry
             .setOnClickListener {
-                seasonAnimeAdapter.refresh()
+                animeAdapter.refresh()
             }
     }
 
@@ -180,10 +178,8 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
             override fun onQueryTextSubmit(query: String): Boolean {
                 (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                     .hideSoftInputFromWindow(view?.windowToken, 0)
-
                 viewModel.insertNewSearchQuery(query)
-                Timber.d("New Search Query : $query")
-
+                binding.rvAnime.smoothScrollToPosition(0)
                 return true
             }
 

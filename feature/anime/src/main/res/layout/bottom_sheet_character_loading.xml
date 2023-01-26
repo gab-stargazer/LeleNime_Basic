@@ -23,7 +23,8 @@
             android:layout_height="134dp"
             android:backgroundTint="?android:attr/textColorPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeWidth="0dp" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/tv_character_name"
@@ -34,7 +35,8 @@
             android:backgroundTint="?android:attr/textColorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_character_image"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeWidth="0dp" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/tv_character_romaji"
@@ -45,7 +47,8 @@
             android:backgroundTint="?android:attr/textColorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_character_name"
-            app:layout_constraintTop_toBottomOf="@id/tv_character_name" />
+            app:layout_constraintTop_toBottomOf="@id/tv_character_name"
+            app:strokeWidth="0dp" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/tv_character_favorite"
@@ -55,25 +58,30 @@
             android:backgroundTint="?android:attr/textColorPrimary"
             app:layout_constraintEnd_toEndOf="@+id/tv_character_romaji"
             app:layout_constraintStart_toStartOf="@+id/tv_character_name"
-            app:layout_constraintTop_toBottomOf="@id/tv_character_romaji" />
+            app:layout_constraintTop_toBottomOf="@id/tv_character_romaji"
+            app:strokeWidth="0dp" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/tv_character_nickname"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="?android:attr/textColorPrimary"
+            app:layout_constraintEnd_toEndOf="@+id/tv_character_favorite"
             app:layout_constraintStart_toStartOf="@id/iv_character_image"
-            app:layout_constraintTop_toBottomOf="@id/iv_character_image" />
+            app:layout_constraintTop_toBottomOf="@id/iv_character_image"
+            app:strokeWidth="0dp" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/tv_character_information"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="?android:attr/textColorPrimary"
-            android:minHeight="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_character_nickname" />
+            app:layout_constraintEnd_toEndOf="@+id/tv_character_nickname"
+            app:layout_constraintStart_toStartOf="@+id/tv_character_nickname"
+            app:layout_constraintTop_toBottomOf="@id/tv_character_nickname"
+            app:strokeWidth="0dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.facebook.shimmer.ShimmerFrameLayout>

@@ -11,6 +11,7 @@ import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import com.lelestacia.lelenimexml.core.network.model.episodes.NetworkEpisode
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -28,6 +29,7 @@ class EpisodeRepository @Inject constructor(
             val shouldFetchNetwork = localData.isEmpty()
 
             if (shouldFetchNetwork) {
+                delay(500)
                 val apiResponse: List<NetworkEpisode> =
                     apiService.getAnimeEpisodesByAnimeID(animeID = animeID)
                 val newEpisodeEntities = apiResponse.map { networkEpisode: NetworkEpisode ->

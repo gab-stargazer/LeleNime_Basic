@@ -7,7 +7,7 @@
     tools:background="?attr/backgroundColor">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_header_character"
+        android:id="@+id/tv_header_episode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -20,29 +20,24 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_character"
-        android:layout_width="0dp"
+        android:id="@+id/rv_episode"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:contentDescription="@string/list_of_anime_characters"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_header_character"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/tv_header_episode"
         tools:itemCount="1"
         tools:listitem="@layout/item_card_episode" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progress_circular"
-        style="@style/Widget.Material3.CircularProgressIndicator.Medium"
-        android:layout_width="wrap_content"
+    <include
+        layout="@layout/item_card_episode_loading"
+        android:id="@+id/rv_episode_loading"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="24dp"
-        android:indeterminate="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rv_character"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@id/tv_header_episode"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_error_message"
@@ -50,12 +45,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="24dp"
         android:textAlignment="center"
         android:textColor="?android:attr/textColorPrimary"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/btn_retry"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rv_episode"
         app:layout_constraintVertical_chainStyle="packed"
         tools:layout_editor_absoluteX="24dp"
         tools:text="No Internet Connection" />
@@ -65,7 +59,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"
         android:text="@string/retry"
         android:visibility="gone"
         app:cornerRadius="8dp"
