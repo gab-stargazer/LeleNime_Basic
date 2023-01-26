@@ -8,7 +8,7 @@ import timber.log.Timber
 
 class SearchAnimePaging(
     private val query: String,
-    private val apiService: ApiService,
+    private val animeAPI: AnimeAPI,
     private val isSafety: Boolean
 ) : PagingSource<Int, NetworkAnime>() {
 
@@ -22,9 +22,9 @@ class SearchAnimePaging(
             delay(500)
             val apiResponse =
                 if (isSafety) {
-                    apiService.searchAnimeByTitle(q = query, page = currentPage, sfw = true)
+                    animeAPI.searchAnimeByTitle(q = query, page = currentPage, sfw = true)
                 } else {
-                    apiService.searchAnimeByTitle(q = query, page = currentPage)
+                    animeAPI.searchAnimeByTitle(q = query, page = currentPage)
                 }
             LoadResult.Page(
                 data = apiResponse.data,

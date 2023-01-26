@@ -10,16 +10,16 @@ import com.lelestacia.lelenimexml.core.common.Constant.IS_NSFW
 import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import com.lelestacia.lelenimexml.core.data.utility.asAnime
 import com.lelestacia.lelenimexml.core.data.utility.asEntity
-import com.lelestacia.lelenimexml.core.database.IAnimeDatabaseService
+import com.lelestacia.lelenimexml.core.database.impl.anime.IAnimeDatabaseService
 import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
 import com.lelestacia.lelenimexml.core.model.anime.Anime
-import com.lelestacia.lelenimexml.core.network.INetworkAnimeService
+import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
-    private val apiService: INetworkAnimeService,
+    private val apiService: IAnimeNetworkService,
     private val localDataSource: IAnimeDatabaseService,
     mContext: Context
 ) : IAnimeRepository {
@@ -60,12 +60,12 @@ class AnimeRepository @Inject constructor(
         }
     }
 
-    override fun getNewestAnimeDataByAnimeId(animeID: Int): Flow<Anime> {
-        return localDataSource.getNewestAnimeDataByAnimeId(animeID).map { it.asAnime() }
+    override fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<Anime> {
+        return localDataSource.getNewestAnimeDataByAnimeID(animeID).map { it.asAnime() }
     }
 
-    override suspend fun getAnimeByAnimeId(animeID: Int): Anime? {
-        return localDataSource.getAnimeByAnimeId(animeID)?.asAnime()
+    override suspend fun getAnimeByAnimeID(animeID: Int): Anime? {
+        return localDataSource.getAnimeByAnimeID(animeID)?.asAnime()
     }
 
     override fun getAnimeHistory(): Flow<PagingData<Anime>> =
@@ -83,19 +83,19 @@ class AnimeRepository @Inject constructor(
         }
 
     override suspend fun insertAnimeToHistory(anime: Anime) {
-        val localAnime = localDataSource.getAnimeByAnimeId(anime.animeID)
+        val localAnime = localDataSource.getAnimeByAnimeID(anime.animeID)
         val isExist = localAnime != null
 
         if (isExist) {
             val newAnime = anime.asEntity(
                 isFavorite = (localAnime as AnimeEntity).isFavorite
             )
-            localDataSource.insertOrUpdateAnime(newAnime)
+            localDataSource.insertOrUpdateAnimeIntoHistory(newAnime)
             return
         }
 
         val newAnime = anime.asEntity()
-        localDataSource.insertOrUpdateAnime(newAnime)
+        localDataSource.insertOrUpdateAnimeIntoHistory(newAnime)
     }
 
     override fun getAllFavoriteAnime(): Flow<PagingData<Anime>> =
@@ -113,7 +113,7 @@ class AnimeRepository @Inject constructor(
         }
 
     override suspend fun updateAnimeFavorite(malID: Int) {
-        val anime = localDataSource.getAnimeByAnimeId(malID)
+        val anime = localDataSource.getAnimeByAnimeID(malID)
         anime?.let {
             localDataSource.updateAnime(
                 anime.apply {

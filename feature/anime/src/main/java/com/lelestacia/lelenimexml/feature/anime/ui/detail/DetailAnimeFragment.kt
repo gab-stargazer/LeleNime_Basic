@@ -1,6 +1,7 @@
 package com.lelestacia.lelenimexml.feature.anime.ui.detail
 
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.viewbinding.library.fragment.viewBinding
@@ -18,9 +19,12 @@ import com.lelestacia.lelenimexml.core.common.DateParser
 import com.lelestacia.lelenimexml.core.common.R.anim.fade_in
 import com.lelestacia.lelenimexml.core.common.R.anim.fade_out
 import com.lelestacia.lelenimexml.core.common.Resource
+import com.lelestacia.lelenimexml.core.model.character.Character
+import com.lelestacia.lelenimexml.core.model.episode.Episode
 import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.FragmentDetailAnimeBinding
 import com.lelestacia.lelenimexml.feature.anime.ui.adapter.CharacterAdapter
+import com.lelestacia.lelenimexml.feature.anime.ui.adapter.EpisodeAdapter
 import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.transformers.coil.BlurTransformation
@@ -37,8 +41,11 @@ class DetailAnimeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getAnimeCharactersById(animeId = args.malID)
+        val animeID = args.malID
+        viewModel.getEpisodesByAnimeID(animeID = animeID)
+        viewModel.getAnimeCharactersByAnimeID(animeID = animeID)
         setView()
+        setEpisodes()
         setCharacters()
         binding.apply {
             fabFavorite.setOnClickListener(this@DetailAnimeFragment)
@@ -48,7 +55,7 @@ class DetailAnimeFragment :
 
     private fun setView() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.getAnimeByMalId(args.malID).collect { anime ->
+            viewModel.getAnimeByAnimeID(args.malID).collect { anime ->
                 binding.headerSection.apply {
                     ivBackgroundAnime.load(anime.coverImages) {
                         transformations(BlurTransformation(requireContext()))
@@ -110,6 +117,63 @@ class DetailAnimeFragment :
         }
     }
 
+    private fun setEpisodes() {
+        val episodeAdapter = EpisodeAdapter()
+
+        binding.episodeSection.rvCharacter.apply {
+            adapter = episodeAdapter
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                RecyclerView.HORIZONTAL,
+                false
+            )
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.episodes.collect { result: Resource<List<Episode>> ->
+                when (result) {
+                    is Resource.Error -> {
+                        binding.episodeSection.apply {
+                            progressCircular.visibility = View.GONE
+                            tvHeaderCharacter.visibility = View.GONE
+                            rvCharacter.visibility = View.GONE
+                            tvErrorMessage.text = result.message
+                            tvErrorMessage.visibility = View.VISIBLE
+                            btnRetry.visibility = View.VISIBLE
+                            btnRetry.setOnClickListener {
+                                viewModel.getEpisodesByAnimeID(animeID = args.malID)
+                            }
+                        }
+                    }
+                    is Resource.Success -> {
+                        val episodes = result.data ?: emptyList()
+
+                        if (episodes.isEmpty()) {
+                            TransitionManager.beginDelayedTransition(binding.root)
+                            binding.episodeSection.root.visibility = View.GONE
+                        } else {
+                            episodeAdapter.submitList(result.data)
+                            binding.episodeSection.progressCircular.visibility = View.GONE
+                        }
+                    }
+                    Resource.Loading -> {
+                        binding.characterSection.apply {
+                            val isBtnRetryVisible = btnRetry.visibility == View.VISIBLE
+                            if (isBtnRetryVisible) {
+                                progressCircular.visibility = View.VISIBLE
+                                tvHeaderCharacter.visibility = View.VISIBLE
+                                rvCharacter.visibility = View.VISIBLE
+                                btnRetry.visibility = View.GONE
+                                tvErrorMessage.visibility = View.GONE
+                            }
+                        }
+                    }
+                    else -> Unit
+                }
+            }
+        }
+    }
+
     private fun setCharacters() {
         val characterAdapter = CharacterAdapter { characterId ->
             val action = DetailAnimeFragmentDirections.getCharacterDetail(characterId)
@@ -119,30 +183,31 @@ class DetailAnimeFragment :
         binding.characterSection.rvCharacter.apply {
             adapter = characterAdapter
             layoutManager = LinearLayoutManager(
-                requireContext(), RecyclerView.HORIZONTAL, false
+                requireContext(),
+                RecyclerView.HORIZONTAL,
+                false
             )
             setHasFixedSize(true)
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.characters.collect { resourceOfCharacters ->
-                when (resourceOfCharacters) {
+            viewModel.characters.collect { result: Resource<List<Character>> ->
+                when (result) {
                     is Resource.Error -> {
                         binding.characterSection.apply {
                             progressCircular.visibility = View.GONE
                             tvHeaderCharacter.visibility = View.GONE
                             rvCharacter.visibility = View.GONE
-
-                            tvErrorMessage.text = resourceOfCharacters.message
+                            tvErrorMessage.text = result.message
                             tvErrorMessage.visibility = View.VISIBLE
                             btnRetry.visibility = View.VISIBLE
                             btnRetry.setOnClickListener {
-                                viewModel.getAnimeCharactersById(animeId = args.malID)
+                                viewModel.getAnimeCharactersByAnimeID(animeID = args.malID)
                             }
                         }
                     }
                     is Resource.Success -> {
-                        characterAdapter.submitList(resourceOfCharacters.data)
+                        characterAdapter.submitList(result.data)
                         binding.characterSection.progressCircular.visibility = View.GONE
                     }
                     is Resource.Loading -> {

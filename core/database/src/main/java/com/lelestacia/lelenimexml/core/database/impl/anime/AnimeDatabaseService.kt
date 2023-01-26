@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.database
+package com.lelestacia.lelenimexml.core.database.impl.anime
 
 import androidx.paging.PagingSource
 import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
@@ -14,7 +14,7 @@ class AnimeDatabaseService @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IAnimeDatabaseService {
 
-    override suspend fun insertOrUpdateAnime(anime: AnimeEntity) {
+    override suspend fun insertOrUpdateAnimeIntoHistory(anime: AnimeEntity) {
         withContext(ioDispatcher) {
             animeDao.insertOrUpdateAnime(anime)
         }
@@ -26,17 +26,17 @@ class AnimeDatabaseService @Inject constructor(
         }
     }
 
-    override suspend fun getAnimeByAnimeId(animeID: Int): AnimeEntity? {
+    override suspend fun getAnimeByAnimeID(animeID: Int): AnimeEntity? {
         return withContext(ioDispatcher) {
             animeDao.getAnimeByAnimeId(animeID)
         }
     }
 
+    override fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<AnimeEntity> =
+        animeDao.getNewestAnimeDataByAnimeId(animeID)
+
     override fun getAllAnimeHistory(): PagingSource<Int, AnimeEntity> =
         animeDao.getAllAnimeHistory()
-
-    override fun getNewestAnimeDataByAnimeId(animeID: Int): Flow<AnimeEntity> =
-        animeDao.getNewestAnimeDataByAnimeId(animeID)
 
     override fun getAllFavoriteAnime(): PagingSource<Int, AnimeEntity> =
         animeDao.getAllFavoriteAnime()

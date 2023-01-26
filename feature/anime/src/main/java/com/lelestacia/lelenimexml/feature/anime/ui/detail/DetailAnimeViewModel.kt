@@ -2,12 +2,16 @@ package com.lelestacia.lelenimexml.feature.anime.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lelestacia.lelenimexml.core.common.Constant.SHORT_DELAY
 import com.lelestacia.lelenimexml.core.common.Resource
-import com.lelestacia.lelenimexml.core.domain.usecase.IAnimeUseCase
-import com.lelestacia.lelenimexml.core.domain.usecase.ICharacterUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.anime.IAnimeUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.character.ICharacterUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.episode.EpisodeUseCase
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.model.character.Character
+import com.lelestacia.lelenimexml.core.model.episode.Episode
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailAnimeViewModel @Inject constructor(
     private val characterUseCase: ICharacterUseCase,
+    private val episodeUseCase: EpisodeUseCase,
     private val animeUseCase: IAnimeUseCase
 ) : ViewModel() {
 
@@ -24,16 +29,30 @@ class DetailAnimeViewModel @Inject constructor(
         MutableStateFlow(Resource.None)
     val characters get() = _characters.asStateFlow()
 
-    fun getAnimeCharactersById(animeId: Int) = viewModelScope.launch {
-        characterUseCase.getAnimeCharacterById(animeId).collect { result ->
-            _characters.emit(result)
-        }
+    private val _episodes: MutableStateFlow<Resource<List<Episode>>> =
+        MutableStateFlow(Resource.None)
+    val episodes get() = _episodes.asStateFlow()
+
+    fun getAnimeCharactersByAnimeID(animeID: Int) = viewModelScope.launch {
+        characterUseCase.getAnimeCharacterById(animeID)
+            .collect { result: Resource<List<Character>> ->
+                delay(SHORT_DELAY)
+                _characters.emit(result)
+            }
     }
 
-    fun getAnimeByMalId(animeId: Int): Flow<Anime> =
-        animeUseCase.getAnimeByMalID(animeId)
+    fun getEpisodesByAnimeID(animeID: Int) = viewModelScope.launch {
+        episodeUseCase.getEpisodesByAnimeID(animeID = animeID)
+            .collect { result: Resource<List<Episode>> ->
+                delay(SHORT_DELAY)
+                _episodes.emit(result)
+            }
+    }
 
-    fun updateAnimeFavorite(malID: Int) = viewModelScope.launch {
-        animeUseCase.updateAnimeFavorite(malID)
+    fun getAnimeByAnimeID(animeID: Int): Flow<Anime> =
+        animeUseCase.getAnimeByMalID(animeID)
+
+    fun updateAnimeFavorite(animeID: Int) = viewModelScope.launch {
+        animeUseCase.updateAnimeFavorite(malID = animeID)
     }
 }

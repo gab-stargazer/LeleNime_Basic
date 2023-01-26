@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.domain.usecase
+package com.lelestacia.lelenimexml.core.domain.usecase.anime
 
 import androidx.paging.PagingData
 import com.lelestacia.lelenimexml.core.data.impl.anime.IAnimeRepository
@@ -17,7 +17,7 @@ class AnimeUseCase @Inject constructor(
         animeRepository.searchAnimeByTitle(query)
 
     override fun getAnimeByMalID(animeId: Int): Flow<Anime> =
-        animeRepository.getNewestAnimeDataByAnimeId(animeId)
+        animeRepository.getNewestAnimeDataByAnimeID(animeId)
 
     override fun getAnimeHistory(): Flow<PagingData<Anime>> =
         animeRepository.getAnimeHistory()

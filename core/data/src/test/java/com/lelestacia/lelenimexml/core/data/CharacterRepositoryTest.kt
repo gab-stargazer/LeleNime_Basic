@@ -6,10 +6,11 @@ import com.lelestacia.lelenimexml.core.data.dummy.powerCharacterDetail
 import com.lelestacia.lelenimexml.core.data.dummy.powerProfile
 import com.lelestacia.lelenimexml.core.data.impl.character.CharacterRepository
 import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
+import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
 import com.lelestacia.lelenimexml.core.data.utility.asCharacterDetail
 import com.lelestacia.lelenimexml.core.data.utility.asEntity
-import com.lelestacia.lelenimexml.core.database.ICharacterDatabaseService
-import com.lelestacia.lelenimexml.core.network.INetworkCharacterService
+import com.lelestacia.lelenimexml.core.database.impl.character.ICharacterDatabaseService
+import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -38,7 +39,7 @@ class CharacterRepositoryTest {
     private lateinit var characterRepository: ICharacterRepository
 
     @MockK
-    lateinit var apiService: INetworkCharacterService
+    lateinit var apiService: ICharacterNetworkService
 
     @MockK
     lateinit var databaseService: ICharacterDatabaseService
@@ -51,7 +52,8 @@ class CharacterRepositoryTest {
         characterRepository = CharacterRepository(
             apiService = apiService,
             localDataSource = databaseService,
-            ioDispatcher = dispatcher
+            ioDispatcher = dispatcher,
+            errorParser = JikanErrorParserUtil()
         )
     }
 
@@ -137,7 +139,7 @@ class CharacterRepositoryTest {
         Assert.assertEquals("Emission should be Loading", Resource.Loading, flowEmission[0])
         Assert.assertEquals(
             "Emission should be Result",
-            Resource.Error(data = null, message = message).message,
+            Resource.Error(data = null, message = "Error: $message").message,
             (flowEmission[1] as Resource.Error).message
         )
         coVerify(exactly = 1) {
@@ -157,7 +159,7 @@ class CharacterRepositoryTest {
     @Test
     fun `Function should return specific message when failed on parsing JSON error`() = runTest {
         val characterID = 170733
-        val message = "Response failed to parse"
+        val message = "Error: Response failed to parse"
         coEvery { apiService.getCharacterDetailByCharacterID(characterID) } throws IOException(message)
         coEvery { databaseService.getCharacterAdditionalInformationById(characterID) } returns null
         coEvery { databaseService.insertOrReplaceAdditionalInformation(powerCharacterDetail.asEntity()) } returns Unit
@@ -167,7 +169,7 @@ class CharacterRepositoryTest {
         Assert.assertEquals("Emission should be Loading", Resource.Loading, flowEmission[0])
         Assert.assertEquals(
             "Emission should be Result",
-            Resource.Error(data = null, message = message).message,
+            Resource.Error(data = null, message = "Error: $message").message,
             (flowEmission[1] as Resource.Error).message
         )
         coVerify(exactly = 1) {

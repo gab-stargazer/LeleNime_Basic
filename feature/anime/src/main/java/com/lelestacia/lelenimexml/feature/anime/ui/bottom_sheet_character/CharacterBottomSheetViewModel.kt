@@ -3,7 +3,7 @@ package com.lelestacia.lelenimexml.feature.anime.ui.bottom_sheet_character
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lelestacia.lelenimexml.core.common.Resource
-import com.lelestacia.lelenimexml.core.domain.usecase.ICharacterUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.character.ICharacterUseCase
 import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -5,11 +5,14 @@ import com.lelestacia.lelenimexml.core.data.impl.anime.AnimeRepository
 import com.lelestacia.lelenimexml.core.data.impl.anime.IAnimeRepository
 import com.lelestacia.lelenimexml.core.data.impl.character.CharacterRepository
 import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
+import com.lelestacia.lelenimexml.core.data.impl.episode.EpisodeRepository
+import com.lelestacia.lelenimexml.core.data.impl.episode.IEpisodeRepository
 import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
-import com.lelestacia.lelenimexml.core.database.IAnimeDatabaseService
-import com.lelestacia.lelenimexml.core.database.ICharacterDatabaseService
-import com.lelestacia.lelenimexml.core.network.INetworkAnimeService
-import com.lelestacia.lelenimexml.core.network.INetworkCharacterService
+import com.lelestacia.lelenimexml.core.database.impl.anime.IAnimeDatabaseService
+import com.lelestacia.lelenimexml.core.database.impl.character.ICharacterDatabaseService
+import com.lelestacia.lelenimexml.core.database.impl.episode.IEpisodeDatabaseService
+import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
+import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,8 +26,12 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideJikanHttpErrorParser(): JikanErrorParserUtil = JikanErrorParserUtil()
+
+    @Provides
+    @Singleton
     fun provideAnimeRepository(
-        apiService: INetworkAnimeService,
+        apiService: IAnimeNetworkService,
         localDataSource: IAnimeDatabaseService,
         @ApplicationContext mContext: Context
     ): IAnimeRepository =
@@ -36,12 +43,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideJikanHttpErrorParser(): JikanErrorParserUtil = JikanErrorParserUtil()
-
-    @Provides
-    @Singleton
     fun provideCharacterRepository(
-        apiService: INetworkCharacterService,
+        apiService: ICharacterNetworkService,
         localDataSource: ICharacterDatabaseService,
         errorParserUtil: JikanErrorParserUtil
     ): ICharacterRepository =
@@ -50,4 +53,16 @@ object RepositoryModule {
             localDataSource = localDataSource,
             errorParser = errorParserUtil
         )
+
+    @Provides
+    @Singleton
+    fun provideEpisodeRepository(
+        databaseService: IEpisodeDatabaseService,
+        apiService: IAnimeNetworkService,
+        errorParserUtil: JikanErrorParserUtil
+    ): IEpisodeRepository = EpisodeRepository(
+        databaseService = databaseService,
+        apiService = apiService,
+        errorParserUtil = errorParserUtil
+    )
 }

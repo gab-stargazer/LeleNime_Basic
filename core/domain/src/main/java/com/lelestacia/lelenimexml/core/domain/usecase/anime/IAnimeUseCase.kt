@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.domain.usecase
+package com.lelestacia.lelenimexml.core.domain.usecase.anime
 
 import androidx.paging.PagingData
 import com.lelestacia.lelenimexml.core.model.anime.Anime

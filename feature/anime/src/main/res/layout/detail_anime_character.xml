@@ -10,14 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/characters_holder"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
         android:textColor="?android:attr/textColorPrimary"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_character"
@@ -29,8 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_header_character"
         tools:itemCount="1"
-        tools:listitem="@layout/item_card_character"
-        tools:visibility="invisible" />
+        tools:listitem="@layout/item_card_character" />
 
     <Space
         android:id="@+id/space"
@@ -48,7 +46,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rv_character" />
+        app:layout_constraintTop_toTopOf="@+id/rv_character"
+        tools:visibility="gone" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_error_message"
@@ -64,8 +63,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:layout_editor_absoluteX="24dp"
-        tools:text="No Internet Connection"
-        tools:visibility="visible" />
+        tools:text="No Internet Connection"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_retry"
@@ -80,6 +78,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_error_message"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:visibility="visible" />
+        app:layout_constraintVertical_chainStyle="packed"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

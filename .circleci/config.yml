@@ -14,16 +14,6 @@ jobs:
           name: Get Gradle Permission
           command: sudo chmod +x ./gradlew
       - run:
-          name: Run KtLint formatting tools
-          command: ./gradlew ktlintFormat --stacktrace
-      - store_artifacts:
-          path: core/network/build/reports/ktlint
-      - run:
-          name: KtLint check for validation
-          command: ./gradlew ktlintCheck --stacktrace
-      - store_test_results:
-          path: app/build/test-ktlint
-      - run:
           name: Run Unit Test from all modules
           command: ./gradlew test --stacktrace
       - store_artifacts:

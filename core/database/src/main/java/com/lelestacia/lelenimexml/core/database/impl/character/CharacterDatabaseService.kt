@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.database
+package com.lelestacia.lelenimexml.core.database.impl.character
 
 import com.lelestacia.lelenimexml.core.database.dao.CharacterDao
 import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
