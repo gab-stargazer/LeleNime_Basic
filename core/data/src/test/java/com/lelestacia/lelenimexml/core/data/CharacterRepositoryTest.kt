@@ -36,13 +36,11 @@ import org.junit.runners.BlockJUnit4ClassRunner
 @RunWith(BlockJUnit4ClassRunner::class)
 class CharacterRepositoryTest {
 
-    private lateinit var characterRepository: ICharacterRepository
-
     @MockK
     lateinit var apiService: ICharacterNetworkService
-
     @MockK
     lateinit var databaseService: ICharacterDatabaseService
+    private lateinit var characterRepository: ICharacterRepository
 
     @Before
     fun setup() {

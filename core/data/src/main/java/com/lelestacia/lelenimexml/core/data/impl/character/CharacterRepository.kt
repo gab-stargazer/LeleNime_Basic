@@ -42,19 +42,14 @@ class CharacterRepository @Inject constructor(
                 localCharacter = localDataSource.getAllCharacterFromAnimeById(animeID)
             }
 
-            emit(
-                Resource.Success(
-                    localCharacter.map {
-                        it.asCharacter()
-                    }
-                )
-            )
+            val characters: List<Character> = localCharacter.map { it.asCharacter() }
+            emit(Resource.Success(data = characters))
         }.onStart {
             emit(Resource.Loading)
         }.catch { t ->
             when (t) {
-                is HttpException -> emit(Resource.Error(null, errorParser(t)))
-                else -> emit(Resource.Error(null, "Error: ${t.message}"))
+                is HttpException -> emit(Resource.Error(data = null, message = errorParser(t)))
+                else -> emit(Resource.Error(data = null, message = "Error: ${t.message}"))
             }
         }.flowOn(ioDispatcher)
 
@@ -79,8 +74,8 @@ class CharacterRepository @Inject constructor(
             emit(Resource.Loading)
         }.catch { t ->
             when (t) {
-                is HttpException -> emit(Resource.Error(null, errorParser(t)))
-                else -> emit(Resource.Error(null, "Error: ${t.message}"))
+                is HttpException -> emit(Resource.Error(data = null, message = errorParser(t)))
+                else -> emit(Resource.Error(data = null, message = "Error: ${t.message}"))
             }
         }.flowOn(ioDispatcher)
 }

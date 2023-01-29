@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0b1997b3c47318cc5ec188546a559b8d",
+    "identityHash": "4f57948c8fa1a43a6d8e977752b6c70f",
     "entities": [
       {
         "tableName": "anime",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `title_english` TEXT, `title_japanese` TEXT, `image` TEXT NOT NULL, `rank` INTEGER NOT NULL, `score` REAL, `scored_by` INTEGER, `type` TEXT NOT NULL, `rating` TEXT NOT NULL, `episodes` INTEGER, `genres` TEXT NOT NULL, `status` TEXT NOT NULL, `season` TEXT, `year` INTEGER NOT NULL, `started_date` TEXT, `finished_date` TEXT, `synopsis` TEXT, `favorite` INTEGER NOT NULL, `last_viewed` INTEGER NOT NULL, `youtubeId` TEXT, `url` TEXT, `images` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `title_english` TEXT, `title_japanese` TEXT, `image` TEXT NOT NULL, `rank` INTEGER NOT NULL, `score` REAL, `scored_by` INTEGER, `type` TEXT NOT NULL, `rating` TEXT NOT NULL, `episodes` INTEGER, `genres` TEXT NOT NULL, `status` TEXT NOT NULL, `season` TEXT, `year` INTEGER NOT NULL, `started_date` TEXT, `finished_date` TEXT, `synopsis` TEXT, `favorite` INTEGER NOT NULL, `last_viewed` INTEGER NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER, `youtubeId` TEXT, `url` TEXT, `images` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "animeID",
@@ -129,6 +129,18 @@
             "notNull": true
           },
           {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "trailer.youtubeId",
             "columnName": "youtubeId",
             "affinity": "TEXT",
@@ -158,7 +170,7 @@
       },
       {
         "tableName": "character",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `anime_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `image` TEXT NOT NULL, `role` TEXT NOT NULL, `favorite` INTEGER NOT NULL, PRIMARY KEY(`id`, `anime_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `anime_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `image` TEXT NOT NULL, `role` TEXT NOT NULL, `favorite` INTEGER NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER, PRIMARY KEY(`id`, `anime_id`))",
         "fields": [
           {
             "fieldPath": "characterID",
@@ -195,6 +207,18 @@
             "columnName": "favorite",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -209,7 +233,7 @@
       },
       {
         "tableName": "character_information",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `character_id` INTEGER NOT NULL, `kanji_name` TEXT NOT NULL, `nickname` TEXT NOT NULL, `favorite` INTEGER NOT NULL, `story` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `character_id` INTEGER NOT NULL, `kanji_name` TEXT NOT NULL, `nickname` TEXT NOT NULL, `favorite` INTEGER NOT NULL, `story` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -246,6 +270,18 @@
             "columnName": "story",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -256,12 +292,93 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "episode",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mal_id` INTEGER NOT NULL, `anime_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `title_japanese` TEXT, `aired` TEXT, `score` REAL NOT NULL, `filler` INTEGER NOT NULL, `recap` INTEGER NOT NULL, `forum_url` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER, PRIMARY KEY(`mal_id`, `anime_id`))",
+        "fields": [
+          {
+            "fieldPath": "malID",
+            "columnName": "mal_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "animeID",
+            "columnName": "anime_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "titleJapanese",
+            "columnName": "title_japanese",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "aired",
+            "columnName": "aired",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "score",
+            "columnName": "score",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "filler",
+            "columnName": "filler",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recap",
+            "columnName": "recap",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "forumURL",
+            "columnName": "forum_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "mal_id",
+            "anime_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b1997b3c47318cc5ec188546a559b8d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4f57948c8fa1a43a6d8e977752b6c70f')"
     ]
   }
 }

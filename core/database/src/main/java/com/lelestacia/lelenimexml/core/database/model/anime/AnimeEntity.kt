@@ -64,13 +64,19 @@ data class AnimeEntity(
     val synopsis: String?,
 
     @ColumnInfo(name = "favorite")
-    var isFavorite: Boolean,
+    val isFavorite: Boolean,
 
     @Embedded
     val trailer: Trailer?,
 
     @ColumnInfo(name = "last_viewed")
     val lastViewed: Date,
+
+    @ColumnInfo(name = "created_at")
+    val createdAt: Date,
+
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: Date?,
 ) {
 
     data class Trailer(

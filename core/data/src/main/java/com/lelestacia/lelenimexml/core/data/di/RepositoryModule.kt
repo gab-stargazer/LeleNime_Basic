@@ -57,11 +57,13 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideEpisodeRepository(
-        databaseService: IEpisodeDatabaseService,
+        episodeDatabaseService: IEpisodeDatabaseService,
+        animeDatabaseService: IAnimeDatabaseService,
         apiService: IAnimeNetworkService,
         errorParserUtil: JikanErrorParserUtil
     ): IEpisodeRepository = EpisodeRepository(
-        databaseService = databaseService,
+        episodeDatabaseService = episodeDatabaseService,
+        animeDatabaseService = animeDatabaseService,
         apiService = apiService,
         errorParserUtil = errorParserUtil
     )

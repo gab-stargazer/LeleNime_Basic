@@ -3,6 +3,7 @@ package com.lelestacia.lelenimexml.core.database.model.character
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(
     tableName = "character_information"
@@ -25,5 +26,11 @@ data class CharacterInformationEntity(
     val characterFavorite: Int,
 
     @ColumnInfo(name = "story")
-    val characterInformation: String
+    val characterInformation: String,
+
+    @ColumnInfo(name = "created_at")
+    val createdAt: Date,
+
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: Date?,
 )

@@ -88,5 +88,7 @@ fun Anime.asEntity(isFavorite: Boolean = false): AnimeEntity =
         lastViewed = Date(),
         isFavorite = isFavorite,
         startedDate = startedDate,
-        finishedDate = finishedDate
+        finishedDate = finishedDate,
+        createdAt = Date(),
+        updatedAt = null
     )

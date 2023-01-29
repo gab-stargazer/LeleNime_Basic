@@ -48,7 +48,7 @@ class DetailAnimeFragment :
         val animeID = args.malID
         viewModel.getEpisodesByAnimeID(animeID = animeID)
         viewModel.getAnimeCharactersByAnimeID(animeID = animeID)
-        setView()
+        setHeaderAndBody()
         setEpisodes()
         setCharacters()
         binding.apply {
@@ -57,10 +57,14 @@ class DetailAnimeFragment :
         }
     }
 
-    private fun setView() {
+    private fun setHeaderAndBody() {
+        val headerSection = binding.headerSection
+        val bodySection = binding.bodySection
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.getAnimeByAnimeID(args.malID).collect { anime ->
-                binding.headerSection.apply {
+            viewModel.getAnimeByAnimeID(animeID = args.malID).collect { anime ->
+
+                //  Header Section
+                headerSection.apply {
                     ivBackgroundAnime.load(anime.coverImages) {
                         transformations(BlurTransformation(requireContext()))
                         build()
@@ -82,7 +86,8 @@ class DetailAnimeFragment :
                     tvUserRated.text = getString(R.string.rated_by, anime.scoredBy ?: 0)
                 }
 
-                binding.bodySection.apply {
+                //  Body Section
+                bodySection.apply {
                     tvTypeValue.text = getText(anime.type)
                     tvRatingValue.text = getText(anime.rating)
 
@@ -107,14 +112,20 @@ class DetailAnimeFragment :
 
                     val parser = DateParser()
                     tvAiredValue.text =
-                        getText("${parser(anime.startedDate)} - ${parser(anime.finishedDate)}")
+                        if ((anime.episodes ?: 0) <= 2) {
+                            getText(parser(anime.startedDate))
+                        } else {
+                            getText("${parser(anime.startedDate)} - ${parser(anime.finishedDate)}")
+                        }
+
 
                     tvSynopsis.text = anime.synopsis
                         ?: getString(R.string.no_information_by_mal)
                 }
 
+                val isFavorite: Boolean = anime.isFavorite
                 binding.fabFavorite.setImageResource(
-                    if (anime.isFavorite) R.drawable.ic_favorite
+                    if (isFavorite) R.drawable.ic_favorite
                     else R.drawable.ic_favorite_hollow
                 )
             }
@@ -140,7 +151,7 @@ class DetailAnimeFragment :
                 when (result) {
                     is Resource.Error -> {
                         TransitionManager.beginDelayedTransition(
-                            episodeSection.root,
+                            binding.root,
                             AutoTransition()
                         )
                         episodeSection.rvEpisodeLoading.root.visibility = View.GONE
@@ -154,35 +165,36 @@ class DetailAnimeFragment :
                                 viewModel.getEpisodesByAnimeID(animeID = args.malID)
                             }
                         }
-                        TransitionManager.endTransitions(episodeSection.root)
+                        TransitionManager.endTransitions(binding.root)
                     }
                     is Resource.Success -> {
                         val episodes = result.data ?: emptyList()
                         if (episodes.isEmpty()) {
-                            TransitionManager.beginDelayedTransition(episodeSection.root)
+                            TransitionManager.beginDelayedTransition(binding.root)
                             episodeSection.root.visibility = View.GONE
-                            TransitionManager.endTransitions(episodeSection.root)
+                            TransitionManager.endTransitions(binding.root)
                         } else {
                             TransitionManager.beginDelayedTransition(
-                                episodeSection.root,
+                                binding.root,
                                 AutoTransition()
                             )
                             episodeAdapter.submitList(result.data)
                             episodeSection.rvEpisode.visibility = View.VISIBLE
                             episodeSection.rvEpisodeLoading.root.visibility = View.GONE
-                            TransitionManager.endTransitions(episodeSection.root)
+                            TransitionManager.endTransitions(binding.root)
                         }
                     }
                     Resource.Loading -> {
                         val isBtnRetryVisibile = episodeSection.btnRetry.visibility == View.VISIBLE
                         if (isBtnRetryVisibile) {
                             TransitionManager.beginDelayedTransition(
-                                episodeSection.root,
-                                AutoTransition())
+                                binding.root,
+                                AutoTransition()
+                            )
                             episodeSection.tvErrorMessage.visibility = View.GONE
                             episodeSection.btnRetry.visibility = View.GONE
                             episodeSection.rvEpisodeLoading.root.visibility = View.VISIBLE
-                            TransitionManager.endTransitions(episodeSection.root)
+                            TransitionManager.endTransitions(binding.root)
                         }
                     }
                     else -> Unit
@@ -197,7 +209,8 @@ class DetailAnimeFragment :
             findNavController().navigate(action)
         }
 
-        binding.characterSection.rvCharacter.apply {
+        val characterSection = binding.characterSection
+        characterSection.rvCharacter.apply {
             adapter = characterAdapter
             layoutManager = LinearLayoutManager(
                 requireContext(),
@@ -209,34 +222,45 @@ class DetailAnimeFragment :
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.characters.collect { result: Resource<List<Character>> ->
+                val characterPlaceholder = characterSection.characterPlaceholder.root
                 when (result) {
                     is Resource.Error -> {
-                        binding.characterSection.apply {
-                            progressCircular.visibility = View.GONE
-                            tvHeaderCharacter.visibility = View.GONE
-                            rvCharacter.visibility = View.GONE
-                            tvErrorMessage.text = result.message
-                            tvErrorMessage.visibility = View.VISIBLE
-                            btnRetry.visibility = View.VISIBLE
-                            btnRetry.setOnClickListener {
+                        characterPlaceholder.visibility = View.GONE
+                        characterSection.rvCharacter.visibility = View.GONE
+                        characterSection.tvErrorMessage.apply {
+                            text = result.message
+                            visibility = View.VISIBLE
+                        }
+                        characterSection.btnRetry.apply {
+                            visibility = View.VISIBLE
+                            setOnClickListener {
                                 viewModel.getAnimeCharactersByAnimeID(animeID = args.malID)
                             }
                         }
                     }
                     is Resource.Success -> {
+                        val characters = result.data ?: emptyList()
+                        if (characters.isEmpty()) {
+                            TransitionManager.beginDelayedTransition(binding.root)
+                            characterSection.root.visibility = View.GONE
+                            TransitionManager.endTransitions(binding.root)
+                            return@collect
+                        }
+
+                        TransitionManager.beginDelayedTransition(binding.root)
                         characterAdapter.submitList(result.data)
-                        binding.characterSection.progressCircular.visibility = View.GONE
+                        characterSection.rvCharacter.visibility = View.VISIBLE
+                        characterPlaceholder.visibility = View.GONE
+                        TransitionManager.endTransitions(binding.root)
                     }
                     is Resource.Loading -> {
-                        binding.characterSection.apply {
-                            val isBtnRetryVisible = btnRetry.visibility == View.VISIBLE
-                            if (isBtnRetryVisible) {
-                                progressCircular.visibility = View.VISIBLE
-                                tvHeaderCharacter.visibility = View.VISIBLE
-                                rvCharacter.visibility = View.VISIBLE
-                                btnRetry.visibility = View.GONE
-                                tvErrorMessage.visibility = View.GONE
-                            }
+                        val isBtnRetryVisible = characterSection.btnRetry.visibility == View.VISIBLE
+                        if (isBtnRetryVisible) {
+                            characterPlaceholder.visibility = View.VISIBLE
+                            characterSection.tvHeaderCharacter.visibility = View.VISIBLE
+                            characterSection.rvCharacter.visibility = View.VISIBLE
+                            characterSection.btnRetry.visibility = View.GONE
+                            characterSection.tvErrorMessage.visibility = View.GONE
                         }
                     }
                     else -> Unit

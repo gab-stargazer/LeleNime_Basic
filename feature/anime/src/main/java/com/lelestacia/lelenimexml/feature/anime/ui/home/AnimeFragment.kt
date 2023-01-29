@@ -46,9 +46,7 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
         super.onViewCreated(view, savedInstanceState)
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(
-            this,
-            viewLifecycleOwner,
-            Lifecycle.State.RESUMED
+            this, viewLifecycleOwner, Lifecycle.State.RESUMED
         )
         binding.apply {
             setInformationText()
@@ -62,50 +60,36 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
             if (searchQuery.isEmpty()) {
                 tvInformation.text = getString(R.string.this_season)
                 tvInformation.setCompoundDrawablesWithIntrinsicBounds(
-                    null,
-                    null,
-                    null,
-                    null
+                    null, null, null, null
                 )
                 return@observe
             }
 
             tvInformation.text = getString(R.string.searching_for, searchQuery)
             tvInformation.setCompoundDrawablesWithIntrinsicBounds(
-                null,
-                null,
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_clear),
-                null
+                null, null, ContextCompat.getDrawable(requireContext(), R.drawable.ic_clear), null
             )
         }
     }
 
     private fun FragmentAnimeBinding.setData() {
-        val myLayoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        val myLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         rvAnime.apply {
             layoutManager = myLayoutManager
-            adapter = animeAdapter
-                .withLoadStateFooter(
-                    footer = FooterLoadStateAdapter {
-                        animeAdapter.retry()
-                    }
-                )
+            adapter = animeAdapter.withLoadStateFooter(footer = FooterLoadStateAdapter {
+                    animeAdapter.retry()
+                })
             addItemDecoration(DividerItemDecoration(context, myLayoutManager.orientation))
             setHasFixedSize(true)
         }
 
-        animeAdapter
-            .loadStateFlow
-            .asLiveData()
-            .observe(viewLifecycleOwner) { loadState ->
+        animeAdapter.loadStateFlow.asLiveData().observe(viewLifecycleOwner) { loadState ->
                 with(loadState.refresh) {
                     when (this) {
                         LoadState.Loading -> {
                             binding.showError(
-                                isError = false,
-                                errorMessage = null
+                                isError = false, errorMessage = null
                             )
                             binding.showNotFound(isNotFound = false)
 
@@ -115,23 +99,19 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
                             }
 
                             Snackbar.make(
-                                binding.root,
-                                getString(R.string.loading),
-                                Snackbar.LENGTH_SHORT
+                                binding.root, getString(R.string.loading), Snackbar.LENGTH_SHORT
                             ).show()
                         }
 
                         is LoadState.NotLoading -> {
                             binding.showLoading(isLoading = false)
-                            if (animeAdapter.itemCount == 0)
-                                binding.showNotFound(isNotFound = true)
+                            if (animeAdapter.itemCount == 0) binding.showNotFound(isNotFound = true)
                         }
 
                         is LoadState.Error -> {
                             binding.showLoading(isLoading = false)
                             binding.showError(
-                                isError = true,
-                                errorMessage = error.localizedMessage
+                                isError = true, errorMessage = error.localizedMessage
                             )
                         }
                     }
@@ -139,15 +119,11 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
             }
 
         val viewLifecycle = viewLifecycleOwner.lifecycle
-        viewModel
-            .getAnimeData
-            .observe(viewLifecycleOwner) { animePagingData ->
+        viewModel.getAnimeData.observe(viewLifecycleOwner) { animePagingData ->
                 animeAdapter.submitData(viewLifecycle, animePagingData)
             }
 
-        screenError
-            .btnRetry
-            .setOnClickListener {
+        screenError.btnRetry.setOnClickListener {
                 animeAdapter.refresh()
             }
     }
@@ -176,8 +152,10 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
         searchView.queryHint = getString(R.string.insert_anime_title)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                    .hideSoftInputFromWindow(view?.windowToken, 0)
+                (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                        view?.windowToken,
+                        0
+                    )
                 viewModel.insertNewSearchQuery(query)
                 binding.rvAnime.smoothScrollToPosition(0)
                 return true

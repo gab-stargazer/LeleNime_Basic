@@ -7,6 +7,7 @@ import com.lelestacia.lelenimexml.core.model.character.Character
 import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterDetail
+import java.util.*
 
 fun NetworkCharacterDetail.asEntity(): CharacterInformationEntity =
     CharacterInformationEntity(
@@ -14,7 +15,9 @@ fun NetworkCharacterDetail.asEntity(): CharacterInformationEntity =
         characterKanjiName = characterKanjiName ?: "",
         characterNickNames = characterNickNames,
         characterFavorite = characterFavoriteCount,
-        characterInformation = characterInformation ?: ""
+        characterInformation = characterInformation ?: "",
+        createdAt = Date(),
+        updatedAt = null
     )
 
 fun NetworkCharacter.asEntity(animeID: Int): CharacterEntity =
@@ -24,7 +27,9 @@ fun NetworkCharacter.asEntity(animeID: Int): CharacterEntity =
         characterName = characterData.name,
         characterImage = characterData.images.webp.imageUrl,
         characterRole = role,
-        characterFavorite = favoriteBy
+        characterFavorite = favoriteBy,
+        createdAt = Date(),
+        updatedAt = null
     )
 
 fun CharacterEntity.asCharacter(): Character =

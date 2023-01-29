@@ -15,7 +15,7 @@
         <item name="backgroundColor">@color/dark_background</item>
         <item name="itemIconTint">?android:attr/textColorPrimary</item>
         <item name="colorOnSurfaceVariant">#D8D8D8</item>
-        <item name="cardBackgroundColor">@color/navy</item>
+        <item name="cardBackgroundColor">?attr/colorPrimary</item>
         <item name="background">@color/beige</item>
         <item name="indicatorColor">@color/navy</item>
         <item name="trackColor">#1C1C1C</item>

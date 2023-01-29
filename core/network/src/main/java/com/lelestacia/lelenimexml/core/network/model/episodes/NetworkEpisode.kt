@@ -18,5 +18,5 @@ data class NetworkEpisode(
     @SerializedName("recap")
     val recap: Boolean,
     @SerializedName("forum_url")
-    val forumURL: String
+    val forumURL: String?
 )

@@ -2,15 +2,10 @@ package com.lelestacia.lelenimexml.core.database.model.episode
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.util.Date
+import java.util.*
 
-@Entity(tableName = "episode")
+@Entity(tableName = "episode", primaryKeys = ["mal_id","anime_id"])
 data class EpisodeEntity(
-    @ColumnInfo(name = "id")
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-
     @ColumnInfo(name = "mal_id")
     val malID: Int,
 
@@ -36,7 +31,7 @@ data class EpisodeEntity(
     val recap: Boolean,
 
     @ColumnInfo(name = "forum_url")
-    val forumURL: String,
+    val forumURL: String?,
 
     @ColumnInfo(name = "created_at")
     val createdAt: Date,

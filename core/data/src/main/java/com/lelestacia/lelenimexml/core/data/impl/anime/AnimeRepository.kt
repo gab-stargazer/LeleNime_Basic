@@ -16,6 +16,8 @@ import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
@@ -61,7 +63,10 @@ class AnimeRepository @Inject constructor(
     }
 
     override fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<Anime> {
-        return localDataSource.getNewestAnimeDataByAnimeID(animeID).map { it.asAnime() }
+        return localDataSource.getNewestAnimeDataByAnimeID(animeID).map {
+            Timber.d("${it.createdAt} - ${it.updatedAt}")
+            it.asAnime()
+        }
     }
 
     override suspend fun getAnimeByAnimeID(animeID: Int): Anime? {
@@ -83,14 +88,14 @@ class AnimeRepository @Inject constructor(
         }
 
     override suspend fun insertAnimeToHistory(anime: Anime) {
-        val localAnime = localDataSource.getAnimeByAnimeID(anime.animeID)
+        val localAnime: AnimeEntity? = localDataSource.getAnimeByAnimeID(anime.animeID)
         val isExist = localAnime != null
 
         if (isExist) {
-            val newAnime = anime.asEntity(
-                isFavorite = (localAnime as AnimeEntity).isFavorite
+            val updatedHistory: AnimeEntity = (localAnime as AnimeEntity).copy(
+                lastViewed = Date(),
             )
-            localDataSource.insertOrUpdateAnimeIntoHistory(newAnime)
+            localDataSource.insertOrUpdateAnimeIntoHistory(updatedHistory)
             return
         }
 
@@ -114,12 +119,12 @@ class AnimeRepository @Inject constructor(
 
     override suspend fun updateAnimeFavorite(malID: Int) {
         val anime = localDataSource.getAnimeByAnimeID(malID)
-        anime?.let {
-            localDataSource.updateAnime(
-                anime.apply {
-                    isFavorite = !isFavorite
-                }
+        anime?.let { oldAnime ->
+            val newAnime = oldAnime.copy(
+                isFavorite = !oldAnime.isFavorite,
+                updatedAt = Date()
             )
+            localDataSource.updateAnime(newAnime)
         }
     }
 
@@ -128,7 +133,8 @@ class AnimeRepository @Inject constructor(
     }
 
     override fun changeSafeMode(isSafeMode: Boolean) {
-        sharedPreferences.edit()
+        sharedPreferences
+            .edit()
             .putBoolean(IS_NSFW, isSafeMode)
             .apply()
     }

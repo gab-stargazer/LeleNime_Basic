@@ -9,5 +9,5 @@ data class Episode(
     val score: Double,
     val filler: Boolean,
     val recap: Boolean,
-    val forumURL: String
+    val forumURL: String?
 )

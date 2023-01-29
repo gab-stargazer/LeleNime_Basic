@@ -2,6 +2,7 @@ package com.lelestacia.lelenimexml.core.database.model.character
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import java.util.*
 
 @Entity(
     tableName = "character",
@@ -24,5 +25,11 @@ data class CharacterEntity(
     val characterRole: String,
 
     @ColumnInfo(name = "favorite")
-    val characterFavorite: Int
+    val characterFavorite: Int,
+
+    @ColumnInfo(name = "created_at")
+    val createdAt: Date,
+
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: Date?,
 )

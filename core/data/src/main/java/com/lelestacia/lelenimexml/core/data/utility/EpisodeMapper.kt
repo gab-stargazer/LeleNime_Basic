@@ -34,7 +34,6 @@ fun Episode.asEntity(createdAt: Date): EpisodeEntity = EpisodeEntity(
 )
 
 fun NetworkEpisode.asNewEntity(animeID: Int): EpisodeEntity = EpisodeEntity(
-    id = 0,
     malID = malID,
     animeID = animeID,
     title = title,
