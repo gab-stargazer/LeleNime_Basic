@@ -31,13 +31,21 @@ class EpisodeRepository @Inject constructor(
 
 
     /*
-     *  If anime is OnGoing the episode data should be no longer than 1 hours
-     *  If anime is Finished Airing the episode data should be no longer than 7 days
+     *  The function is designed to use both local data and network data, it will do the following process:
+     *  1. Function will fetch episode from local data and check whether it is empty or not
+     *  2. Function will fetch corresponding anime from local data and check:
+     *      - Is the anime status On Going  or Finished Airing
+     *      - Is the anime have more than 1 episode
+     *  3. Function will calculate the difference between last network request based on anime status
+     *      - 1 Hour if the anime is On Going
+     *      - 1 Day if the anime was finished airing
+     *  4. Function will determine whether it should pull another data / new data from network or not
+     *  5. If it making a network call, it will insert the data with the correct timestamp tobe used again
+     *     for the later use
      */
 
     override fun getEpisodesByAnimeID(animeID: Int): Flow<Resource<List<Episode>>> =
         flow<Resource<List<Episode>>> {
-            //Fetch the episodes data locally first to get the oldest update timestamp
             var localEpisodes: List<EpisodeEntity> = episodeDatabaseService
                 .getEpisodeByAnimeID(animeID = animeID)
             Timber.d(localEpisodes.toString())
@@ -50,7 +58,6 @@ class EpisodeRepository @Inject constructor(
                     }
                 }
 
-            //Fetch the anime data locally then check the airing status from the anime
             val anime: AnimeEntity =
                 animeDatabaseService.getAnimeByAnimeID(animeID = animeID) as AnimeEntity
             val animeEpisodeCount = anime.episodes ?: 0
@@ -63,10 +70,6 @@ class EpisodeRepository @Inject constructor(
                 return@flow
             }
 
-            /*
-             *  Compare the oldest timestamp and the anime status before making the decision
-             *  whether to do network call or not
-             */
             val timeDifference: Long = Date().time - oldestUpdate
             val isDataOutDated: Boolean =
                 if (isAnimeOnGoing) {

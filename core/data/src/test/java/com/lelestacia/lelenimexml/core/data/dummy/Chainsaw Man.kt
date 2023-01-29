@@ -31,6 +31,8 @@ val chainsawManEntity = AnimeEntity(
     lastViewed = Date(),
     startedDate = Date().toString(),
     finishedDate = Date().toString(),
+    createdAt = Date(),
+    updatedAt = Date()
 )
 
 val chainsawManCharacters = listOf(
@@ -91,7 +93,9 @@ val powerProfile = CharacterProfile(
         characterName = "Power",
         characterImage = "https://cdn.myanimelist.net/images/characters/7/494969.webp?s=02622d6ffa487b8d6d7503af4792a106",
         characterRole = "Main",
-        characterFavorite = 19730
+        characterFavorite = 19730,
+        createdAt = Date(),
+        updatedAt = Date()
     ),
     additionalInformation = powerCharacterDetail.asEntity()
 )
