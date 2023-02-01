@@ -10,6 +10,12 @@ import com.lelestacia.lelenimexml.core.domain.usecase.character.CharacterUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.character.ICharacterUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.episode.EpisodeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.episode.IEpisodeUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.favorite.FavoriteAnimeUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.favorite.IFavoriteAnimeUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.history.HistoryAnimeUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.history.IHistoryAnimeUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.home.HomeAnimeUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.home.IHomeAnimeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,4 +40,19 @@ object UseCaseModule {
     @ViewModelScoped
     fun provideEpisodeUseCase(repository: IEpisodeRepository): IEpisodeUseCase =
         EpisodeUseCase(episodeRepository = repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideHomeAnimeUseCase(repository: IAnimeRepository): IHomeAnimeUseCase =
+        HomeAnimeUseCase(animeRepository = repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideHistoryAnimeUseCase(repository: IAnimeRepository): IHistoryAnimeUseCase =
+        HistoryAnimeUseCase(animeRepository = repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideFavoriteAnimeUseCase(repository: IAnimeRepository): IFavoriteAnimeUseCase =
+        FavoriteAnimeUseCase(animeRepository = repository)
 }

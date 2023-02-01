@@ -5,8 +5,8 @@ import java.util.Date
 
 val chainsawManNetwork = NetworkAnime(
     malId = 44511,
-    images = NetworkAnime.Images(
-        webp = NetworkAnime.Images.Webp(
+    coverImages = NetworkAnime.NetworkAnimeImages(
+        webp = NetworkAnime.NetworkAnimeImages.NetworkAnimeWebp(
             imageUrl = "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg",
             largeImageUrl = "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg"
         )
@@ -26,16 +26,20 @@ val chainsawManNetwork = NetworkAnime(
     season = "fall",
     year = 2022,
     genres = listOf(),
-    aired = NetworkAnime.AiringInformation(
+    aired = NetworkAnime.NetworkAnimeAiringInformation(
         from = Date().toString(),
         to = Date().toString(),
-    )
+    ),
+    source = "Manga",
+    airing = false,
+    duration = "",
+    studio = emptyList()
 )
 
 val mobPsychoNetwork = NetworkAnime(
     malId = 50172,
-    images = NetworkAnime.Images(
-        webp = NetworkAnime.Images.Webp(
+    coverImages = NetworkAnime.NetworkAnimeImages(
+        webp = NetworkAnime.NetworkAnimeImages.NetworkAnimeWebp(
             imageUrl = "https://cdn.myanimelist.net/images/anime/1228/125011.jpg",
             largeImageUrl = "https://cdn.myanimelist.net/images/anime/1228/125011.jpg"
         )
@@ -55,8 +59,12 @@ val mobPsychoNetwork = NetworkAnime(
     season = "fall",
     year = 2022,
     genres = listOf(),
-    aired = NetworkAnime.AiringInformation(
+    aired = NetworkAnime.NetworkAnimeAiringInformation(
         from = Date().toString(),
         to = Date().toString(),
-    )
+    ),
+    source = "Manga",
+    airing = false,
+    duration = "",
+    studio = emptyList()
 )

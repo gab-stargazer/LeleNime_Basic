@@ -1,53 +1,130 @@
 package com.lelestacia.lelenimexml.core.data.impl.character
 
 import com.lelestacia.lelenimexml.core.common.Resource
-import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
-import com.lelestacia.lelenimexml.core.data.utility.asCharacter
-import com.lelestacia.lelenimexml.core.data.utility.asCharacterDetail
-import com.lelestacia.lelenimexml.core.data.utility.asEntity
-import com.lelestacia.lelenimexml.core.database.impl.character.ICharacterDatabaseService
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
+import com.lelestacia.lelenimexml.core.data.utility.*
+import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeCharacterCrossRefEntity
+import com.lelestacia.lelenimexml.core.database.entity.character.CharacterEntity
+import com.lelestacia.lelenimexml.core.database.entity.character.CharacterInformationEntity
+import com.lelestacia.lelenimexml.core.database.entity.character.CharacterVoiceActorCrossRefEntity
+import com.lelestacia.lelenimexml.core.database.entity.voice_actor.VoiceActorEntity
+import com.lelestacia.lelenimexml.core.database.service.ICharacterDatabaseService
 import com.lelestacia.lelenimexml.core.model.character.Character
 import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkService
+import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CharacterRepository @Inject constructor(
     private val apiService: ICharacterNetworkService,
-    private val localDataSource: ICharacterDatabaseService,
+    private val characterDatabaseService: ICharacterDatabaseService,
     private val errorParser: JikanErrorParserUtil,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ICharacterRepository {
 
     override fun getAnimeCharactersById(animeID: Int): Flow<Resource<List<Character>>> =
         flow<Resource<List<Character>>> {
-            var localCharacter: List<CharacterEntity> =
-                localDataSource.getAllCharacterFromAnimeById(animeID)
+            val animeCharactersCrossRef: List<AnimeCharacterCrossRefEntity> =
+                characterDatabaseService.getCharactersByAnimeID(animeID = animeID)
 
-            if (localCharacter.isNotEmpty()) {
-                val characters = localCharacter.map { it.asCharacter() }
-                emit(Resource.Success(data = characters))
-                return@flow
+            if (animeCharactersCrossRef.isEmpty()) {
+                Timber
+                    .tag("getAnimeCharactersById")
+                    .d("Fetching new data because the local data is empty")
+
+                val apiResponse: List<NetworkCharacter> =
+                    apiService.getCharactersByAnimeID(animeID = animeID)
+
+                if (apiResponse.isEmpty()) {
+
+                    /*
+                     *  Returning here, because since the api doesn't return anything,
+                     *  that means the data on the server are also empty
+                     */
+
+                    delay(500)
+                    emit(Resource.Success(data = emptyList()))
+                    return@flow
+                }
+
+                val characterEntities: List<CharacterEntity> =
+                    apiResponse.map { it.asNewEntity() }
+
+                val characterWithVoiceActors: List<Pair<Int, List<VoiceActorEntity>>> =
+                    apiResponse.map { it.asCharacterWithVoiceActorEntities() }
+
+                characterDatabaseService.insertCharactersAndVoiceActors(
+                    characters = characterEntities,
+                    voiceActors = characterWithVoiceActors.map { pair ->
+                        pair.second
+                    }.flatten(),
+                    animeCharactersCrossRef = apiResponse.map { networkCharacter ->
+                        AnimeCharacterCrossRefEntity(
+                            animeID = animeID,
+                            characterID = networkCharacter.characterData.malID
+                        )
+                    },
+                    characterVoiceActorsCrossRef = characterWithVoiceActors.map { pair ->
+                        pair.second.map { voiceActorEntity ->
+                            CharacterVoiceActorCrossRefEntity(
+                                characterID = pair.first,
+                                voiceActorID = voiceActorEntity.voiceActorID
+                            )
+                        }
+                    }.flatten()
+                ).also {
+                    emit(Resource.Success(data = characterEntities.map { it.asCharacter() }))
+                    return@flow
+                }
+
+                /*
+                 *  At this point, characters' data, voice actors data,
+                 *  and its corresponding reference have been inserted into its own table to be queried in further usage.
+                 *  Also, there's no need to continue the process since the data are coming straight from the API
+                 *  and don't need further inspection
+                 */
             }
 
-            val apiResponse = apiService
-                .getCharactersByAnimeID(animeID).map { characterResponse ->
-                    characterResponse.asEntity(animeID = animeID)
-                }
-            delay(500)
-            localDataSource.insertOrUpdateCharacter(apiResponse)
-            localCharacter = localDataSource.getAllCharacterFromAnimeById(animeID)
+            val charactersID: List<Int> = animeCharactersCrossRef.map { it.characterID }
+            val localCharacters: List<CharacterEntity> =
+                characterDatabaseService.getCharactersByCharacterID(characterID = charactersID)
+            val localVoiceActors =
+                characterDatabaseService.getVoiceActorsByCharacterID(characterID = charactersID)
 
-            val characters: List<Character> = localCharacter.map { it.asCharacter() }
-            emit(Resource.Success(data = characters))
+            emit(Resource.Success(data = localCharacters.map { it.asCharacter() }))
+
+            val oldestUpdate: Long = localCharacters.minOf {
+                (it.updatedAt ?: it.createdAt).time
+            }
+            val timeDifference: Long = Date().time - oldestUpdate
+            val isDataOutDated = (TimeUnit.MILLISECONDS.toHours(timeDifference) % 24).toInt() > 24
+
+            if (isDataOutDated) {
+                Timber
+                    .tag("getAnimeCharactersById")
+                    .d("Fetching new data because the local data is outdated")
+
+                val apiResponse = apiService.getCharactersByAnimeID(animeID = animeID)
+
+                val newCharacters: List<CharacterEntity> =
+                    apiResponse.map { it.asNewEntity() }
+                val newVoiceActors: List<VoiceActorEntity> =
+                    apiResponse.map { it.asNewVoiceActor() }.flatten()
+
+                characterDatabaseService.updateCharactersAndVoiceActors(
+                    characters = Pair(localCharacters, newCharacters),
+                    voiceActors = Pair(localVoiceActors, newVoiceActors)
+                )
+
+                emit(Resource.Success(data = newCharacters.map { it.asCharacter() }))
+            }
         }.onStart {
             emit(Resource.Loading)
         }.catch { t ->
@@ -58,18 +135,22 @@ class CharacterRepository @Inject constructor(
         }.flowOn(ioDispatcher)
 
     /*
-     *  The function is designed to use both local data and network data, it will do the following process:
-     *  1. Function will fetch character from local data and check whether it is empty or not
-     *  2. Function will calculate the difference between last network request based on timestamp
-     *  3. Function will determine whether it should pull another data / new data from network or not
-     *  4. If it making a network call, it will insert the data with the correct timestamp tobe used again
-     *     for the later use
+     *  The function is designed to use both local data and network data.
+     *  It will do the following process:
+     *      1. The function will fetch character from local data
+     *         and check whether it is empty or not
+     *      2. The function will calculate the difference between the last network request based on timestamp
+     *      3. The function will determine
+     *         whether it should pull other data / new data from network or not
+     *      4. If it's making a network call,
+     *         it will insert the data with the correct timestamp tobe used again
+     *         for the latter use
      */
 
     override fun getCharacterDetailById(characterID: Int): Flow<Resource<CharacterDetail>> =
         flow<Resource<CharacterDetail>> {
             var localCharacter: CharacterInformationEntity? =
-                localDataSource.getCharacterAdditionalInformationById(characterID)
+                characterDatabaseService.getCharacterAdditionalInformationById(characterID)
 
             val oldestUpdate: Long =
                 if (localCharacter == null) 0
@@ -83,7 +164,7 @@ class CharacterRepository @Inject constructor(
             val shouldFetchNetwork = localCharacter == null || isDataOutdated
             if (shouldFetchNetwork) {
                 val apiResponse = apiService.getCharacterDetailByCharacterID(characterID)
-                val newEntities = apiResponse.asEntity()
+                val newEntities = apiResponse.asNewEntity()
 
                 localCharacter =
                     localCharacter?.copy(
@@ -93,11 +174,11 @@ class CharacterRepository @Inject constructor(
                         updatedAt = Date()
                     ) ?: newEntities
 
-                localDataSource.insertOrReplaceAdditionalInformation(additionalInformation = localCharacter)
+                characterDatabaseService.insertOrUpdateAdditionalInformation(characterInformationEntity = localCharacter)
                 delay(500)
             }
 
-            val fullInformation = localDataSource.getCharacterFullProfile(characterID = characterID)
+            val fullInformation = characterDatabaseService.getCharacterFullProfile(characterID = characterID)
             emit(Resource.Success(data = fullInformation.asCharacterDetail()))
         }.onStart {
             emit(Resource.Loading)

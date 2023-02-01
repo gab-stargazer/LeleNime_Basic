@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.database.model.converter
+package com.lelestacia.lelenimexml.core.database.type_converter
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

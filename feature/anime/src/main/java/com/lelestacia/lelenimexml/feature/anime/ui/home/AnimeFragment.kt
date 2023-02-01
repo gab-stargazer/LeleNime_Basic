@@ -37,7 +37,7 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
     private val animeAdapter = ListAnimePagingAdapter { anime ->
         lifecycleScope.launch {
             viewModel.insertOrUpdateAnimeToHistory(anime).join()
-            val action = AnimeFragmentDirections.animeToDetail(anime.animeID)
+            val action = AnimeFragmentDirections.animeToDetail(anime.malID)
             findNavController().navigate(action)
         }
     }

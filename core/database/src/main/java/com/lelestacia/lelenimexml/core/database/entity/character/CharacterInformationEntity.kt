@@ -1,13 +1,11 @@
-package com.lelestacia.lelenimexml.core.database.model.character
+package com.lelestacia.lelenimexml.core.database.entity.character
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity(
-    tableName = "character_information"
-)
+@Entity(tableName = "character_information_table")
 data class CharacterInformationEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

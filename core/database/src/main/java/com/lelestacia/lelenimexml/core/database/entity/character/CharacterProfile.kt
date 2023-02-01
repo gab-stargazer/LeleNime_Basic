@@ -1,15 +1,16 @@
-package com.lelestacia.lelenimexml.core.database.model.character
+package com.lelestacia.lelenimexml.core.database.entity.character
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.lelestacia.lelenimexml.core.database.entity.Constant.CHARACTER_ID
 
 data class CharacterProfile(
     @Embedded
     val character: CharacterEntity,
 
     @Relation(
-        parentColumn = "id",
-        entityColumn = "character_id"
+        parentColumn = CHARACTER_ID,
+        entityColumn = CHARACTER_ID
     )
     val additionalInformation: CharacterInformationEntity
 )

@@ -9,21 +9,23 @@ import androidx.paging.map
 import com.lelestacia.lelenimexml.core.common.Constant.IS_NSFW
 import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import com.lelestacia.lelenimexml.core.data.utility.asAnime
-import com.lelestacia.lelenimexml.core.data.utility.asEntity
-import com.lelestacia.lelenimexml.core.database.impl.anime.IAnimeDatabaseService
-import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
+import com.lelestacia.lelenimexml.core.data.utility.asNewEntity
+import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
+import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
     private val apiService: IAnimeNetworkService,
-    private val localDataSource: IAnimeDatabaseService,
-    mContext: Context
+    private val animeDao: AnimeDao,
+    mContext: Context,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IAnimeRepository {
 
     private val sharedPreferences: SharedPreferences = mContext
@@ -62,15 +64,11 @@ class AnimeRepository @Inject constructor(
         }
     }
 
-    override fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<Anime> {
-        return localDataSource.getNewestAnimeDataByAnimeID(animeID).map {
-            Timber.d("${it.createdAt} - ${it.updatedAt}")
-            it.asAnime()
-        }
-    }
+    override fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<Anime> =
+        animeDao.getNewestAnimeDataByAnimeId(animeId = animeID).map { it.asAnime() }
 
     override suspend fun getAnimeByAnimeID(animeID: Int): Anime? {
-        return localDataSource.getAnimeByAnimeID(animeID)?.asAnime()
+        return animeDao.getAnimeByAnimeId(animeID)?.asAnime()
     }
 
     override fun getAnimeHistory(): Flow<PagingData<Anime>> =
@@ -81,26 +79,28 @@ class AnimeRepository @Inject constructor(
                 prefetchDistance = 5
             ),
             pagingSourceFactory = {
-                localDataSource.getAllAnimeHistory()
+                animeDao.getAllAnimeHistory()
             }
         ).flow.map { pagingData ->
             pagingData.map { it.asAnime() }
         }
 
     override suspend fun insertAnimeToHistory(anime: Anime) {
-        val localAnime: AnimeEntity? = localDataSource.getAnimeByAnimeID(anime.animeID)
-        val isExist = localAnime != null
+        withContext(ioDispatcher) {
+            val localAnime: AnimeEntity? = animeDao.getAnimeByAnimeId(anime.malID)
+            val isAnimeExist = localAnime != null
 
-        if (isExist) {
-            val updatedHistory: AnimeEntity = (localAnime as AnimeEntity).copy(
-                lastViewed = Date(),
-            )
-            localDataSource.insertOrUpdateAnimeIntoHistory(updatedHistory)
-            return
+            if (isAnimeExist) {
+                val updatedHistory: AnimeEntity = (localAnime as AnimeEntity).copy(
+                    lastViewed = Date(),
+                )
+                animeDao.updateAnime(updatedHistory)
+                return@withContext
+            }
+
+            val newAnime = anime.asNewEntity()
+            animeDao.insertOrUpdateAnime(newAnime)
         }
-
-        val newAnime = anime.asEntity()
-        localDataSource.insertOrUpdateAnimeIntoHistory(newAnime)
     }
 
     override fun getAllFavoriteAnime(): Flow<PagingData<Anime>> =
@@ -111,20 +111,22 @@ class AnimeRepository @Inject constructor(
                 prefetchDistance = 5
             ),
             pagingSourceFactory = {
-                localDataSource.getAllFavoriteAnime()
+                animeDao.getAllFavoriteAnime()
             }
         ).flow.map { pagingData ->
             pagingData.map { it.asAnime() }
         }
 
     override suspend fun updateAnimeFavorite(malID: Int) {
-        val anime = localDataSource.getAnimeByAnimeID(malID)
-        anime?.let { oldAnime ->
-            val newAnime = oldAnime.copy(
-                isFavorite = !oldAnime.isFavorite,
-                updatedAt = Date()
-            )
-            localDataSource.updateAnime(newAnime)
+        withContext(ioDispatcher) {
+            val anime = animeDao.getAnimeByAnimeId(animeID = malID)
+            anime?.let { oldAnime ->
+                val newAnime = oldAnime.copy(
+                    isFavorite = !oldAnime.isFavorite,
+                    updatedAt = Date()
+                )
+                animeDao.updateAnime(newAnime)
+            }
         }
     }
 

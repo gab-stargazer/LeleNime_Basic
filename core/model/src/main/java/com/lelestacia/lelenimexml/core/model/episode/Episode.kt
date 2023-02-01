@@ -5,6 +5,7 @@ data class Episode(
     val animeID: Int,
     val title: String,
     val titleJapanese: String?,
+    val titleRomanji: String?,
     val aired: String?,
     val score: Double,
     val filler: Boolean,

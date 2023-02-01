@@ -4,7 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.lelestacia.lelenimexml.core.database.model.episode.EpisodeEntity
+import androidx.room.Update
+import com.lelestacia.lelenimexml.core.database.entity.episode.EpisodeEntity
 
 @Dao
 interface EpisodeDao {
@@ -12,6 +13,9 @@ interface EpisodeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdateEpisode(episodes: List<EpisodeEntity>)
 
-    @Query("SELECT * FROM episode WHERE anime_id = :animeID ORDER BY mal_id ASC")
+    @Query("SELECT * FROM episode_table WHERE anime_id = :animeID ORDER BY episode_id ASC")
     fun getEpisodeByAnimeID(animeID: Int): List<EpisodeEntity>
+
+    @Update
+    suspend fun updateEpisodes(episodes: List<EpisodeEntity>)
 }

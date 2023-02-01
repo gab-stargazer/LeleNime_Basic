@@ -1,14 +1,14 @@
 package com.lelestacia.lelenimexml.core.data.utility
 
-import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
+import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.network.model.anime.NetworkAnime
 import java.util.Date
 
 fun NetworkAnime.asAnime(): Anime =
     Anime(
-        animeID = malId,
-        coverImages = images.webp.largeImageUrl,
+        malID = malId,
+        coverImages = coverImages.webp.largeImageUrl,
         trailer = Anime.Trailer(
             youtubeId = trailer?.youtubeId,
             url = trailer?.url,
@@ -32,16 +32,20 @@ fun NetworkAnime.asAnime(): Anime =
         },
         isFavorite = false,
         startedDate = aired.from,
-        finishedDate = aired.to
+        finishedDate = aired.to,
+        source = source,
+        airing = airing,
+        duration = duration,
+        studios = studio.map { it.name }
     )
 
 fun AnimeEntity.asAnime(): Anime = Anime(
-    animeID = animeID,
-    coverImages = coverImages,
+    malID = animeID,
+    coverImages = image,
     trailer = Anime.Trailer(
-        youtubeId = trailer?.youtubeId,
+        youtubeId = trailer?.id,
         url = trailer?.url,
-        images = trailer?.images
+        images = trailer?.image
     ),
     title = title,
     titleEnglish = titleEnglish,
@@ -59,17 +63,21 @@ fun AnimeEntity.asAnime(): Anime = Anime(
     genres = genres,
     isFavorite = isFavorite,
     startedDate = startedDate,
-    finishedDate = finishedDate
+    finishedDate = finishedDate,
+    source = source,
+    airing = airing,
+    duration = duration,
+    studios = studios
 )
 
-fun Anime.asEntity(isFavorite: Boolean = false): AnimeEntity =
+fun Anime.asNewEntity(isFavorite: Boolean = false): AnimeEntity =
     AnimeEntity(
-        animeID = animeID,
-        coverImages = coverImages,
+        animeID = malID,
+        image = coverImages,
         trailer = AnimeEntity.Trailer(
-            youtubeId = trailer?.youtubeId,
+            id = trailer?.youtubeId,
             url = trailer?.url,
-            images = trailer?.images,
+            image = trailer?.images,
         ),
         title = title,
         titleEnglish = titleEnglish,
@@ -90,5 +98,9 @@ fun Anime.asEntity(isFavorite: Boolean = false): AnimeEntity =
         startedDate = startedDate,
         finishedDate = finishedDate,
         createdAt = Date(),
-        updatedAt = null
+        updatedAt = null,
+        source = source,
+        airing = airing,
+        duration = duration,
+        studios = studios
     )

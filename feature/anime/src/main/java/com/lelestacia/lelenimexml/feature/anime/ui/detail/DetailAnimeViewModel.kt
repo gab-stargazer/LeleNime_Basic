@@ -33,6 +33,9 @@ class DetailAnimeViewModel @Inject constructor(
         MutableStateFlow(Resource.None)
     val episodes get() = _episodes.asStateFlow()
 
+    private val _anime: MutableStateFlow<Resource<Anime>> = MutableStateFlow(Resource.None)
+    val anime get() = _anime.asStateFlow()
+
     fun getAnimeCharactersByAnimeID(animeID: Int) = viewModelScope.launch {
         characterUseCase.getAnimeCharacterById(animeID)
             .collect { result: Resource<List<Character>> ->

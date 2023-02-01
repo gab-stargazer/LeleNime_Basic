@@ -25,7 +25,7 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
         val historyAnimeAdapter = ListAnimePagingAdapterExtended(
             onItemClicked = { anime ->
                 viewModel.insertOrUpdateAnime(anime)
-                val action = HistoryFragmentDirections.historyToDetail(anime.animeID)
+                val action = HistoryFragmentDirections.historyToDetail(anime.malID)
                 findNavController().navigate(action)
             },
             onItemLongClicked = { anime ->

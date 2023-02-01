@@ -1,17 +1,18 @@
 package com.lelestacia.lelenimexml.core.data.dummy
 
-import com.lelestacia.lelenimexml.core.data.utility.asEntity
-import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterProfile
+import com.lelestacia.lelenimexml.core.data.utility.asNewEntity
+import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
+import com.lelestacia.lelenimexml.core.database.entity.character.CharacterEntity
+import com.lelestacia.lelenimexml.core.database.entity.character.CharacterProfile
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
+import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter.CharacterResponseData.NetworkCharacterImage
+import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter.CharacterResponseData.NetworkCharacterImage.Webp
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterDetail
-import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterImage
 import java.util.Date
 
 val chainsawManEntity = AnimeEntity(
     animeID = 44511,
-    coverImages = "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg",
+    image = "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg",
     trailer = null,
     title = "Chainsaw Man",
     titleEnglish = "Chainsaw Man",
@@ -32,48 +33,55 @@ val chainsawManEntity = AnimeEntity(
     startedDate = Date().toString(),
     finishedDate = Date().toString(),
     createdAt = Date(),
-    updatedAt = Date()
+    updatedAt = Date(),
+    source = "Manga",
+    airing = false,
+    duration = "",
+    studios = emptyList()
 )
 
 val chainsawManCharacters = listOf(
     NetworkCharacter(
         characterData = NetworkCharacter.CharacterResponseData(
-            characterMalId = 170732,
+            malID = 170732,
             images = NetworkCharacterImage(
-                NetworkCharacterImage.Webp(
+                Webp(
                     imageUrl = "https://cdn.myanimelist.net/images/characters/3/492407.webp?s=4d8e9a01dac6a5d891c3ed434187fba9"
                 )
             ),
             name = "Denji"
         ),
         role = "Main",
-        favoriteBy = 13968
+        favorites = 13968,
+        voiceActors = emptyList()
     ),
     NetworkCharacter(
         characterData = NetworkCharacter.CharacterResponseData(
-            characterMalId = 170735,
+            malID = 170735,
             images = NetworkCharacterImage(
-                NetworkCharacterImage.Webp(
+                Webp(
                     imageUrl = "https://cdn.myanimelist.net/images/characters/10/492791.webp?s=bcd7cca0e5126478eb2417666188adc7"
                 )
             ),
             name = "Hayakawa, Aki"
         ),
         role = "Main",
-        favoriteBy = 6872
+        favorites = 6872,
+        voiceActors = emptyList()
     ),
     NetworkCharacter(
         characterData = NetworkCharacter.CharacterResponseData(
-            characterMalId = 170733,
+            malID = 170733,
             images = NetworkCharacterImage(
-                NetworkCharacterImage.Webp(
+                Webp(
                     imageUrl = "https://cdn.myanimelist.net/images/characters/7/494969.webp?s=02622d6ffa487b8d6d7503af4792a106"
                 )
             ),
             name = "Power"
         ),
         role = "Main",
-        favoriteBy = 18586
+        favorites = 18586,
+        voiceActors = emptyList()
     )
 )
 
@@ -83,19 +91,19 @@ val powerCharacterDetail = NetworkCharacterDetail(
     characterKanjiName = "パワー",
     characterNickNames = listOf("Blood Devil"),
     characterFavoriteCount = 19730,
-    characterInformation = "Power is a fiend and Public Safety Devil Hunter, part of Makima's squad. She's a work partner and good friend with Denji. They share an apartment alongside Aki Hayakawa. She lacks manners and often lies to avoid punishment. She's very fond of her pet cat Nyako to the point she was willing to sacrifice Denji's life to save Nyako who had been captured by a bat demon.\n\n(Source: Chainsaw Man Wiki)"
+    characterInformation = "Power is a fiend and Public Safety Devil Hunter, part of Makima's squad. She's a work partner and good friend with Denji. They share an apartment alongside Aki Hayakawa. She lacks manners and often lies to avoid punishment. She's very fond of her pet cat Nyako to the point she was willing to sacrifice Denji's life to save Nyako who had been captured by a bat demon.\n\n(Source: Chainsaw Man Wiki)",
+    voiceActors = emptyList()
 )
 
 val powerProfile = CharacterProfile(
     character = CharacterEntity(
         characterID = 170733,
-        animeID = 44511,
-        characterName = "Power",
-        characterImage = "https://cdn.myanimelist.net/images/characters/7/494969.webp?s=02622d6ffa487b8d6d7503af4792a106",
-        characterRole = "Main",
-        characterFavorite = 19730,
+        name = "Power",
+        image = "https://cdn.myanimelist.net/images/characters/7/494969.webp?s=02622d6ffa487b8d6d7503af4792a106",
+        role = "Main",
+        favorite = 19730,
         createdAt = Date(),
         updatedAt = Date()
     ),
-    additionalInformation = powerCharacterDetail.asEntity()
+    additionalInformation = powerCharacterDetail.asNewEntity()
 )

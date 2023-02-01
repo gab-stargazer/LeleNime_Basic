@@ -8,9 +8,8 @@ import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
 import com.lelestacia.lelenimexml.core.data.impl.episode.EpisodeRepository
 import com.lelestacia.lelenimexml.core.data.impl.episode.IEpisodeRepository
 import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
-import com.lelestacia.lelenimexml.core.database.impl.anime.IAnimeDatabaseService
-import com.lelestacia.lelenimexml.core.database.impl.character.ICharacterDatabaseService
-import com.lelestacia.lelenimexml.core.database.impl.episode.IEpisodeDatabaseService
+import com.lelestacia.lelenimexml.core.database.dao.*
+import com.lelestacia.lelenimexml.core.database.service.ICharacterDatabaseService
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkService
 import dagger.Module
@@ -32,12 +31,13 @@ object RepositoryModule {
     @Singleton
     fun provideAnimeRepository(
         apiService: IAnimeNetworkService,
-        localDataSource: IAnimeDatabaseService,
-        @ApplicationContext mContext: Context
+        @ApplicationContext mContext: Context,
+        animeDao: AnimeDao,
+
     ): IAnimeRepository =
         AnimeRepository(
             apiService = apiService,
-            localDataSource = localDataSource,
+            animeDao = animeDao,
             mContext = mContext
         )
 
@@ -45,26 +45,26 @@ object RepositoryModule {
     @Singleton
     fun provideCharacterRepository(
         apiService: ICharacterNetworkService,
-        localDataSource: ICharacterDatabaseService,
+        characterDatabaseService: ICharacterDatabaseService,
         errorParserUtil: JikanErrorParserUtil
     ): ICharacterRepository =
         CharacterRepository(
             apiService = apiService,
-            localDataSource = localDataSource,
+            characterDatabaseService = characterDatabaseService,
             errorParser = errorParserUtil
         )
 
     @Provides
     @Singleton
     fun provideEpisodeRepository(
-        episodeDatabaseService: IEpisodeDatabaseService,
-        animeDatabaseService: IAnimeDatabaseService,
         apiService: IAnimeNetworkService,
-        errorParserUtil: JikanErrorParserUtil
+        errorParserUtil: JikanErrorParserUtil,
+        episodeDao: EpisodeDao,
+        animeDao: AnimeDao
     ): IEpisodeRepository = EpisodeRepository(
-        episodeDatabaseService = episodeDatabaseService,
-        animeDatabaseService = animeDatabaseService,
         apiService = apiService,
-        errorParserUtil = errorParserUtil
+        errorParserUtil = errorParserUtil,
+        episodeDao = episodeDao,
+        animeDao = animeDao
     )
 }

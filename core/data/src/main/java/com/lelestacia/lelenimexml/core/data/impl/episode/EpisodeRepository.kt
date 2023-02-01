@@ -4,10 +4,10 @@ import com.lelestacia.lelenimexml.core.common.Resource
 import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
 import com.lelestacia.lelenimexml.core.data.utility.asEpisode
 import com.lelestacia.lelenimexml.core.data.utility.asNewEntity
-import com.lelestacia.lelenimexml.core.database.impl.anime.IAnimeDatabaseService
-import com.lelestacia.lelenimexml.core.database.impl.episode.IEpisodeDatabaseService
-import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
-import com.lelestacia.lelenimexml.core.database.model.episode.EpisodeEntity
+import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
+import com.lelestacia.lelenimexml.core.database.dao.EpisodeDao
+import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
+import com.lelestacia.lelenimexml.core.database.entity.episode.EpisodeEntity
 import com.lelestacia.lelenimexml.core.model.episode.Episode
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import com.lelestacia.lelenimexml.core.network.model.episodes.NetworkEpisode
@@ -22,31 +22,31 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class EpisodeRepository @Inject constructor(
-    private val episodeDatabaseService: IEpisodeDatabaseService,
-    private val animeDatabaseService: IAnimeDatabaseService,
+    private val episodeDao: EpisodeDao,
+    private val animeDao: AnimeDao,
     private val apiService: IAnimeNetworkService,
     private val errorParserUtil: JikanErrorParserUtil,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IEpisodeRepository {
 
-
     /*
-     *  The function is designed to use both local data and network data, it will do the following process:
-     *  1. Function will fetch episode from local data and check whether it is empty or not
-     *  2. Function will fetch corresponding anime from local data and check:
-     *      - Is the anime status On Going  or Finished Airing
-     *      - Is the anime have more than 1 episode
-     *  3. Function will calculate the difference between last network request based on anime status
-     *      - 1 Hour if the anime is On Going
-     *      - 1 Day if the anime was finished airing
-     *  4. Function will determine whether it should pull another data / new data from network or not
-     *  5. If it making a network call, it will insert the data with the correct timestamp tobe used again
-     *     for the later use
+     *  The function is designed to use both local data and network data.
+     *  it will do the following process:
+     *      1. Function will fetch a list of episodes from local data
+     *         and check whether it is empty or not
+     *      2. Function will fetch the corresponding anime from local data and check:
+     *          - Is the anime status On Going or Finished Airing
+     *          - Is the anime has more than 1 episode
+     *      3. Function will calculate the difference between the last network request based on anime status
+     *          - 1 Hour if the anime is On Going
+     *          - 1 Day if the anime was finished airing
+     *      4. Function will determine whether it should pull new data / new data from network or not
+     *      5. If it's making a network call, it will insert the data with the correct timestamp tobe used again for the latter use
      */
 
     override fun getEpisodesByAnimeID(animeID: Int): Flow<Resource<List<Episode>>> =
         flow<Resource<List<Episode>>> {
-            var localEpisodes: List<EpisodeEntity> = episodeDatabaseService
+            var localEpisodes: List<EpisodeEntity> = episodeDao
                 .getEpisodeByAnimeID(animeID = animeID)
             Timber.d(localEpisodes.toString())
             val isLocalEpisodeEmpty = localEpisodes.isEmpty()
@@ -59,7 +59,7 @@ class EpisodeRepository @Inject constructor(
                 }
 
             val anime: AnimeEntity =
-                animeDatabaseService.getAnimeByAnimeID(animeID = animeID) as AnimeEntity
+                animeDao.getAnimeByAnimeId(animeID = animeID) as AnimeEntity
             val animeEpisodeCount = anime.episodes ?: 0
             val isAnimeHaveMoreThanOneEpisodes = animeEpisodeCount > 1
             val isAnimeOnGoing = anime.status == "Currently Airing"
@@ -108,7 +108,7 @@ class EpisodeRepository @Inject constructor(
                         }
                     }
 
-                episodeDatabaseService.insertOrUpdateEpisode(episodes = localEpisodes)
+                episodeDao.insertOrUpdateEpisode(episodes = localEpisodes)
             }
 
             val episodes = localEpisodes.map { it.asEpisode() }

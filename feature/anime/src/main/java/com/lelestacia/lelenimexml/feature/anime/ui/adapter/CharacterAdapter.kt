@@ -24,7 +24,7 @@ class CharacterAdapter(val onCharacterSelected: (Int) -> Unit) :
                     if (SystemClock.elapsedRealtime() - lastClickTime < 500) return@setOnClickListener
 
                     lastClickTime = SystemClock.elapsedRealtime()
-                    onCharacterSelected(item.characterID)
+                    onCharacterSelected(item.malID)
                 }
             }
         }
@@ -45,7 +45,7 @@ class CharacterAdapter(val onCharacterSelected: (Int) -> Unit) :
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Character>() {
             override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean =
-                oldItem.characterID == newItem.characterID
+                oldItem.malID == newItem.malID
 
             override fun areContentsTheSame(
                 oldItem: Character,
