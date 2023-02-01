@@ -4,10 +4,10 @@ import com.lelestacia.lelenimexml.core.common.Resource
 import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
 import com.lelestacia.lelenimexml.core.data.utility.asEpisode
 import com.lelestacia.lelenimexml.core.data.utility.asNewEntity
-import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
-import com.lelestacia.lelenimexml.core.database.dao.EpisodeDao
 import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
 import com.lelestacia.lelenimexml.core.database.entity.episode.EpisodeEntity
+import com.lelestacia.lelenimexml.core.database.service.IAnimeDatabaseService
+import com.lelestacia.lelenimexml.core.database.service.IEpisodeDatabaseService
 import com.lelestacia.lelenimexml.core.model.episode.Episode
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import com.lelestacia.lelenimexml.core.network.model.episodes.NetworkEpisode
@@ -26,9 +26,9 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class EpisodeRepository @Inject constructor(
-    private val episodeDao: EpisodeDao,
-    private val animeDao: AnimeDao,
-    private val apiService: IAnimeNetworkService,
+    private val animeApiService: IAnimeNetworkService,
+    private val animeDatabaseService: IAnimeDatabaseService,
+    private val episodeDatabaseService: IEpisodeDatabaseService,
     private val errorParserUtil: JikanErrorParserUtil,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IEpisodeRepository {
@@ -50,9 +50,8 @@ class EpisodeRepository @Inject constructor(
 
     override fun getEpisodesByAnimeID(animeID: Int): Flow<Resource<List<Episode>>> =
         flow<Resource<List<Episode>>> {
-            var localEpisodes: List<EpisodeEntity> = episodeDao
-                .getEpisodeByAnimeID(animeID = animeID)
-            Timber.d(localEpisodes.toString())
+            var localEpisodes: List<EpisodeEntity> = episodeDatabaseService
+                .getEpisodesByAnimeID(animeID = animeID)
             val isLocalEpisodeEmpty = localEpisodes.isEmpty()
             val oldestUpdate: Long =
                 if (isLocalEpisodeEmpty) 0
@@ -63,13 +62,14 @@ class EpisodeRepository @Inject constructor(
                 }
 
             val anime: AnimeEntity =
-                animeDao.getAnimeByAnimeId(animeID = animeID) as AnimeEntity
+                animeDatabaseService.getAnimeByAnimeID(animeID = animeID) as AnimeEntity
             val animeEpisodeCount = anime.episodes ?: 0
-            val isAnimeHaveMoreThanOneEpisodes = animeEpisodeCount > 1
+            Timber.d("${anime.title} has $animeEpisodeCount episodes")
+            val isAnimeOnlyOneEpisode = animeEpisodeCount == 1
             val isAnimeOnGoing = anime.status == "Currently Airing"
 
-            if (!isAnimeHaveMoreThanOneEpisodes) {
-                Timber.d("Anime only has 1 or less episode, therefor no data should be fetched")
+            if (isAnimeOnlyOneEpisode) {
+                Timber.d("Anime only has 1 episode, therefor no data should be fetched")
                 emit(Resource.Success(data = emptyList()))
                 return@flow
             }
@@ -91,10 +91,11 @@ class EpisodeRepository @Inject constructor(
             if (shouldFetchNetwork) {
                 Timber.d("Episode is fetched from the network")
                 delay(500)
-                val apiResponse = apiService.getAnimeEpisodesByAnimeID(animeID = animeID)
-                val newEpisodeEntities = apiResponse.map { networkEpisode: NetworkEpisode ->
-                    networkEpisode.asNewEntity(animeID = animeID)
-                }
+                val apiResponse = animeApiService.getAnimeEpisodesByAnimeID(animeID = animeID)
+                val newEpisodeEntities: List<EpisodeEntity> = apiResponse
+                    .map { networkEpisode: NetworkEpisode ->
+                        networkEpisode.asNewEntity(animeID = animeID)
+                    }
 
                 localEpisodes =
                     if (isLocalEpisodeEmpty) {
@@ -102,17 +103,18 @@ class EpisodeRepository @Inject constructor(
                         newEpisodeEntities
                     } else {
                         Timber.d("Local Episodes updated")
-                        localEpisodes.onEachIndexed { index, episodeEntity ->
+                        localEpisodes.mapIndexed { index, episodeEntity ->
+                            val newEpisode = newEpisodeEntities[index]
                             episodeEntity.copy(
-                                titleJapanese = newEpisodeEntities[index].titleJapanese,
-                                aired = newEpisodeEntities[index].aired,
-                                score = newEpisodeEntities[index].score,
+                                titleJapanese = newEpisode.titleJapanese,
+                                aired = newEpisode.aired,
+                                score = newEpisode.score,
                                 updatedAt = Date()
                             )
                         }
                     }
 
-                episodeDao.insertOrUpdateEpisode(episodes = localEpisodes)
+                episodeDatabaseService.insertOrUpdateEpisodes(episodes = localEpisodes)
             }
 
             val episodes = localEpisodes.map { it.asEpisode() }

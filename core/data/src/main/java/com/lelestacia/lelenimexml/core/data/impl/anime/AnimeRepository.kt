@@ -8,8 +8,8 @@ import androidx.paging.map
 import com.lelestacia.lelenimexml.core.common.Constant.IS_NSFW
 import com.lelestacia.lelenimexml.core.data.utility.asAnime
 import com.lelestacia.lelenimexml.core.data.utility.asNewEntity
-import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
 import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
+import com.lelestacia.lelenimexml.core.database.service.IAnimeDatabaseService
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,8 +21,8 @@ import java.util.Date
 import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
-    private val apiService: IAnimeNetworkService,
-    private val animeDao: AnimeDao,
+    private val animeApiService: IAnimeNetworkService,
+    private val animeDatabaseService: IAnimeDatabaseService,
     private val userPreferences: SharedPreferences,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IAnimeRepository {
@@ -36,7 +36,7 @@ class AnimeRepository @Inject constructor(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                apiService.getAiringAnime()
+                animeApiService.getAiringAnime()
             }
         ).flow.map { pagingData ->
             pagingData.map { it.asAnime() }
@@ -53,7 +53,7 @@ class AnimeRepository @Inject constructor(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                apiService.searchAnimeByTitle(query, isNsfw)
+                animeApiService.searchAnimeByTitle(query, isNsfw)
             }
         ).flow.map { pagingData ->
             pagingData.map { it.asAnime() }
@@ -61,11 +61,7 @@ class AnimeRepository @Inject constructor(
     }
 
     override fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<Anime> =
-        animeDao.getNewestAnimeDataByAnimeId(animeId = animeID).map { it.asAnime() }
-
-    override suspend fun getAnimeByAnimeID(animeID: Int): Anime? {
-        return animeDao.getAnimeByAnimeId(animeID)?.asAnime()
-    }
+        animeDatabaseService.getNewestAnimeDataByAnimeID(animeID = animeID).map { it.asAnime() }
 
     override fun getAnimeHistory(): Flow<PagingData<Anime>> =
         Pager(
@@ -75,7 +71,7 @@ class AnimeRepository @Inject constructor(
                 prefetchDistance = 5
             ),
             pagingSourceFactory = {
-                animeDao.getAllAnimeHistory()
+                animeDatabaseService.getAnimeHistory()
             }
         ).flow.map { pagingData ->
             pagingData.map { it.asAnime() }
@@ -83,19 +79,19 @@ class AnimeRepository @Inject constructor(
 
     override suspend fun insertAnimeToHistory(anime: Anime) {
         withContext(ioDispatcher) {
-            val localAnime: AnimeEntity? = animeDao.getAnimeByAnimeId(anime.malID)
+            val localAnime: AnimeEntity? = animeDatabaseService.getAnimeByAnimeID(anime.malID)
             val isAnimeExist = localAnime != null
 
             if (isAnimeExist) {
                 val updatedHistory: AnimeEntity = (localAnime as AnimeEntity).copy(
                     lastViewed = Date(),
                 )
-                animeDao.updateAnime(updatedHistory)
+                animeDatabaseService.updateAnime(updatedHistory)
                 return@withContext
             }
 
             val newAnime = anime.asNewEntity()
-            animeDao.insertOrUpdateAnime(newAnime)
+            animeDatabaseService.insertOrReplaceAnime(newAnime)
         }
     }
 
@@ -107,7 +103,7 @@ class AnimeRepository @Inject constructor(
                 prefetchDistance = 5
             ),
             pagingSourceFactory = {
-                animeDao.getAllFavoriteAnime()
+                animeDatabaseService.getAnimeFavorite()
             }
         ).flow.map { pagingData ->
             pagingData.map { it.asAnime() }
@@ -115,13 +111,13 @@ class AnimeRepository @Inject constructor(
 
     override suspend fun updateAnimeFavorite(malID: Int) {
         withContext(ioDispatcher) {
-            val anime = animeDao.getAnimeByAnimeId(animeID = malID)
+            val anime = animeDatabaseService.getAnimeByAnimeID(animeID = malID)
             anime?.let { oldAnime ->
                 val newAnime = oldAnime.copy(
                     isFavorite = !oldAnime.isFavorite,
                     updatedAt = Date()
                 )
-                animeDao.updateAnime(newAnime)
+                animeDatabaseService.updateAnime(newAnime)
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.database.entity
+package com.lelestacia.lelenimexml.core.database.util
 
 internal object DatabaseConstant {
     const val IMAGE = "image"

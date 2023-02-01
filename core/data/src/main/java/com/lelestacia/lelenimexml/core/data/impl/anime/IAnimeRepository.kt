@@ -8,7 +8,6 @@ interface IAnimeRepository {
     fun seasonAnimePagingData(): Flow<PagingData<Anime>>
     fun searchAnimeByTitle(query: String): Flow<PagingData<Anime>>
     fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<Anime>
-    suspend fun getAnimeByAnimeID(animeID: Int): Anime?
     fun getAnimeHistory(): Flow<PagingData<Anime>>
     suspend fun insertAnimeToHistory(anime: Anime)
     fun getAllFavoriteAnime(): Flow<PagingData<Anime>>

@@ -12,19 +12,19 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AnimeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdateAnime(anime: AnimeEntity)
+    suspend fun insertOrReplaceAnime(anime: AnimeEntity)
 
     @Query("SELECT * FROM anime_table ORDER BY last_viewed DESC")
-    fun getAllAnimeHistory(): PagingSource<Int, AnimeEntity>
+    fun getAnimeHistory(): PagingSource<Int, AnimeEntity>
 
     @Query("SELECT * FROM anime_table WHERE favorite = 1")
-    fun getAllFavoriteAnime(): PagingSource<Int, AnimeEntity>
+    fun getAnimeFavorite(): PagingSource<Int, AnimeEntity>
 
-    @Query("SELECT * FROM anime_table WHERE anime_id = :animeID")
-    fun getAnimeByAnimeId(animeID: Int): AnimeEntity?
+    @Query("SELECT * FROM anime_table WHERE anime_id =:animeID")
+    fun getAnimeByAnimeID(animeID: Int): AnimeEntity?
 
-    @Query("SELECT * FROM anime_table WHERE anime_id = :animeId")
-    fun getNewestAnimeDataByAnimeId(animeId: Int): Flow<AnimeEntity>
+    @Query("SELECT * FROM anime_table WHERE anime_id =:animeID")
+    fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<AnimeEntity>
 
     @Update
     suspend fun updateAnime(anime: AnimeEntity)

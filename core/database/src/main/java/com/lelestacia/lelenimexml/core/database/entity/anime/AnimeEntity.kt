@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.ANIME_ID
-import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.CREATED_AT
-import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.UPDATED_AT
+import com.lelestacia.lelenimexml.core.database.util.DatabaseConstant.ANIME_ID
+import com.lelestacia.lelenimexml.core.database.util.DatabaseConstant.CREATED_AT
+import com.lelestacia.lelenimexml.core.database.util.DatabaseConstant.UPDATED_AT
 import java.util.Date
 
 @Entity(tableName = "anime_table")

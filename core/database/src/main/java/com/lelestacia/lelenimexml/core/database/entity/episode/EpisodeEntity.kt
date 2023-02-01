@@ -2,26 +2,15 @@ package com.lelestacia.lelenimexml.core.database.entity.episode
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.ForeignKey.RESTRICT
-import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.ANIME_ID
-import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.CREATED_AT
-import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.EPISODE_ID
-import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.UPDATED_AT
-import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
+import com.lelestacia.lelenimexml.core.database.util.DatabaseConstant.ANIME_ID
+import com.lelestacia.lelenimexml.core.database.util.DatabaseConstant.CREATED_AT
+import com.lelestacia.lelenimexml.core.database.util.DatabaseConstant.EPISODE_ID
+import com.lelestacia.lelenimexml.core.database.util.DatabaseConstant.UPDATED_AT
 import java.util.*
 
 @Entity(
     tableName = "episode_table",
     primaryKeys = [EPISODE_ID, ANIME_ID],
-    foreignKeys = [
-        ForeignKey(
-            entity = AnimeEntity::class,
-            parentColumns = [ANIME_ID],
-            childColumns = [ANIME_ID],
-            onDelete = RESTRICT,
-        )
-    ]
 )
 data class EpisodeEntity(
     @ColumnInfo(name = EPISODE_ID)

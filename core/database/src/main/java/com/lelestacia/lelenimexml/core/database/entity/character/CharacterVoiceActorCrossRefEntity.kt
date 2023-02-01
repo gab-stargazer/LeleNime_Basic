@@ -2,8 +2,8 @@ package com.lelestacia.lelenimexml.core.database.entity.character
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.CHARACTER_ID
-import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.VOICE_ACTOR_ID
+import com.lelestacia.lelenimexml.core.database.util.DatabaseConstant.CHARACTER_ID
+import com.lelestacia.lelenimexml.core.database.util.DatabaseConstant.VOICE_ACTOR_ID
 
 @Entity(
     tableName = "character_voice_actor_reference_table",

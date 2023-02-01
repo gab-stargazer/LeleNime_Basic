@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9ebedf707115209a47504bf4096ca6f4",
+    "identityHash": "24bc2886b77bb1359d0a6a2d711d8bea",
     "entities": [
       {
         "tableName": "anime_table",
@@ -366,7 +366,7 @@
       },
       {
         "tableName": "episode_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`episode_id` INTEGER NOT NULL, `anime_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `title_japanese` TEXT, `title_romanji` TEXT, `aired` TEXT, `score` REAL NOT NULL, `filler` INTEGER NOT NULL, `recap` INTEGER NOT NULL, `forum_url` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER, PRIMARY KEY(`episode_id`, `anime_id`), FOREIGN KEY(`anime_id`) REFERENCES `anime_table`(`anime_id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`episode_id` INTEGER NOT NULL, `anime_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `title_japanese` TEXT, `title_romanji` TEXT, `aired` TEXT, `score` REAL NOT NULL, `filler` INTEGER NOT NULL, `recap` INTEGER NOT NULL, `forum_url` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER, PRIMARY KEY(`episode_id`, `anime_id`))",
         "fields": [
           {
             "fieldPath": "episodeID",
@@ -449,19 +449,7 @@
           "autoGenerate": false
         },
         "indices": [],
-        "foreignKeys": [
-          {
-            "table": "anime_table",
-            "onDelete": "RESTRICT",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "anime_id"
-            ],
-            "referencedColumns": [
-              "anime_id"
-            ]
-          }
-        ]
+        "foreignKeys": []
       },
       {
         "tableName": "voice_actor_table",
@@ -517,7 +505,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9ebedf707115209a47504bf4096ca6f4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '24bc2886b77bb1359d0a6a2d711d8bea')"
     ]
   }
 }

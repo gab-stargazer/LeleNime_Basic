@@ -9,9 +9,9 @@ import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
 import com.lelestacia.lelenimexml.core.data.impl.episode.EpisodeRepository
 import com.lelestacia.lelenimexml.core.data.impl.episode.IEpisodeRepository
 import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
-import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
-import com.lelestacia.lelenimexml.core.database.dao.EpisodeDao
+import com.lelestacia.lelenimexml.core.database.service.IAnimeDatabaseService
 import com.lelestacia.lelenimexml.core.database.service.ICharacterDatabaseService
+import com.lelestacia.lelenimexml.core.database.service.IEpisodeDatabaseService
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkService
 import dagger.Module
@@ -34,13 +34,12 @@ object RepositoryModule {
     fun provideAnimeRepository(
         apiService: IAnimeNetworkService,
         @ApplicationContext mContext: Context,
-        animeDao: AnimeDao,
-
+        animeDatabaseService: IAnimeDatabaseService
     ): IAnimeRepository =
         AnimeRepository(
-            apiService = apiService,
-            animeDao = animeDao,
-            userPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
+            animeApiService = apiService,
+            userPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE),
+            animeDatabaseService = animeDatabaseService
         )
 
     @Provides
@@ -60,13 +59,12 @@ object RepositoryModule {
     @Singleton
     fun provideEpisodeRepository(
         apiService: IAnimeNetworkService,
-        errorParserUtil: JikanErrorParserUtil,
-        episodeDao: EpisodeDao,
-        animeDao: AnimeDao
+        episodeDatabaseService: IEpisodeDatabaseService,
+        animeDatabaseService: IAnimeDatabaseService
     ): IEpisodeRepository = EpisodeRepository(
-        apiService = apiService,
-        errorParserUtil = errorParserUtil,
-        episodeDao = episodeDao,
-        animeDao = animeDao
+        animeApiService = apiService,
+        errorParserUtil = JikanErrorParserUtil(),
+        episodeDatabaseService = episodeDatabaseService,
+        animeDatabaseService = animeDatabaseService
     )
 }
