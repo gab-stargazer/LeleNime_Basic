@@ -11,7 +11,8 @@ val chainsawManNetworkEpisodes = listOf(
         score = 4.5,
         filler = false,
         recap = false,
-        forumURL = "https://myanimelist.net/forum/?topicid=2049947"
+        forumURL = "https://myanimelist.net/forum/?topicid=2049947",
+        titleRomanji = ""
     ),
     NetworkEpisode(
         malID = 2,
@@ -21,7 +22,8 @@ val chainsawManNetworkEpisodes = listOf(
         score = 4.5,
         filler = false,
         recap = false,
-        forumURL = "https://myanimelist.net/forum/?topicid=2052415"
+        forumURL = "https://myanimelist.net/forum/?topicid=2052415",
+        titleRomanji = ""
     ),
     NetworkEpisode(
         malID = 3,
@@ -31,7 +33,8 @@ val chainsawManNetworkEpisodes = listOf(
         score = 4.5,
         filler = false,
         recap = false,
-        forumURL = "https://myanimelist.net/forum/?topicid=2053819"
+        forumURL = "https://myanimelist.net/forum/?topicid=2053819",
+        titleRomanji = ""
     ),
     NetworkEpisode(
         malID = 4,
@@ -41,6 +44,7 @@ val chainsawManNetworkEpisodes = listOf(
         score = 4.6,
         filler = false,
         recap = false,
-        forumURL = "https://myanimelist.net/forum/?topicid=2055336"
+        forumURL = "https://myanimelist.net/forum/?topicid=2055336",
+        titleRomanji = ""
     )
 )

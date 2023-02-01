@@ -1,6 +1,7 @@
 package com.lelestacia.lelenimexml.core.data.di
 
 import android.content.Context
+import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import com.lelestacia.lelenimexml.core.data.impl.anime.AnimeRepository
 import com.lelestacia.lelenimexml.core.data.impl.anime.IAnimeRepository
 import com.lelestacia.lelenimexml.core.data.impl.character.CharacterRepository
@@ -8,7 +9,8 @@ import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
 import com.lelestacia.lelenimexml.core.data.impl.episode.EpisodeRepository
 import com.lelestacia.lelenimexml.core.data.impl.episode.IEpisodeRepository
 import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
-import com.lelestacia.lelenimexml.core.database.dao.*
+import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
+import com.lelestacia.lelenimexml.core.database.dao.EpisodeDao
 import com.lelestacia.lelenimexml.core.database.service.ICharacterDatabaseService
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkService
@@ -38,7 +40,7 @@ object RepositoryModule {
         AnimeRepository(
             apiService = apiService,
             animeDao = animeDao,
-            mContext = mContext
+            userPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
         )
 
     @Provides

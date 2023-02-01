@@ -11,6 +11,6 @@ interface CharacterVoiceActorCrossRefDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrReplaceCrossRef(crossRef: List<CharacterVoiceActorCrossRefEntity>)
 
-    @Query("SELECT * FROM character_voice_actor_cross_ref_table WHERE character_id =:characterID")
+    @Query("SELECT * FROM character_voice_actor_reference_table WHERE character_id =:characterID")
     fun getVoiceActorsByCharacterID(characterID: Int): List<CharacterVoiceActorCrossRefEntity>
 }

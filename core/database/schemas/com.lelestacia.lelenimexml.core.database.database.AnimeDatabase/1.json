@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "941884d8fcd22486124b8f1fa8f6a5ba",
+    "identityHash": "9ebedf707115209a47504bf4096ca6f4",
     "entities": [
       {
         "tableName": "anime_table",
@@ -193,7 +193,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "anime_characters_cross_ref_table",
+        "tableName": "anime_characters_reference_table",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`anime_id` INTEGER NOT NULL, `character_id` INTEGER NOT NULL, PRIMARY KEY(`anime_id`, `character_id`))",
         "fields": [
           {
@@ -276,7 +276,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "character_voice_actor_cross_ref_table",
+        "tableName": "character_voice_actor_reference_table",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`character_id` INTEGER NOT NULL, `voice_actor_id` INTEGER NOT NULL, PRIMARY KEY(`character_id`, `voice_actor_id`))",
         "fields": [
           {
@@ -366,7 +366,7 @@
       },
       {
         "tableName": "episode_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`episode_id` INTEGER NOT NULL, `anime_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `title_japanese` TEXT, `title_romanji` TEXT, `aired` TEXT, `score` REAL NOT NULL, `filler` INTEGER NOT NULL, `recap` INTEGER NOT NULL, `forum_url` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER, PRIMARY KEY(`episode_id`, `anime_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`episode_id` INTEGER NOT NULL, `anime_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `title_japanese` TEXT, `title_romanji` TEXT, `aired` TEXT, `score` REAL NOT NULL, `filler` INTEGER NOT NULL, `recap` INTEGER NOT NULL, `forum_url` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER, PRIMARY KEY(`episode_id`, `anime_id`), FOREIGN KEY(`anime_id`) REFERENCES `anime_table`(`anime_id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "episodeID",
@@ -449,7 +449,19 @@
           "autoGenerate": false
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "anime_table",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "anime_id"
+            ],
+            "referencedColumns": [
+              "anime_id"
+            ]
+          }
+        ]
       },
       {
         "tableName": "voice_actor_table",
@@ -505,7 +517,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '941884d8fcd22486124b8f1fa8f6a5ba')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9ebedf707115209a47504bf4096ca6f4')"
     ]
   }
 }

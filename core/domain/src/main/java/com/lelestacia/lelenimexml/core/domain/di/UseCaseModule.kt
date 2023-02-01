@@ -3,7 +3,6 @@ package com.lelestacia.lelenimexml.core.domain.di
 import com.lelestacia.lelenimexml.core.data.impl.anime.IAnimeRepository
 import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
 import com.lelestacia.lelenimexml.core.data.impl.episode.IEpisodeRepository
-import com.lelestacia.lelenimexml.core.domain.usecase.*
 import com.lelestacia.lelenimexml.core.domain.usecase.anime.AnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.anime.IAnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.character.CharacterUseCase

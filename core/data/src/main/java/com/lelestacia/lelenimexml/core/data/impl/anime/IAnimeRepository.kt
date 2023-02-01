@@ -13,6 +13,6 @@ interface IAnimeRepository {
     suspend fun insertAnimeToHistory(anime: Anime)
     fun getAllFavoriteAnime(): Flow<PagingData<Anime>>
     suspend fun updateAnimeFavorite(malID: Int)
-    fun isSafeMode(): Boolean
+    fun isNsfwMode(): Boolean
     fun changeSafeMode(isSafeMode: Boolean)
 }

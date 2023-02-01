@@ -1,6 +1,6 @@
 package com.lelestacia.lelenimexml.core.database.entity
 
-internal object Constant {
+internal object DatabaseConstant {
     const val IMAGE = "image"
     const val ANIME_ID = "anime_id"
     const val CHARACTER_ID = "character_id"

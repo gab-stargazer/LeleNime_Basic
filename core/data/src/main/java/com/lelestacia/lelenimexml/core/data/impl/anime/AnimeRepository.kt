@@ -1,13 +1,11 @@
 package com.lelestacia.lelenimexml.core.data.impl.anime
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.lelestacia.lelenimexml.core.common.Constant.IS_NSFW
-import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import com.lelestacia.lelenimexml.core.data.utility.asAnime
 import com.lelestacia.lelenimexml.core.data.utility.asNewEntity
 import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
@@ -16,20 +14,18 @@ import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
     private val apiService: IAnimeNetworkService,
     private val animeDao: AnimeDao,
-    mContext: Context,
+    private val userPreferences: SharedPreferences,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IAnimeRepository {
-
-    private val sharedPreferences: SharedPreferences = mContext
-        .getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
 
     override fun seasonAnimePagingData(): Flow<PagingData<Anime>> {
         return Pager(
@@ -48,7 +44,7 @@ class AnimeRepository @Inject constructor(
     }
 
     override fun searchAnimeByTitle(query: String): Flow<PagingData<Anime>> {
-        val isSafeMode = sharedPreferences.getBoolean(IS_NSFW, false)
+        val isNsfw = isNsfwMode()
         return Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -57,7 +53,7 @@ class AnimeRepository @Inject constructor(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                apiService.searchAnimeByTitle(query, isSafeMode)
+                apiService.searchAnimeByTitle(query, isNsfw)
             }
         ).flow.map { pagingData ->
             pagingData.map { it.asAnime() }
@@ -130,12 +126,12 @@ class AnimeRepository @Inject constructor(
         }
     }
 
-    override fun isSafeMode(): Boolean {
-        return sharedPreferences.getBoolean(IS_NSFW, false)
+    override fun isNsfwMode(): Boolean {
+        return userPreferences.getBoolean(IS_NSFW, false)
     }
 
     override fun changeSafeMode(isSafeMode: Boolean) {
-        sharedPreferences
+        userPreferences
             .edit()
             .putBoolean(IS_NSFW, isSafeMode)
             .apply()

@@ -20,7 +20,7 @@ class AnimeUseCase @Inject constructor(
         animeRepository.updateAnimeFavorite(malID)
     }
 
-    override fun isSafeMode(): Boolean = animeRepository.isSafeMode()
+    override fun isSafeMode(): Boolean = animeRepository.isNsfwMode()
 
     override fun changeSafeMode(isSafeMode: Boolean) {
         animeRepository.changeSafeMode(isSafeMode)

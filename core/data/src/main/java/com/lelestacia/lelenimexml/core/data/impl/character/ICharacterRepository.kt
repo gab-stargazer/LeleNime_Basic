@@ -6,6 +6,6 @@ import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import kotlinx.coroutines.flow.Flow
 
 interface ICharacterRepository {
-    fun getAnimeCharactersById(animeID: Int): Flow<Resource<List<Character>>>
+    fun getAnimeCharactersByAnimeID(animeID: Int): Flow<Resource<List<Character>>>
     fun getCharacterDetailById(characterID: Int): Flow<Resource<CharacterDetail>>
 }

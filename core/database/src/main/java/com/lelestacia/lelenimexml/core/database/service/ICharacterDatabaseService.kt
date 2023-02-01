@@ -1,6 +1,6 @@
 package com.lelestacia.lelenimexml.core.database.service
 
-import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeCharacterCrossRefEntity
+import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeCharacterReferenceEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterProfile
@@ -11,11 +11,11 @@ interface ICharacterDatabaseService {
     suspend fun insertCharactersAndVoiceActors(
         characters: List<CharacterEntity>,
         voiceActors: List<VoiceActorEntity>,
-        animeCharactersCrossRef: List<AnimeCharacterCrossRefEntity>,
+        animeCharactersCrossRef: List<AnimeCharacterReferenceEntity>,
         characterVoiceActorsCrossRef: List<CharacterVoiceActorCrossRefEntity>
     )
     suspend fun insertOrUpdateAdditionalInformation(characterInformationEntity: CharacterInformationEntity)
-    suspend fun getCharactersByAnimeID(animeID: Int): List<AnimeCharacterCrossRefEntity>
+    suspend fun getCharactersByAnimeID(animeID: Int): List<AnimeCharacterReferenceEntity>
     suspend fun getCharactersByCharacterID(characterID: List<Int>): List<CharacterEntity>
     suspend fun getVoiceActorsByCharacterID(characterID: List<Int>): List<VoiceActorEntity>
     suspend fun getCharacterAdditionalInformationById(characterId: Int): CharacterInformationEntity?

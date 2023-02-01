@@ -3,15 +3,20 @@ package com.lelestacia.lelenimexml.core.database.entity.character
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
+import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.CHARACTER_ID
+import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.CREATED_AT
+import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.UPDATED_AT
+import java.util.Date
 
-@Entity(tableName = "character_information_table")
+@Entity(
+    tableName = "character_information_table",
+)
 data class CharacterInformationEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Int = 0,
 
-    @ColumnInfo(name = "character_id")
+    @ColumnInfo(name = CHARACTER_ID)
     val characterID: Int,
 
     @ColumnInfo(name = "kanji_name")
@@ -26,9 +31,9 @@ data class CharacterInformationEntity(
     @ColumnInfo(name = "story")
     val characterInformation: String,
 
-    @ColumnInfo(name = "created_at")
+    @ColumnInfo(name = CREATED_AT)
     val createdAt: Date,
 
-    @ColumnInfo(name = "updated_at")
+    @ColumnInfo(name = UPDATED_AT)
     val updatedAt: Date?,
 )

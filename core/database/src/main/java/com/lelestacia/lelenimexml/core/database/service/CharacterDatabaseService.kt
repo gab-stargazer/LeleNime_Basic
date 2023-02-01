@@ -4,7 +4,7 @@ import com.lelestacia.lelenimexml.core.database.dao.AnimeCharacterCrossRefDao
 import com.lelestacia.lelenimexml.core.database.dao.CharacterDao
 import com.lelestacia.lelenimexml.core.database.dao.CharacterVoiceActorCrossRefDao
 import com.lelestacia.lelenimexml.core.database.dao.VoiceActorDao
-import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeCharacterCrossRefEntity
+import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeCharacterReferenceEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterProfile
@@ -13,7 +13,7 @@ import com.lelestacia.lelenimexml.core.database.entity.voice_actor.VoiceActorEnt
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.Date
 
 class CharacterDatabaseService(
     private val animeCharactersCrossRefDao: AnimeCharacterCrossRefDao,
@@ -26,7 +26,7 @@ class CharacterDatabaseService(
     override suspend fun insertCharactersAndVoiceActors(
         characters: List<CharacterEntity>,
         voiceActors: List<VoiceActorEntity>,
-        animeCharactersCrossRef: List<AnimeCharacterCrossRefEntity>,
+        animeCharactersCrossRef: List<AnimeCharacterReferenceEntity>,
         characterVoiceActorsCrossRef: List<CharacterVoiceActorCrossRefEntity>
     ) {
         withContext(ioDispatcher) {
@@ -43,7 +43,7 @@ class CharacterDatabaseService(
         }
     }
 
-    override suspend fun getCharactersByAnimeID(animeID: Int): List<AnimeCharacterCrossRefEntity> {
+    override suspend fun getCharactersByAnimeID(animeID: Int): List<AnimeCharacterReferenceEntity> {
         return withContext(ioDispatcher) {
             animeCharactersCrossRefDao.getCharactersByAnimeID(animeID = animeID)
         }

@@ -2,7 +2,7 @@ package com.lelestacia.lelenimexml.core.data.impl.character
 
 import com.lelestacia.lelenimexml.core.common.Resource
 import com.lelestacia.lelenimexml.core.data.utility.*
-import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeCharacterCrossRefEntity
+import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeCharacterReferenceEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterVoiceActorCrossRefEntity
@@ -14,10 +14,8 @@ import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkS
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
-import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -29,15 +27,12 @@ class CharacterRepository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ICharacterRepository {
 
-    override fun getAnimeCharactersById(animeID: Int): Flow<Resource<List<Character>>> =
+    override fun getAnimeCharactersByAnimeID(animeID: Int): Flow<Resource<List<Character>>> =
         flow<Resource<List<Character>>> {
-            val animeCharactersCrossRef: List<AnimeCharacterCrossRefEntity> =
+            val animeCharactersCrossRef: List<AnimeCharacterReferenceEntity> =
                 characterDatabaseService.getCharactersByAnimeID(animeID = animeID)
 
             if (animeCharactersCrossRef.isEmpty()) {
-                Timber
-                    .tag("getAnimeCharactersById")
-                    .d("Fetching new data because the local data is empty")
 
                 val apiResponse: List<NetworkCharacter> =
                     apiService.getCharactersByAnimeID(animeID = animeID)
@@ -45,11 +40,10 @@ class CharacterRepository @Inject constructor(
                 if (apiResponse.isEmpty()) {
 
                     /*
-                     *  Returning here, because since the api doesn't return anything,
+                     *  Returning here, because since the API doesn't return anything,
                      *  that means the data on the server are also empty
                      */
 
-                    delay(500)
                     emit(Resource.Success(data = emptyList()))
                     return@flow
                 }
@@ -66,7 +60,7 @@ class CharacterRepository @Inject constructor(
                         pair.second
                     }.flatten(),
                     animeCharactersCrossRef = apiResponse.map { networkCharacter ->
-                        AnimeCharacterCrossRefEntity(
+                        AnimeCharacterReferenceEntity(
                             animeID = animeID,
                             characterID = networkCharacter.characterData.malID
                         )
@@ -107,10 +101,6 @@ class CharacterRepository @Inject constructor(
             val isDataOutDated = (TimeUnit.MILLISECONDS.toHours(timeDifference) % 24).toInt() > 24
 
             if (isDataOutDated) {
-                Timber
-                    .tag("getAnimeCharactersById")
-                    .d("Fetching new data because the local data is outdated")
-
                 val apiResponse = apiService.getCharactersByAnimeID(animeID = animeID)
 
                 val newCharacters: List<CharacterEntity> =
@@ -174,11 +164,13 @@ class CharacterRepository @Inject constructor(
                         updatedAt = Date()
                     ) ?: newEntities
 
-                characterDatabaseService.insertOrUpdateAdditionalInformation(characterInformationEntity = localCharacter)
-                delay(500)
+                characterDatabaseService.insertOrUpdateAdditionalInformation(
+                    characterInformationEntity = localCharacter
+                )
             }
 
-            val fullInformation = characterDatabaseService.getCharacterFullProfile(characterID = characterID)
+            val fullInformation =
+                characterDatabaseService.getCharacterFullProfile(characterID = characterID)
             emit(Resource.Success(data = fullInformation.asCharacterDetail()))
         }.onStart {
             emit(Resource.Loading)

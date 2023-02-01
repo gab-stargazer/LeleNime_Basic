@@ -44,6 +44,4 @@ class CharacterRepositoryTest {
     fun tearDown() {
         Dispatchers.resetMain()
     }
-
-
 }

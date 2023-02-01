@@ -104,9 +104,9 @@ class DetailAnimeFragment :
                         if (anime.season.isNullOrEmpty()) getText(null)
                         else getText(
                             "${
-                                (anime.season as String).replaceFirstChar { firstChar ->
-                                    firstChar.uppercase()
-                                }
+                            (anime.season as String).replaceFirstChar { firstChar ->
+                                firstChar.uppercase()
+                            }
                             } ${anime.year}"
                         )
 
@@ -117,7 +117,6 @@ class DetailAnimeFragment :
                         } else {
                             getText("${parser(anime.startedDate)} - ${parser(anime.finishedDate)}")
                         }
-
 
                     tvSynopsis.text = anime.synopsis
                         ?: getString(R.string.no_information_by_mal)

@@ -3,11 +3,11 @@ package com.lelestacia.lelenimexml.core.database.entity.character
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.lelestacia.lelenimexml.core.database.entity.Constant.CHARACTER_ID
-import com.lelestacia.lelenimexml.core.database.entity.Constant.CREATED_AT
-import com.lelestacia.lelenimexml.core.database.entity.Constant.IMAGE
-import com.lelestacia.lelenimexml.core.database.entity.Constant.UPDATED_AT
-import java.util.*
+import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.CHARACTER_ID
+import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.CREATED_AT
+import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.IMAGE
+import com.lelestacia.lelenimexml.core.database.entity.DatabaseConstant.UPDATED_AT
+import java.util.Date
 
 @Entity(tableName = "character_table")
 data class CharacterEntity(

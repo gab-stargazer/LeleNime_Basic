@@ -2,7 +2,12 @@ package com.lelestacia.lelenimexml.core.database.di
 
 import android.content.Context
 import androidx.room.Room
-import com.lelestacia.lelenimexml.core.database.dao.*
+import com.lelestacia.lelenimexml.core.database.dao.AnimeDao
+import com.lelestacia.lelenimexml.core.database.dao.AnimeCharacterCrossRefDao
+import com.lelestacia.lelenimexml.core.database.dao.CharacterDao
+import com.lelestacia.lelenimexml.core.database.dao.CharacterVoiceActorCrossRefDao
+import com.lelestacia.lelenimexml.core.database.dao.EpisodeDao
+import com.lelestacia.lelenimexml.core.database.dao.VoiceActorDao
 import com.lelestacia.lelenimexml.core.database.database.AnimeDatabase
 import dagger.Module
 import dagger.Provides

@@ -77,55 +77,57 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
 
         rvAnime.apply {
             layoutManager = myLayoutManager
-            adapter = animeAdapter.withLoadStateFooter(footer = FooterLoadStateAdapter {
+            adapter = animeAdapter.withLoadStateFooter(
+                footer = FooterLoadStateAdapter {
                     animeAdapter.retry()
-                })
+                }
+            )
             addItemDecoration(DividerItemDecoration(context, myLayoutManager.orientation))
             setHasFixedSize(true)
         }
 
         animeAdapter.loadStateFlow.asLiveData().observe(viewLifecycleOwner) { loadState ->
-                with(loadState.refresh) {
-                    when (this) {
-                        LoadState.Loading -> {
-                            binding.showError(
-                                isError = false, errorMessage = null
-                            )
-                            binding.showNotFound(isNotFound = false)
+            with(loadState.refresh) {
+                when (this) {
+                    LoadState.Loading -> {
+                        binding.showError(
+                            isError = false, errorMessage = null
+                        )
+                        binding.showNotFound(isNotFound = false)
 
-                            if (animeAdapter.itemCount == 0) {
-                                binding.showLoading(isLoading = true)
-                                return@observe
-                            }
-
-                            Snackbar.make(
-                                binding.root, getString(R.string.loading), Snackbar.LENGTH_SHORT
-                            ).show()
+                        if (animeAdapter.itemCount == 0) {
+                            binding.showLoading(isLoading = true)
+                            return@observe
                         }
 
-                        is LoadState.NotLoading -> {
-                            binding.showLoading(isLoading = false)
-                            if (animeAdapter.itemCount == 0) binding.showNotFound(isNotFound = true)
-                        }
+                        Snackbar.make(
+                            binding.root, getString(R.string.loading), Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
 
-                        is LoadState.Error -> {
-                            binding.showLoading(isLoading = false)
-                            binding.showError(
-                                isError = true, errorMessage = error.localizedMessage
-                            )
-                        }
+                    is LoadState.NotLoading -> {
+                        binding.showLoading(isLoading = false)
+                        if (animeAdapter.itemCount == 0) binding.showNotFound(isNotFound = true)
+                    }
+
+                    is LoadState.Error -> {
+                        binding.showLoading(isLoading = false)
+                        binding.showError(
+                            isError = true, errorMessage = error.localizedMessage
+                        )
                     }
                 }
             }
+        }
 
         val viewLifecycle = viewLifecycleOwner.lifecycle
         viewModel.getAnimeData.observe(viewLifecycleOwner) { animePagingData ->
-                animeAdapter.submitData(viewLifecycle, animePagingData)
-            }
+            animeAdapter.submitData(viewLifecycle, animePagingData)
+        }
 
         screenError.btnRetry.setOnClickListener {
-                animeAdapter.refresh()
-            }
+            animeAdapter.refresh()
+        }
     }
 
     private fun FragmentAnimeBinding.showLoading(isLoading: Boolean) {
@@ -153,9 +155,9 @@ class AnimeFragment : Fragment(R.layout.fragment_anime), MenuProvider, View.OnCl
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                        view?.windowToken,
-                        0
-                    )
+                    view?.windowToken,
+                    0
+                )
                 viewModel.insertNewSearchQuery(query)
                 binding.rvAnime.smoothScrollToPosition(0)
                 return true

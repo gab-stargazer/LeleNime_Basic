@@ -8,7 +8,7 @@ import com.lelestacia.lelenimexml.core.model.character.Character
 import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterDetail
-import java.util.*
+import java.util.Date
 
 fun NetworkCharacterDetail.asNewEntity(): CharacterInformationEntity =
     CharacterInformationEntity(
@@ -48,7 +48,7 @@ fun NetworkCharacter.asCharacterWithVoiceActorEntities(): Pair<Int, List<VoiceAc
 }
 
 fun NetworkCharacter.asNewVoiceActor(): List<VoiceActorEntity> {
-    return voiceActors.map {networkVoiceActor ->
+    return voiceActors.map { networkVoiceActor ->
         VoiceActorEntity(
             voiceActorID = networkVoiceActor.person.malID,
             image = networkVoiceActor.person.image.jpg.imageUrl,

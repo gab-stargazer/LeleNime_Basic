@@ -30,5 +30,4 @@ interface CharacterDao {
 
     @Update
     suspend fun updateCharacters(characters: List<CharacterEntity>)
-
 }
