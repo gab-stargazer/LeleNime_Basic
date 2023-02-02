@@ -23,21 +23,23 @@
         android:id="@+id/rv_episode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:contentDescription="@string/list_of_anime_characters"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@+id/tv_header_episode"
         tools:itemCount="1"
         tools:listitem="@layout/item_card_episode" />
 
     <include
-        layout="@layout/item_card_episode_loading"
         android:id="@+id/rv_episode_loading"
+        layout="@layout/item_card_episode_loading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_header_episode"/>
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_header_episode"
+        tools:visibility="visible" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_error_message"
@@ -52,7 +54,8 @@
         app:layout_constraintTop_toTopOf="@id/rv_episode"
         app:layout_constraintVertical_chainStyle="packed"
         tools:layout_editor_absoluteX="24dp"
-        tools:text="No Internet Connection" />
+        tools:text="No Internet Connection"
+        tools:visibility="gone" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_retry"
@@ -66,5 +69,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_error_message"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:visibility="gone" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_update"
+        style="@style/Widget.Material3.CircularProgressIndicator.ExtraSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/tv_header_episode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_header_episode"
+        tools:visibility="visible" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_error_bottom"
+        style="@style/TextAppearance.Material3.BodyMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="4dp"
+        android:textColor="?android:attr/textColorPrimary"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/rv_episode"
+        tools:text="Failed to Update Data"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

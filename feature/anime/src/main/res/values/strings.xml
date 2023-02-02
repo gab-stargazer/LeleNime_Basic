@@ -45,4 +45,5 @@
     <string name="fetching_data_please_wait">Fetching Data, Please Wait</string>
     <string name="season">Season</string>
     <string name="list_of_anime_characters">List of anime characters</string>
+    <string name="episodes_updated">Data is successfully updated</string>
 </resources>

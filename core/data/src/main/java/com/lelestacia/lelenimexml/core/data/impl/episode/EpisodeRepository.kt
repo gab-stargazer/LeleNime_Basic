@@ -11,9 +11,7 @@ import com.lelestacia.lelenimexml.core.database.service.IEpisodeDatabaseService
 import com.lelestacia.lelenimexml.core.model.episode.Episode
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import com.lelestacia.lelenimexml.core.network.model.episodes.NetworkEpisode
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -45,14 +43,23 @@ class EpisodeRepository @Inject constructor(
      *          - 1 Hour if the anime is On Going
      *          - 1 Day if the anime was finished airing
      *      4. Function will determine whether it should pull new data / new data from network or not
-     *      5. If it's making a network call, it will insert the data with the correct timestamp tobe used again for the latter use
+     *      5. If it's making a network call, it will insert the data with the correct
+     *         timestamp tobe used again for the latter use
      */
 
+    private var temporaryEpisodeEntities: List<EpisodeEntity> = emptyList()
+
     override fun getEpisodesByAnimeID(animeID: Int): Flow<Resource<List<Episode>>> =
-        flow<Resource<List<Episode>>> {
+        flow {
             var localEpisodes: List<EpisodeEntity> = episodeDatabaseService
                 .getEpisodesByAnimeID(animeID = animeID)
-            val isLocalEpisodeEmpty = localEpisodes.isEmpty()
+            val isLocalEpisodeEmpty: Boolean = localEpisodes.isEmpty()
+            if (!isLocalEpisodeEmpty) {
+                temporaryEpisodeEntities = localEpisodes
+                val episodes: List<Episode> = localEpisodes.map { it.asEpisode() }
+                emit(Resource.Success(data = episodes))
+            }
+
             val oldestUpdate: Long =
                 if (isLocalEpisodeEmpty) 0
                 else {
@@ -63,10 +70,10 @@ class EpisodeRepository @Inject constructor(
 
             val anime: AnimeEntity =
                 animeDatabaseService.getAnimeByAnimeID(animeID = animeID) as AnimeEntity
-            val animeEpisodeCount = anime.episodes ?: 0
+            val animeEpisodeCount: Int = anime.episodes ?: 0
             Timber.d("${anime.title} has $animeEpisodeCount episodes")
-            val isAnimeOnlyOneEpisode = animeEpisodeCount == 1
-            val isAnimeOnGoing = anime.status == "Currently Airing"
+            val isAnimeOnlyOneEpisode: Boolean = animeEpisodeCount == 1
+            val isAnimeOnGoing: Boolean = anime.status == "Currently Airing"
 
             if (isAnimeOnlyOneEpisode) {
                 Timber.d("Anime only has 1 episode, therefor no data should be fetched")
@@ -77,20 +84,21 @@ class EpisodeRepository @Inject constructor(
             val timeDifference: Long = Date().time - oldestUpdate
             val isDataOutDated: Boolean =
                 if (isAnimeOnGoing) {
-                    val differenceInMinutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference) % 60
+                    val differenceInMinutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference)
                     Timber.d("Difference is $differenceInMinutes Minutes")
                     differenceInMinutes.toInt() > 60
                 } else {
-                    val differenceInHours = TimeUnit.MILLISECONDS.toHours(timeDifference) % 24
+                    val differenceInHours = TimeUnit.MILLISECONDS.toHours(timeDifference)
                     Timber.d("Difference is $differenceInHours Hours")
                     differenceInHours.toInt() > 24
                 }
 
-            val shouldFetchNetwork =
+            val shouldFetchNetwork: Boolean =
                 isLocalEpisodeEmpty || isDataOutDated
             if (shouldFetchNetwork) {
-                Timber.d("Episode is fetched from the network")
-                delay(500)
+                emit(Resource.Loading)
+                Timber.d("Episode is being fetch from the network")
+
                 val apiResponse = animeApiService.getAnimeEpisodesByAnimeID(animeID = animeID)
                 val newEpisodeEntities: List<EpisodeEntity> = apiResponse
                     .map { networkEpisode: NetworkEpisode ->
@@ -115,14 +123,22 @@ class EpisodeRepository @Inject constructor(
                     }
 
                 episodeDatabaseService.insertOrUpdateEpisodes(episodes = localEpisodes)
+                val episodes: List<Episode> = localEpisodes.map { it.asEpisode() }
+                emit(Resource.Success(data = episodes))
             }
-
-            val episodes = localEpisodes.map { it.asEpisode() }
-            emit(Resource.Success(data = episodes))
         }.catch { t ->
+            val episodes: List<Episode>? =
+                if (temporaryEpisodeEntities.isEmpty()) null
+                else temporaryEpisodeEntities.map { it.asEpisode() }
+
             when (t) {
-                is HttpException -> emit(Resource.Error(data = null, message = errorParserUtil(t)))
-                else -> emit(Resource.Error(data = null, message = "Error: ${t.message}"))
+                is HttpException -> emit(
+                    Resource.Error(
+                        data = episodes,
+                        message = errorParserUtil(t)
+                    )
+                )
+                else -> emit(Resource.Error(data = episodes, message = "Error: ${t.message}"))
             }
         }.onStart { emit(Resource.Loading) }.flowOn(ioDispatcher)
 }

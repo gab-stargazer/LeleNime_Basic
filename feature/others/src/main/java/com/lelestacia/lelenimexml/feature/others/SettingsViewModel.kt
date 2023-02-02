@@ -10,7 +10,7 @@ class SettingsViewModel @Inject constructor(
     private val animeUseCase: AnimeUseCase
 ) : ViewModel() {
     fun isSafeMode() = animeUseCase.isSafeMode()
-    fun changeSafeMode(isSafeMode: Boolean) {
-        animeUseCase.changeSafeMode(isSafeMode)
+    fun changeSafeMode(isNsfwMode: Boolean) {
+        animeUseCase.changeSafeMode(isNsfwMode)
     }
 }

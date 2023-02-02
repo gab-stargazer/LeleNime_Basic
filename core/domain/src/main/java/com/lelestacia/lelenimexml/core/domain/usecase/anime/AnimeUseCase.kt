@@ -22,7 +22,7 @@ class AnimeUseCase @Inject constructor(
 
     override fun isSafeMode(): Boolean = animeRepository.isNsfwMode()
 
-    override fun changeSafeMode(isSafeMode: Boolean) {
-        animeRepository.changeSafeMode(isSafeMode)
+    override fun changeSafeMode(isNsfw: Boolean) {
+        animeRepository.changeSafeMode(isNsfw)
     }
 }

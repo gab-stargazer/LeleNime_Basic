@@ -8,5 +8,5 @@ interface IAnimeUseCase {
     suspend fun insertOrUpdateNewAnimeToHistory(anime: Anime)
     suspend fun updateAnimeFavorite(malID: Int)
     fun isSafeMode(): Boolean
-    fun changeSafeMode(isSafeMode: Boolean)
+    fun changeSafeMode(isNsfw: Boolean)
 }

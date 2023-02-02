@@ -126,10 +126,10 @@ class AnimeRepository @Inject constructor(
         return userPreferences.getBoolean(IS_NSFW, false)
     }
 
-    override fun changeSafeMode(isSafeMode: Boolean) {
+    override fun changeSafeMode(isNsfw: Boolean) {
         userPreferences
             .edit()
-            .putBoolean(IS_NSFW, isSafeMode)
+            .putBoolean(IS_NSFW, isNsfw)
             .apply()
     }
 }

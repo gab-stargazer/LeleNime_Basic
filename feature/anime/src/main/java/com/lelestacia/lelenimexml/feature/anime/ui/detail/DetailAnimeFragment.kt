@@ -32,6 +32,7 @@ import com.lelestacia.lelenimexml.feature.anime.ui.adapter.EpisodeAdapter
 import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.transformers.coil.BlurTransformation
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class DetailAnimeFragment :
@@ -104,9 +105,9 @@ class DetailAnimeFragment :
                         if (anime.season.isNullOrEmpty()) getText(null)
                         else getText(
                             "${
-                            (anime.season as String).replaceFirstChar { firstChar ->
-                                firstChar.uppercase()
-                            }
+                                (anime.season as String).replaceFirstChar { firstChar ->
+                                    firstChar.uppercase()
+                                }
                             } ${anime.year}"
                         )
 
@@ -149,11 +150,29 @@ class DetailAnimeFragment :
             viewModel.episodes.collect { result: Resource<List<Episode>> ->
                 when (result) {
                     is Resource.Error -> {
-                        TransitionManager.beginDelayedTransition(
-                            binding.root,
-                            AutoTransition()
-                        )
-                        episodeSection.rvEpisodeLoading.root.visibility = View.GONE
+                        val isDataNull = result.data.isNullOrEmpty()
+                        if (!isDataNull) {
+                            episodeAdapter.submitList(result.data)
+                            val isPlaceholderPresent =
+                                episodeSection.rvEpisodeLoading.root.visibility == View.VISIBLE
+                            TransitionManager.beginDelayedTransition(binding.root)
+                            episodeSection.rvEpisode.visibility = View.VISIBLE
+                            if (isPlaceholderPresent) {
+                                episodeSection.rvEpisodeLoading.root.visibility = View.GONE
+                            }
+                            episodeSection.progressUpdate.visibility = View.INVISIBLE
+                            episodeSection.tvErrorBottom.apply {
+                                text = result.message
+                                visibility = View.VISIBLE
+                            }
+                            delay(5000)
+                            TransitionManager.beginDelayedTransition(binding.root)
+                            episodeSection.tvErrorBottom.visibility = View.GONE
+                            return@collect
+                        }
+
+                        TransitionManager.beginDelayedTransition(binding.root)
+                        episodeSection.rvEpisodeLoading.root.visibility = View.INVISIBLE
                         episodeSection.tvErrorMessage.apply {
                             text = result.message
                             visibility = View.VISIBLE
@@ -164,37 +183,56 @@ class DetailAnimeFragment :
                                 viewModel.getEpisodesByAnimeID(animeID = args.malID)
                             }
                         }
-                        TransitionManager.endTransitions(binding.root)
                     }
                     is Resource.Success -> {
+                        val isPlaceholderPresent =
+                            episodeSection.rvEpisodeLoading.root.visibility == View.VISIBLE
                         val episodes = result.data ?: emptyList()
-                        if (episodes.isEmpty()) {
+                        if (isPlaceholderPresent && episodes.isEmpty()) {
                             TransitionManager.beginDelayedTransition(binding.root)
                             episodeSection.root.visibility = View.GONE
-                            TransitionManager.endTransitions(binding.root)
-                        } else {
+                            return@collect
+                        }
+
+                        if (isPlaceholderPresent) {
                             TransitionManager.beginDelayedTransition(
-                                binding.root,
+                                episodeSection.rvEpisodeLoading.root,
                                 AutoTransition()
                             )
-                            episodeAdapter.submitList(result.data)
+                            episodeAdapter.submitList(episodes)
                             episodeSection.rvEpisode.visibility = View.VISIBLE
                             episodeSection.rvEpisodeLoading.root.visibility = View.GONE
-                            TransitionManager.endTransitions(binding.root)
+                            return@collect
                         }
+
+                        TransitionManager.beginDelayedTransition(binding.root)
+                        episodeSection.progressUpdate.visibility = View.GONE
+                        episodeSection.tvErrorBottom.apply {
+                            text = getString(R.string.episodes_updated)
+                            visibility = View.VISIBLE
+                        }
+                        delay(5000)
+                        TransitionManager.beginDelayedTransition(binding.root)
+                        episodeSection.tvErrorBottom.visibility = View.GONE
                     }
-                    Resource.Loading -> {
-                        val isBtnRetryVisibile = episodeSection.btnRetry.visibility == View.VISIBLE
-                        if (isBtnRetryVisibile) {
+                    is Resource.Loading -> {
+                        val isEpisodesExist = episodeAdapter.itemCount > 0
+                        if (isEpisodesExist) {
                             TransitionManager.beginDelayedTransition(
-                                binding.root,
-                                AutoTransition()
+                                episodeSection.root,
+                                AutoTransition().excludeTarget(
+                                    episodeSection.rvEpisodeLoading.root,
+                                    true
+                                )
                             )
-                            episodeSection.tvErrorMessage.visibility = View.GONE
-                            episodeSection.btnRetry.visibility = View.GONE
-                            episodeSection.rvEpisodeLoading.root.visibility = View.VISIBLE
-                            TransitionManager.endTransitions(binding.root)
+                            episodeSection.progressUpdate.visibility = View.VISIBLE
+                            return@collect
                         }
+
+                        TransitionManager.beginDelayedTransition(episodeSection.root)
+                        episodeSection.rvEpisodeLoading.root.visibility = View.VISIBLE
+                        episodeSection.btnRetry.visibility = View.GONE
+                        episodeSection.tvErrorMessage.visibility = View.GONE
                     }
                     else -> Unit
                 }
