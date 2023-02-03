@@ -53,15 +53,15 @@ class EpisodeRepository @Inject constructor(
         flow {
             var localEpisodes: List<EpisodeEntity> = episodeDatabaseService
                 .getEpisodesByAnimeID(animeID = animeID)
-            val isLocalEpisodeEmpty: Boolean = localEpisodes.isEmpty()
-            if (!isLocalEpisodeEmpty) {
+
+            if (localEpisodes.isNotEmpty()) {
                 temporaryEpisodeEntities = localEpisodes
                 val episodes: List<Episode> = localEpisodes.map { it.asEpisode() }
                 emit(Resource.Success(data = episodes))
             }
 
             val oldestUpdate: Long =
-                if (isLocalEpisodeEmpty) 0
+                if (localEpisodes.isEmpty()) 0
                 else {
                     localEpisodes.minOf { episodes ->
                         (episodes.updatedAt ?: episodes.createdAt).time
@@ -73,7 +73,6 @@ class EpisodeRepository @Inject constructor(
             val animeEpisodeCount: Int = anime.episodes ?: 0
             Timber.d("${anime.title} has $animeEpisodeCount episodes")
             val isAnimeOnlyOneEpisode: Boolean = animeEpisodeCount == 1
-            val isAnimeOnGoing: Boolean = anime.status == "Currently Airing"
 
             if (isAnimeOnlyOneEpisode) {
                 Timber.d("Anime only has 1 episode, therefor no data should be fetched")
@@ -81,20 +80,12 @@ class EpisodeRepository @Inject constructor(
                 return@flow
             }
 
-            val timeDifference: Long = Date().time - oldestUpdate
-            val isDataOutDated: Boolean =
-                if (isAnimeOnGoing) {
-                    val differenceInMinutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference)
-                    Timber.d("Difference is $differenceInMinutes Minutes")
-                    differenceInMinutes.toInt() > 60
-                } else {
-                    val differenceInHours = TimeUnit.MILLISECONDS.toHours(timeDifference)
-                    Timber.d("Difference is $differenceInHours Hours")
-                    differenceInHours.toInt() > 24
-                }
-
             val shouldFetchNetwork: Boolean =
-                isLocalEpisodeEmpty || isDataOutDated
+                localEpisodes.isEmpty() || isLocalDataOutdated(
+                    anime = anime,
+                    oldestUpdate = oldestUpdate
+                )
+
             if (shouldFetchNetwork) {
                 emit(Resource.Loading)
                 Timber.d("Episode is being fetch from the network")
@@ -106,7 +97,7 @@ class EpisodeRepository @Inject constructor(
                     }
 
                 localEpisodes =
-                    if (isLocalEpisodeEmpty) {
+                    if (localEpisodes.isEmpty()) {
                         Timber.d("Local Episodes replaced")
                         newEpisodeEntities
                     } else {
@@ -131,6 +122,8 @@ class EpisodeRepository @Inject constructor(
                 if (temporaryEpisodeEntities.isEmpty()) null
                 else temporaryEpisodeEntities.map { it.asEpisode() }
 
+            temporaryEpisodeEntities = emptyList()
+
             when (t) {
                 is HttpException -> emit(
                     Resource.Error(
@@ -141,4 +134,21 @@ class EpisodeRepository @Inject constructor(
                 else -> emit(Resource.Error(data = episodes, message = "Error: ${t.message}"))
             }
         }.onStart { emit(Resource.Loading) }.flowOn(ioDispatcher)
+
+    private fun isLocalDataOutdated(anime: AnimeEntity, oldestUpdate: Long): Boolean {
+        val isAnimeOnGoing: Boolean = anime.airing
+        val timeDifference: Long = Date().time - oldestUpdate
+        val isOutdated: Boolean =
+            if (isAnimeOnGoing) {
+                val differenceInMinutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference)
+                Timber.d("Difference is $differenceInMinutes Minutes")
+                differenceInMinutes.toInt() > 60
+            } else {
+                val differenceInHours = TimeUnit.MILLISECONDS.toHours(timeDifference)
+                Timber.d("Difference is $differenceInHours Hours")
+                differenceInHours.toInt() > 24
+            }
+
+        return isOutdated
+    }
 }

@@ -151,38 +151,39 @@ class DetailAnimeFragment :
                 when (result) {
                     is Resource.Error -> {
                         val isDataNull = result.data.isNullOrEmpty()
-                        if (!isDataNull) {
-                            episodeAdapter.submitList(result.data)
-                            val isPlaceholderPresent =
-                                episodeSection.rvEpisodeLoading.root.visibility == View.VISIBLE
+
+                        if (isDataNull) {
                             TransitionManager.beginDelayedTransition(binding.root)
-                            episodeSection.rvEpisode.visibility = View.VISIBLE
-                            if (isPlaceholderPresent) {
-                                episodeSection.rvEpisodeLoading.root.visibility = View.GONE
-                            }
-                            episodeSection.progressUpdate.visibility = View.INVISIBLE
-                            episodeSection.tvErrorBottom.apply {
+                            episodeSection.rvEpisodeLoading.root.visibility = View.INVISIBLE
+                            episodeSection.tvErrorMessage.apply {
                                 text = result.message
                                 visibility = View.VISIBLE
                             }
-                            delay(5000)
-                            TransitionManager.beginDelayedTransition(binding.root)
-                            episodeSection.tvErrorBottom.visibility = View.GONE
+                            episodeSection.btnRetry.apply {
+                                visibility = View.VISIBLE
+                                setOnClickListener {
+                                    viewModel.getEpisodesByAnimeID(animeID = args.malID)
+                                }
+                            }
                             return@collect
                         }
 
+                        episodeAdapter.submitList(result.data)
+                        val isPlaceholderPresent =
+                            episodeSection.rvEpisodeLoading.root.visibility == View.VISIBLE
                         TransitionManager.beginDelayedTransition(binding.root)
-                        episodeSection.rvEpisodeLoading.root.visibility = View.INVISIBLE
-                        episodeSection.tvErrorMessage.apply {
+                        episodeSection.rvEpisode.visibility = View.VISIBLE
+                        if (isPlaceholderPresent) {
+                            episodeSection.rvEpisodeLoading.root.visibility = View.GONE
+                        }
+                        episodeSection.progressUpdate.visibility = View.INVISIBLE
+                        episodeSection.tvErrorBottom.apply {
                             text = result.message
                             visibility = View.VISIBLE
                         }
-                        episodeSection.btnRetry.apply {
-                            visibility = View.VISIBLE
-                            setOnClickListener {
-                                viewModel.getEpisodesByAnimeID(animeID = args.malID)
-                            }
-                        }
+                        delay(5000)
+                        TransitionManager.beginDelayedTransition(binding.root)
+                        episodeSection.tvErrorBottom.visibility = View.GONE
                     }
                     is Resource.Success -> {
                         val isPlaceholderPresent =

@@ -2,10 +2,7 @@ package com.lelestacia.lelenimexml
 
 import android.app.Application
 import android.content.Context
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
+import androidx.appcompat.app.AppCompatDelegate.*
 import com.lelestacia.lelenimexml.core.common.Constant.IS_DARK_MODE
 import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
 import dagger.hilt.android.HiltAndroidApp

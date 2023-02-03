@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.lelestacia.lelenimexml.core.database.entity.character.CharacterProfileAndVoiceActors
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterInformationEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterProfile
@@ -27,6 +28,10 @@ interface CharacterDao {
     @Transaction
     @Query("SELECT * FROM character_table WHERE character_id =:characterID")
     fun getCharacterFullProfile(characterID: Int): CharacterProfile
+
+    @Transaction
+    @Query("SELECT * FROM character_table WHERE character_id =:characterID")
+    fun getCharacterProfileAndVoiceActors(characterID: Int): CharacterProfileAndVoiceActors
 
     @Update
     suspend fun updateCharacters(characters: List<CharacterEntity>)
