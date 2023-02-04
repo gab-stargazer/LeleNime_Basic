@@ -123,7 +123,6 @@ class EpisodeRepository @Inject constructor(
                 else temporaryEpisodeEntities.map { it.asEpisode() }
 
             temporaryEpisodeEntities = emptyList()
-
             when (t) {
                 is HttpException -> emit(
                     Resource.Error(
@@ -138,7 +137,7 @@ class EpisodeRepository @Inject constructor(
     private fun isLocalDataOutdated(anime: AnimeEntity, oldestUpdate: Long): Boolean {
         val isAnimeOnGoing: Boolean = anime.airing
         val timeDifference: Long = Date().time - oldestUpdate
-        val isOutdated: Boolean =
+        val isOutdated = {
             if (isAnimeOnGoing) {
                 val differenceInMinutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference)
                 Timber.d("Difference is $differenceInMinutes Minutes")
@@ -148,7 +147,8 @@ class EpisodeRepository @Inject constructor(
                 Timber.d("Difference is $differenceInHours Hours")
                 differenceInHours.toInt() > 24
             }
+        }
 
-        return isOutdated
+        return isOutdated.invoke()
     }
 }

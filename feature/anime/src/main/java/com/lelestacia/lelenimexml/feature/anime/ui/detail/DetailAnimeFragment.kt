@@ -151,7 +151,6 @@ class DetailAnimeFragment :
                 when (result) {
                     is Resource.Error -> {
                         val isDataNull = result.data.isNullOrEmpty()
-
                         if (isDataNull) {
                             TransitionManager.beginDelayedTransition(binding.root)
                             episodeSection.rvEpisodeLoading.root.visibility = View.INVISIBLE

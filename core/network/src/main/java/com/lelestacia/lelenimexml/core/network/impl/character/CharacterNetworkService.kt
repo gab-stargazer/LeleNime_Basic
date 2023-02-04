@@ -17,17 +17,15 @@ class CharacterNetworkService @Inject constructor(
 ) : ICharacterNetworkService {
     override suspend fun getCharactersByAnimeID(animeID: Int): List<NetworkCharacter> {
         return withContext(ioDispatcher) {
-            val apiResponse = animeAPI.getCharactersByAnimeID(id = animeID).data
-            delay(750)
-            apiResponse
+            delay(1000)
+            animeAPI.getCharactersByAnimeID(id = animeID).data
         }
     }
 
     override suspend fun getCharacterDetailByCharacterID(characterID: Int): NetworkCharacterDetail {
         return withContext(ioDispatcher) {
-            val apiResponse = characterAPI.getCharacterDetailByCharacterID(id = characterID).data
-            delay(750)
-            apiResponse
+            delay(1000)
+            characterAPI.getCharacterDetailByCharacterID(id = characterID).data
         }
     }
 }

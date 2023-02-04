@@ -2,6 +2,7 @@ package com.lelestacia.lelenimexml.feature.anime.ui.bottom_sheet_character
 
 import android.os.Bundle
 import android.transition.AutoTransition
+import android.transition.Fade
 import android.transition.TransitionManager.beginDelayedTransition
 import android.transition.TransitionManager.endTransitions
 import android.view.View
@@ -21,6 +22,7 @@ import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.BottomSheetCharacterBinding
 import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class FragmentCharacterBottomSheet :
@@ -33,10 +35,25 @@ class FragmentCharacterBottomSheet :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getCharacterDetailByID(args.characterId)
+        val listOfState: MutableList<Resource<CharacterDetail>> = mutableListOf()
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.character.collect { resourceOfCharacter ->
+                listOfState.add(resourceOfCharacter)
+                val isThereData =
+                    listOfState
+                        .toList()
+                        .filter { it is Resource.Success }
+                isThereData.forEachIndexed { index , it ->
+                    Timber.d("Data [$index]: ${it.data}")
+                }
                 when (resourceOfCharacter) {
                     is Resource.Error -> {
+                        if (isThereData.isNotEmpty()) {
+                            beginDelayedTransition(binding.root, Fade())
+                            binding.progressCircularUpdate.visibility = View.GONE
+                            return@collect
+                        }
+
                         //  Handle UI when data still exist but Error happened
                         val data: CharacterDetail? = resourceOfCharacter.data
                         data?.let { characterDetail ->
@@ -60,6 +77,12 @@ class FragmentCharacterBottomSheet :
                         setContentView(characterDetail = characterDetail)
                     }
                     is Resource.Loading -> {
+                        if (isThereData.isNotEmpty()) {
+                            beginDelayedTransition(binding.root, Fade())
+                            binding.progressCircularUpdate.visibility = View.VISIBLE
+                            return@collect
+                        }
+
                         //  Start loading at this state
                         beginDelayedTransition(binding.root)
                         binding.layoutLoading.root.visibility = View.VISIBLE
@@ -97,6 +120,13 @@ class FragmentCharacterBottomSheet :
     }
 
     private fun setContentView(characterDetail: CharacterDetail) {
+
+        val isUpdateProgressPresent = binding.progressCircularUpdate.visibility == View.VISIBLE
+        if(isUpdateProgressPresent) {
+            beginDelayedTransition(binding.root, Fade())
+            binding.progressCircularUpdate.visibility = View.GONE
+        }
+
         binding.layoutContent.apply {
             beginDelayedTransition(
                 binding.root,
@@ -106,7 +136,10 @@ class FragmentCharacterBottomSheet :
             root.visibility = View.VISIBLE
             endTransitions(binding.root)
 
-            beginDelayedTransition(root)
+            beginDelayedTransition(
+                root, AutoTransition()
+                    .excludeTarget(tvCharacterNickname, true)
+            )
             ivCharacterImage.load(characterDetail.images) {
                 transformations(RoundedCornersTransformation(15f))
                 build()

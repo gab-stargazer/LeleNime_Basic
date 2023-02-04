@@ -19,7 +19,7 @@ class SearchAnimePaging(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NetworkAnime> {
         return try {
             val currentPage = params.key ?: 1
-            delay(750)
+            delay(1000)
             Timber.d("Nsfw Mode: $nsfwMode")
             val apiResponse =
                 if (nsfwMode) {

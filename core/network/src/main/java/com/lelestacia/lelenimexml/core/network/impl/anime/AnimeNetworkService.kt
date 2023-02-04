@@ -31,10 +31,8 @@ class AnimeNetworkService @Inject constructor(
 
     override suspend fun getAnimeEpisodesByAnimeID(animeID: Int): List<NetworkEpisode> {
         return withContext(ioDispatcher) {
-            val networkEpisodes: List<NetworkEpisode> =
-                animeAPI.getAnimeEpisodesByAnimeID(animeID = animeID).data
-            delay(750)
-            return@withContext networkEpisodes
+            delay(1000)
+            animeAPI.getAnimeEpisodesByAnimeID(animeID = animeID).data
         }
     }
 }

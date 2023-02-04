@@ -16,7 +16,7 @@ class SeasonAnimePaging(private val animeAPI: AnimeAPI) : PagingSource<Int, Netw
         return try {
             val currentPage = params.key ?: 1
             val apiResponse = animeAPI.getCurrentSeason(currentPage)
-            delay(500)
+            delay(1000)
             LoadResult.Page(
                 data = apiResponse.data,
                 prevKey =

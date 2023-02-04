@@ -5,6 +5,7 @@ import com.lelestacia.lelenimexml.core.data.utility.*
 import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeCharacterReferenceEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterInformationEntity
+import com.lelestacia.lelenimexml.core.database.entity.character.CharacterProfile
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterVoiceActorCrossRefEntity
 import com.lelestacia.lelenimexml.core.database.entity.voice_actor.VoiceActorEntity
 import com.lelestacia.lelenimexml.core.database.service.ICharacterDatabaseService
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.catch
 import retrofit2.HttpException
+import timber.log.Timber
 import java.util.Date
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -141,10 +143,20 @@ class CharacterRepository @Inject constructor(
      *         for the latter use
      */
 
+    private var temporaryProfile: CharacterProfile? = null
+
     override fun getCharacterDetailById(characterID: Int): Flow<Resource<CharacterDetail>> =
-        flow<Resource<CharacterDetail>> {
+        flow {
             var localCharacter: CharacterInformationEntity? =
                 characterDatabaseService.getCharacterAdditionalInformationById(characterID)
+
+            if (localCharacter != null) {
+                temporaryProfile =
+                    characterDatabaseService.getCharacterFullProfile(characterID = characterID)
+                emit(Resource.Success(data = temporaryProfile!!.asCharacterDetail()))
+            }
+
+            kotlinx.coroutines.delay(3000)
 
             val oldestUpdate: Long =
                 if (localCharacter == null) 0
@@ -153,10 +165,16 @@ class CharacterRepository @Inject constructor(
                 }
 
             val timeDifference = Date().time - oldestUpdate
-            val isDataOutdated = (TimeUnit.MILLISECONDS.toMinutes(timeDifference) % 60).toInt() > 60
+            val isDataOutdated = {
+                val differenceInHours = TimeUnit.MILLISECONDS.toHours(timeDifference).toInt()
+                Timber.d("Difference in hours is $differenceInHours")
+                differenceInHours>= 24
+                true
+            }
 
-            val shouldFetchNetwork = localCharacter == null || isDataOutdated
+            val shouldFetchNetwork = localCharacter == null || isDataOutdated.invoke()
             if (shouldFetchNetwork) {
+                emit(Resource.Loading)
                 val apiResponse = apiService.getCharacterDetailByCharacterID(characterID)
                 val newEntities = apiResponse.asNewEntity()
 
@@ -179,9 +197,27 @@ class CharacterRepository @Inject constructor(
         }.onStart {
             emit(Resource.Loading)
         }.catch { t ->
+
+            /*
+             * If a temporary profile is not empty,
+             * this means exception was happened during the update process,
+             * and we already have data on the local database
+             * that we can pass to the UI layer
+             */
+
             when (t) {
-                is HttpException -> emit(Resource.Error(data = null, message = errorParser(t)))
-                else -> emit(Resource.Error(data = null, message = "Error: ${t.message}"))
+                is HttpException -> emit(
+                    Resource.Error(
+                        data = temporaryProfile?.asCharacterDetail(),
+                        message = errorParser(t)
+                    )
+                )
+                else -> emit(
+                    Resource.Error(
+                        data = temporaryProfile?.asCharacterDetail(),
+                        message = "Error: ${t.message}"
+                    )
+                )
             }
         }.flowOn(ioDispatcher)
 }
