@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.core.common.Constant.UNKNOWN
 import com.lelestacia.lelenimexml.core.common.DateParser
 import com.lelestacia.lelenimexml.core.common.R.anim.fade_in
@@ -49,12 +51,28 @@ class DetailAnimeFragment :
         val animeID = args.malID
         viewModel.getEpisodesByAnimeID(animeID = animeID)
         viewModel.getAnimeCharactersByAnimeID(animeID = animeID)
+        viewModel.updateAnimeIfNecessary(animeID = animeID)
         setHeaderAndBody()
         setEpisodes()
         setCharacters()
         binding.apply {
             fabFavorite.setOnClickListener(this@DetailAnimeFragment)
             scrollContent.setOnScrollChangeListener(this@DetailAnimeFragment)
+        }
+        viewModel.updateStatus.asLiveData().observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Error -> Snackbar.make(
+                    binding.root,
+                    "Anime was failed to synchronized",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                is Resource.Success -> Snackbar.make(
+                    binding.root,
+                    "Anime is successfully synchronized",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                else -> Unit
+            }
         }
     }
 

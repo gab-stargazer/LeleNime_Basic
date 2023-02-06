@@ -8,4 +8,5 @@ interface IAnimeNetworkService {
     fun getAiringAnime(): PagingSource<Int, NetworkAnime>
     fun searchAnimeByTitle(query: String, isSafety: Boolean): PagingSource<Int, NetworkAnime>
     suspend fun getAnimeEpisodesByAnimeID(animeID: Int): List<NetworkEpisode>
+    suspend fun getAnimeByAnimeID(animeID: Int): NetworkAnime
 }

@@ -25,7 +25,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:text="@string/retry"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/white"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

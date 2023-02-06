@@ -13,7 +13,7 @@ interface AnimeAPI {
 
     @GET("seasons/now")
     suspend fun getCurrentSeason(@Query("page") page: Int):
-        GenericPaginationResponse<List<NetworkAnime>>
+            GenericPaginationResponse<List<NetworkAnime>>
 
     @GET("anime")
     suspend fun searchAnimeByTitle(
@@ -28,11 +28,16 @@ interface AnimeAPI {
         @Query("sfw") sfw: Boolean
     ): GenericPaginationResponse<List<NetworkAnime>>
 
+    @GET("anime/{id}")
+    suspend fun getAnimeByAnimeID(
+        @Path("id") animeID: Int
+    ): GenericResponse<NetworkAnime>
+
     @GET("anime/{id}/episodes")
     suspend fun getAnimeEpisodesByAnimeID(@Path("id") animeID: Int):
-        GenericResponse<List<NetworkEpisode>>
+            GenericResponse<List<NetworkEpisode>>
 
     @GET("anime/{id}/characters")
-    suspend fun getCharactersByAnimeID(@Path("id") id: Int):
-        GenericResponse<List<NetworkCharacter>>
+    suspend fun getCharactersByAnimeID(@Path("id") animeID: Int):
+            GenericResponse<List<NetworkCharacter>>
 }

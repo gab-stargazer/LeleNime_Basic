@@ -35,4 +35,11 @@ class AnimeNetworkService @Inject constructor(
             animeAPI.getAnimeEpisodesByAnimeID(animeID = animeID).data
         }
     }
+
+    override suspend fun getAnimeByAnimeID(animeID: Int): NetworkAnime {
+        return withContext(ioDispatcher) {
+            delay(1000)
+            animeAPI.getAnimeByAnimeID(animeID = animeID).data
+        }
+    }
 }

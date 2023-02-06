@@ -22,7 +22,6 @@ import com.lelestacia.lelenimexml.feature.anime.R
 import com.lelestacia.lelenimexml.feature.anime.databinding.BottomSheetCharacterBinding
 import com.lelestacia.lelenimexml.feature.anime.util.ListToString
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class FragmentCharacterBottomSheet :
@@ -35,22 +34,19 @@ class FragmentCharacterBottomSheet :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getCharacterDetailByID(args.characterId)
-        val listOfState: MutableList<Resource<CharacterDetail>> = mutableListOf()
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.character.collect { resourceOfCharacter ->
-                listOfState.add(resourceOfCharacter)
-                val isThereData =
-                    listOfState
-                        .toList()
-                        .filter { it is Resource.Success }
-                isThereData.forEachIndexed { index , it ->
-                    Timber.d("Data [$index]: ${it.data}")
-                }
                 when (resourceOfCharacter) {
                     is Resource.Error -> {
-                        if (isThereData.isNotEmpty()) {
+                        val isContentVisible = binding.layoutContent.root.visibility == View.VISIBLE
+                        if (isContentVisible) {
                             beginDelayedTransition(binding.root, Fade())
                             binding.progressCircularUpdate.visibility = View.GONE
+                            Snackbar.make(
+                                binding.root,
+                                resourceOfCharacter.message ?: "",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
                             return@collect
                         }
 
@@ -77,7 +73,8 @@ class FragmentCharacterBottomSheet :
                         setContentView(characterDetail = characterDetail)
                     }
                     is Resource.Loading -> {
-                        if (isThereData.isNotEmpty()) {
+                        val isContentVisible = binding.layoutContent.root.visibility == View.VISIBLE
+                        if (isContentVisible) {
                             beginDelayedTransition(binding.root, Fade())
                             binding.progressCircularUpdate.visibility = View.VISIBLE
                             return@collect

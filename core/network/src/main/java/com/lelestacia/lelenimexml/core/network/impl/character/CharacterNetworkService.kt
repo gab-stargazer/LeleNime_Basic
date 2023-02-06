@@ -18,7 +18,7 @@ class CharacterNetworkService @Inject constructor(
     override suspend fun getCharactersByAnimeID(animeID: Int): List<NetworkCharacter> {
         return withContext(ioDispatcher) {
             delay(1000)
-            animeAPI.getCharactersByAnimeID(id = animeID).data
+            animeAPI.getCharactersByAnimeID(animeID = animeID).data
         }
     }
 

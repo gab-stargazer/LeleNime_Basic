@@ -27,10 +27,6 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideJikanHttpErrorParser(): JikanErrorParserUtil = JikanErrorParserUtil()
-
-    @Provides
-    @Singleton
     fun provideAnimeRepository(
         apiService: IAnimeNetworkService,
         @ApplicationContext mContext: Context,
@@ -38,21 +34,21 @@ object RepositoryModule {
     ): IAnimeRepository =
         AnimeRepository(
             animeApiService = apiService,
+            animeDatabaseService = animeDatabaseService,
             userPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE),
-            animeDatabaseService = animeDatabaseService
+            errorParser = JikanErrorParserUtil()
         )
 
     @Provides
     @Singleton
     fun provideCharacterRepository(
         apiService: ICharacterNetworkService,
-        characterDatabaseService: ICharacterDatabaseService,
-        errorParserUtil: JikanErrorParserUtil
+        characterDatabaseService: ICharacterDatabaseService
     ): ICharacterRepository =
         CharacterRepository(
             apiService = apiService,
             characterDatabaseService = characterDatabaseService,
-            errorParser = errorParserUtil
+            errorParser = JikanErrorParserUtil()
         )
 
     @Provides
@@ -63,8 +59,8 @@ object RepositoryModule {
         animeDatabaseService: IAnimeDatabaseService
     ): IEpisodeRepository = EpisodeRepository(
         animeApiService = apiService,
-        errorParserUtil = JikanErrorParserUtil(),
         episodeDatabaseService = episodeDatabaseService,
-        animeDatabaseService = animeDatabaseService
+        animeDatabaseService = animeDatabaseService,
+        errorParserUtil = JikanErrorParserUtil()
     )
 }

@@ -47,15 +47,12 @@ class EpisodeRepository @Inject constructor(
      *         timestamp tobe used again for the latter use
      */
 
-    private var temporaryEpisodeEntities: List<EpisodeEntity> = emptyList()
-
     override fun getEpisodesByAnimeID(animeID: Int): Flow<Resource<List<Episode>>> =
         flow {
             var localEpisodes: List<EpisodeEntity> = episodeDatabaseService
                 .getEpisodesByAnimeID(animeID = animeID)
 
             if (localEpisodes.isNotEmpty()) {
-                temporaryEpisodeEntities = localEpisodes
                 val episodes: List<Episode> = localEpisodes.map { it.asEpisode() }
                 emit(Resource.Success(data = episodes))
             }
@@ -106,6 +103,7 @@ class EpisodeRepository @Inject constructor(
                             val newEpisode = newEpisodeEntities[index]
                             episodeEntity.copy(
                                 titleJapanese = newEpisode.titleJapanese,
+                                titleRomanji = newEpisode.titleRomanji,
                                 aired = newEpisode.aired,
                                 score = newEpisode.score,
                                 updatedAt = Date()
@@ -118,11 +116,13 @@ class EpisodeRepository @Inject constructor(
                 emit(Resource.Success(data = episodes))
             }
         }.catch { t ->
-            val episodes: List<Episode>? =
-                if (temporaryEpisodeEntities.isEmpty()) null
-                else temporaryEpisodeEntities.map { it.asEpisode() }
+            val localEpisodes: List<EpisodeEntity> = episodeDatabaseService
+                .getEpisodesByAnimeID(animeID = animeID)
 
-            temporaryEpisodeEntities = emptyList()
+            val episodes: List<Episode>? =
+                if (localEpisodes.isEmpty()) null
+                else localEpisodes.map { it.asEpisode() }
+
             when (t) {
                 is HttpException -> emit(
                     Resource.Error(

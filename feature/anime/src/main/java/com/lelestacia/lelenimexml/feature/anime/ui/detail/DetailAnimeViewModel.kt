@@ -36,6 +36,9 @@ class DetailAnimeViewModel @Inject constructor(
     private val _anime: MutableStateFlow<Resource<Anime>> = MutableStateFlow(Resource.None)
     val anime get() = _anime.asStateFlow()
 
+    private val _updateStatus: MutableStateFlow<Resource<Boolean>> = MutableStateFlow(Resource.None)
+    val updateStatus = _updateStatus.asStateFlow()
+
     fun getAnimeCharactersByAnimeID(animeID: Int) = viewModelScope.launch {
         characterUseCase.getAnimeCharacterById(animeID)
             .collect { result: Resource<List<Character>> ->
@@ -56,6 +59,10 @@ class DetailAnimeViewModel @Inject constructor(
         animeUseCase.getAnimeByMalID(animeID)
 
     fun updateAnimeFavorite(animeID: Int) = viewModelScope.launch {
-        animeUseCase.updateAnimeFavorite(malID = animeID)
+        animeUseCase.updateAnimeFavorite(animeID = animeID)
+    }
+
+    fun updateAnimeIfNecessary(animeID: Int) = viewModelScope.launch {
+        _updateStatus.emit(animeUseCase.updateAnimeIfNecessary(animeID = animeID))
     }
 }

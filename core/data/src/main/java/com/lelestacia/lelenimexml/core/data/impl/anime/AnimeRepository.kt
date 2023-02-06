@@ -6,24 +6,27 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.lelestacia.lelenimexml.core.common.Constant.IS_NSFW
+import com.lelestacia.lelenimexml.core.common.Resource
+import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
 import com.lelestacia.lelenimexml.core.data.utility.asAnime
 import com.lelestacia.lelenimexml.core.data.utility.asNewEntity
 import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
 import com.lelestacia.lelenimexml.core.database.service.IAnimeDatabaseService
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.Date
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
     private val animeApiService: IAnimeNetworkService,
     private val animeDatabaseService: IAnimeDatabaseService,
     private val userPreferences: SharedPreferences,
+    private val errorParser: JikanErrorParserUtil,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IAnimeRepository {
 
@@ -61,7 +64,48 @@ class AnimeRepository @Inject constructor(
     }
 
     override fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<Anime> =
-        animeDatabaseService.getNewestAnimeDataByAnimeID(animeID = animeID).map { it.asAnime() }
+        animeDatabaseService.getNewestAnimeDataByAnimeID(animeID = animeID)
+            .map { it.asAnime() }
+
+    override suspend fun updateAnimeIfNecessary(animeID: Int): Resource<Boolean> {
+        return withContext(ioDispatcher) {
+            val localAnimeEntity: AnimeEntity =
+                animeDatabaseService.getAnimeByAnimeID(animeID = animeID) as AnimeEntity
+            val timeDifference: Long =
+                Date().time - (localAnimeEntity.updatedAt ?: localAnimeEntity.createdAt).time
+            val isAnimeDataOutdated =
+                if (localAnimeEntity.airing) {
+                    val differenceInMinutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference)
+                    Timber.d("Anime ${localAnimeEntity.title} was updated $differenceInMinutes minutes ago")
+                    differenceInMinutes.toInt() >= 60
+                } else {
+                    val differenceInHours = TimeUnit.MILLISECONDS.toHours(timeDifference)
+                    Timber.d("Anime ${localAnimeEntity.title} was updated $differenceInHours hours ago")
+                    differenceInHours.toInt() >= 24
+                }
+
+            if (isAnimeDataOutdated) {
+                Timber.d("Anime ${localAnimeEntity.title} is being updated")
+                try {
+                    val networkAnime = animeApiService.getAnimeByAnimeID(animeID = animeID)
+                    val newEntity =
+                        networkAnime.asAnime().asNewEntity(isFavorite = localAnimeEntity.isFavorite)
+                    animeDatabaseService.updateAnime(
+                        newEntity.copy(
+                            isFavorite = localAnimeEntity.isFavorite,
+                            createdAt = localAnimeEntity.createdAt,
+                            updatedAt = Date()
+                        )
+                    )
+                } catch (e: Exception) {
+                    Timber.e(e.message)
+                    Resource.Error(data = false, message = errorParser(e))
+                }
+            }
+            Resource.Success(data = true)
+        }
+    }
+
 
     override fun getAnimeHistory(): Flow<PagingData<Anime>> =
         Pager(
@@ -84,7 +128,22 @@ class AnimeRepository @Inject constructor(
 
             if (isAnimeExist) {
                 val updatedHistory: AnimeEntity = (localAnime as AnimeEntity).copy(
+                    image = anime.coverImages,
+                    trailer = AnimeEntity.Trailer(
+                        id = anime.trailer?.youtubeId,
+                        url = anime.trailer?.url,
+                        image = anime.trailer?.images
+                    ),
+                    episodes = anime.episodes,
+                    status = anime.status,
+                    airing = anime.airing,
+                    startedDate = anime.startedDate,
+                    finishedDate = anime.finishedDate,
+                    score = anime.score,
+                    scoredBy = anime.scoredBy,
+                    rank = anime.rank,
                     lastViewed = Date(),
+                    updatedAt = Date()
                 )
                 animeDatabaseService.updateAnime(updatedHistory)
                 return@withContext

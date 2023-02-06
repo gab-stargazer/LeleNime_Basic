@@ -15,14 +15,10 @@ import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkS
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import timber.log.Timber
-import java.util.Date
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -143,20 +139,16 @@ class CharacterRepository @Inject constructor(
      *         for the latter use
      */
 
-    private var temporaryProfile: CharacterProfile? = null
-
     override fun getCharacterDetailById(characterID: Int): Flow<Resource<CharacterDetail>> =
         flow {
             var localCharacter: CharacterInformationEntity? =
                 characterDatabaseService.getCharacterAdditionalInformationById(characterID)
 
             if (localCharacter != null) {
-                temporaryProfile =
+                val localCharacterDetail =
                     characterDatabaseService.getCharacterFullProfile(characterID = characterID)
-                emit(Resource.Success(data = temporaryProfile!!.asCharacterDetail()))
+                emit(Resource.Success(data = localCharacterDetail.asCharacterDetail()))
             }
-
-            kotlinx.coroutines.delay(3000)
 
             val oldestUpdate: Long =
                 if (localCharacter == null) 0
@@ -168,7 +160,7 @@ class CharacterRepository @Inject constructor(
             val isDataOutdated = {
                 val differenceInHours = TimeUnit.MILLISECONDS.toHours(timeDifference).toInt()
                 Timber.d("Difference in hours is $differenceInHours")
-                differenceInHours>= 24
+                differenceInHours >= 24
                 true
             }
 
@@ -198,23 +190,30 @@ class CharacterRepository @Inject constructor(
             emit(Resource.Loading)
         }.catch { t ->
 
+            val localCharacter: CharacterInformationEntity? =
+                characterDatabaseService.getCharacterAdditionalInformationById(characterID)
+
+            val localCharacterProfile: CharacterProfile? =
+                if (localCharacter == null) null
+                else characterDatabaseService.getCharacterFullProfile(characterID = characterID)
+
             /*
-             * If a temporary profile is not empty,
-             * this means exception was happened during the update process,
-             * and we already have data on the local database
-             * that we can pass to the UI layer
+             * If a local character is null,
+             * this means exception happened during a fresh pull network request,
+             * but if it is existed,
+             * then it means the exception was happened during update network request
              */
 
             when (t) {
                 is HttpException -> emit(
                     Resource.Error(
-                        data = temporaryProfile?.asCharacterDetail(),
+                        data = localCharacterProfile?.asCharacterDetail(),
                         message = errorParser(t)
                     )
                 )
                 else -> emit(
                     Resource.Error(
-                        data = temporaryProfile?.asCharacterDetail(),
+                        data = localCharacterProfile?.asCharacterDetail(),
                         message = "Error: ${t.message}"
                     )
                 )
