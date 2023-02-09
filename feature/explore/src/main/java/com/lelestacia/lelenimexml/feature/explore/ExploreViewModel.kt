@@ -14,30 +14,16 @@ import javax.inject.Inject
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
     private val commonAnimeUseCase: IAnimeUseCase,
-    private val homeAnimeUseCase: IHomeAnimeUseCase
+    homeAnimeUseCase: IHomeAnimeUseCase
 ) : ViewModel() {
 
     private val _searchQuery = MutableLiveData("")
 
-    val upcomingAnime: LiveData<PagingData<Anime>> = homeAnimeUseCase
-        .getUpcomingAnime()
-        .cachedIn(viewModelScope)
-        .asLiveData()
-
     val topAnime: Flow<PagingData<Anime>> = homeAnimeUseCase.getTopAnime()
         .cachedIn(viewModelScope)
 
-    val airingAnime: LiveData<PagingData<Anime>> = _searchQuery
-        .switchMap { query ->
-            if (query.isNullOrEmpty()) homeAnimeUseCase
-                .getAiringAnime()
-                .cachedIn(viewModelScope)
-                .asLiveData()
-            else homeAnimeUseCase
-                .getAnimeByTitle(query)
-                .cachedIn(viewModelScope)
-                .asLiveData()
-        }
+    val airingAnime: Flow<PagingData<Anime>> = homeAnimeUseCase.getAiringAnime()
+        .cachedIn(viewModelScope)
 
     fun insertNewSearchQuery(newSearchQuery: String) {
         _searchQuery.value = newSearchQuery

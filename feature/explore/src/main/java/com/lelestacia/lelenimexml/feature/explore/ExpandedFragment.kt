@@ -49,6 +49,17 @@ class ExpandedFragment : Fragment(R.layout.fragment_expanded) {
             getString(R.string.airing_anime) -> setAiringAnime()
             getString(R.string.upcoming_anime) -> setUpcomingAnime()
         }
+
+        /*
+         *   TODO:
+         *   1. Fix fragment didn't persist the previous position
+         *   2. Implement Trailer on the list
+         *   3. Fix the load state adapter and make some improvements
+         *   4. Wrap everything
+         *   5. Refactor everything
+         *   6. Make some documentation
+         */
+
     }
 
     private fun setTopAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {

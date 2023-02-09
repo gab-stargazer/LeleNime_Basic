@@ -19,11 +19,18 @@ class TopAnimePaging(
         return try {
             val currentPage = params.key ?: 1
             val apiResponse = animeAPI.getTopAnime(page = currentPage)
-            delay(1000)
+            delay(
+                if (currentPage == 1) 400
+                else 500
+            )
             LoadResult.Page(
                 data = apiResponse.data,
-                prevKey = if (currentPage == 1) null else currentPage.minus(1),
-                nextKey = if (apiResponse.pagination.hasNextPage) currentPage.plus(1) else null
+                prevKey =
+                if (currentPage == 1) null
+                else currentPage.minus(1),
+                nextKey =
+                if (apiResponse.pagination.hasNextPage) currentPage.plus(1)
+                else null
             )
         } catch (e: Exception) {
             Timber.e(e.message)

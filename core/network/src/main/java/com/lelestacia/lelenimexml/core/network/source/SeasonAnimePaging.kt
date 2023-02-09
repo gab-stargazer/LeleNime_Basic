@@ -6,7 +6,9 @@ import com.lelestacia.lelenimexml.core.network.model.anime.NetworkAnime
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
-class SeasonAnimePaging(private val animeAPI: AnimeAPI) : PagingSource<Int, NetworkAnime>() {
+class SeasonAnimePaging(
+    private val animeAPI: AnimeAPI
+) : PagingSource<Int, NetworkAnime>() {
 
     override fun getRefreshKey(state: PagingState<Int, NetworkAnime>): Int? {
         return state.anchorPosition
@@ -16,7 +18,10 @@ class SeasonAnimePaging(private val animeAPI: AnimeAPI) : PagingSource<Int, Netw
         return try {
             val currentPage = params.key ?: 1
             val apiResponse = animeAPI.getCurrentSeason(currentPage)
-            delay(1000)
+            delay(
+                if (currentPage == 1) 800
+                else 500
+            )
             LoadResult.Page(
                 data = apiResponse.data,
                 prevKey =
