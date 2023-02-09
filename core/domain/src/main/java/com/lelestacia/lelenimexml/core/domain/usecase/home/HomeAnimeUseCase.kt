@@ -13,6 +13,14 @@ class HomeAnimeUseCase @Inject constructor(
         return animeRepository.seasonAnimePagingData()
     }
 
+    override fun getUpcomingAnime(): Flow<PagingData<Anime>> {
+        return animeRepository.upcomingAnimePagingData()
+    }
+
+    override fun getTopAnime(): Flow<PagingData<Anime>> {
+        return animeRepository.topAnimePagingData()
+    }
+
     override fun getAnimeByTitle(query: String): Flow<PagingData<Anime>> {
         return animeRepository.searchAnimeByTitle(query = query)
     }

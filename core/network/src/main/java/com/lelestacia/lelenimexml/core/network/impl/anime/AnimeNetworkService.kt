@@ -3,9 +3,7 @@ package com.lelestacia.lelenimexml.core.network.impl.anime
 import androidx.paging.PagingSource
 import com.lelestacia.lelenimexml.core.network.model.anime.NetworkAnime
 import com.lelestacia.lelenimexml.core.network.model.episodes.NetworkEpisode
-import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
-import com.lelestacia.lelenimexml.core.network.source.SearchAnimePaging
-import com.lelestacia.lelenimexml.core.network.source.SeasonAnimePaging
+import com.lelestacia.lelenimexml.core.network.source.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -18,6 +16,12 @@ class AnimeNetworkService @Inject constructor(
 ) : IAnimeNetworkService {
     override fun getAiringAnime(): PagingSource<Int, NetworkAnime> =
         SeasonAnimePaging(animeAPI = animeAPI)
+
+    override fun getUpcomingAnime(): PagingSource<Int, NetworkAnime> =
+        UpcomingAnimePaging(animeAPI = animeAPI)
+
+    override fun getTopAnime(): PagingSource<Int, NetworkAnime> =
+        TopAnimePaging(animeAPI = animeAPI)
 
     override fun searchAnimeByTitle(
         query: String,

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/explore_navigation"
+    app:startDestination="@id/exploreFragment">
+
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="com.lelestacia.lelenimexml.feature.explore.ExploreFragment"
+        android:label="Explore"
+        tools:layout="@layout/fragment_explore">
+
+        <action
+            android:id="@+id/explore_to_detail"
+            app:destination="@id/detail_navigation"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out">
+
+            <argument
+                android:name="malID"
+                app:argType="integer" />
+        </action>
+
+        <action
+            android:id="@+id/explore_to_expanded"
+            app:destination="@id/expandedFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out">
+
+            <argument
+                android:name="type"
+                android:defaultValue="1"
+                app:argType="integer" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/expandedFragment"
+        android:name="com.lelestacia.lelenimexml.feature.explore.ExpandedFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_expanded">
+
+        <action
+            android:id="@+id/expanded_to_detail"
+            app:destination="@id/detail_navigation"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out">
+
+            <argument
+                android:name="malID"
+                app:argType="integer" />
+        </action>
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="fullscreen"
+            android:defaultValue="true"
+            app:argType="boolean" />
+    </fragment>
+
+    <include app:graph="@navigation/detail_navigation" />
+</navigation>

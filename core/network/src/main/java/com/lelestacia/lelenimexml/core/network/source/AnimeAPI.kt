@@ -15,6 +15,14 @@ interface AnimeAPI {
     suspend fun getCurrentSeason(@Query("page") page: Int):
             GenericPaginationResponse<List<NetworkAnime>>
 
+    @GET("seasons/upcoming")
+    suspend fun getUpcomingSeason(@Query("page") page: Int):
+            GenericPaginationResponse<List<NetworkAnime>>
+
+    @GET("top/anime")
+    suspend fun getTopAnime(@Query("page") page: Int):
+            GenericPaginationResponse<List<NetworkAnime>>
+
     @GET("anime")
     suspend fun searchAnimeByTitle(
         @Query("q") q: String,

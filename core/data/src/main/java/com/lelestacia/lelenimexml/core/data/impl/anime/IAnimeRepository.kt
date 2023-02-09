@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface IAnimeRepository {
     fun seasonAnimePagingData(): Flow<PagingData<Anime>>
+    fun upcomingAnimePagingData(): Flow<PagingData<Anime>>
+    fun topAnimePagingData(): Flow<PagingData<Anime>>
     fun searchAnimeByTitle(query: String): Flow<PagingData<Anime>>
     fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<Anime>
     suspend fun updateAnimeIfNecessary(animeID: Int): Resource<Boolean>

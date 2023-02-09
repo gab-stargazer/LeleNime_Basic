@@ -14,11 +14,13 @@ import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
 import com.lelestacia.lelenimexml.core.database.service.IAnimeDatabaseService
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.Date
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -40,6 +42,38 @@ class AnimeRepository @Inject constructor(
             ),
             pagingSourceFactory = {
                 animeApiService.getAiringAnime()
+            }
+        ).flow.map { pagingData ->
+            pagingData.map { it.asAnime() }
+        }
+    }
+
+    override fun upcomingAnimePagingData(): Flow<PagingData<Anime>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 25,
+                prefetchDistance = 5,
+                initialLoadSize = 25,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                animeApiService.getUpcomingAnime()
+            }
+        ).flow.map { pagingData ->
+            pagingData.map { it.asAnime() }
+        }
+    }
+
+    override fun topAnimePagingData(): Flow<PagingData<Anime>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 25,
+                prefetchDistance = 5,
+                initialLoadSize = 25,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                animeApiService.getTopAnime()
             }
         ).flow.map { pagingData ->
             pagingData.map { it.asAnime() }
