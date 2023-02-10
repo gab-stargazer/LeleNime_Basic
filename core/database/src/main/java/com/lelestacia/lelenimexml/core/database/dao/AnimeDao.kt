@@ -6,25 +6,25 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.lelestacia.lelenimexml.core.database.model.anime.AnimeEntity
+import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AnimeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdateAnime(anime: AnimeEntity)
+    suspend fun insertOrReplaceAnime(anime: AnimeEntity)
 
-    @Query("SELECT * FROM anime ORDER BY last_viewed DESC")
-    fun getAllAnimeHistory(): PagingSource<Int, AnimeEntity>
+    @Query("SELECT * FROM anime_table ORDER BY last_viewed DESC")
+    fun getAnimeHistory(): PagingSource<Int, AnimeEntity>
 
-    @Query("SELECT * FROM anime WHERE id = :animeId")
-    fun getNewestAnimeDataByAnimeId(animeId: Int): Flow<AnimeEntity>
+    @Query("SELECT * FROM anime_table WHERE favorite = 1")
+    fun getAnimeFavorite(): PagingSource<Int, AnimeEntity>
 
-    @Query("SELECT * FROM anime WHERE id =:animeId")
-    fun getAnimeByAnimeId(animeId: Int): AnimeEntity?
+    @Query("SELECT * FROM anime_table WHERE anime_id =:animeID")
+    fun getAnimeByAnimeID(animeID: Int): AnimeEntity?
 
-    @Query("SELECT * FROM anime WHERE favorite = 1")
-    fun getAllFavoriteAnime(): PagingSource<Int, AnimeEntity>
+    @Query("SELECT * FROM anime_table WHERE anime_id =:animeID")
+    fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<AnimeEntity>
 
     @Update
     suspend fun updateAnime(anime: AnimeEntity)

@@ -15,7 +15,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "LeleNime XML"
 include ':app'
-include ':feature:anime'
 include ':feature:others'
 include ':core:network'
 include ':core:database'
@@ -23,3 +22,6 @@ include ':core:data'
 include ':core:domain'
 include ':core:model'
 include ':core:common'
+include ':feature:collection'
+include ':feature:explore'
+include ':feature:common'

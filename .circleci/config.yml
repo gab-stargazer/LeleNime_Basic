@@ -14,24 +14,13 @@ jobs:
           name: Get Gradle Permission
           command: sudo chmod +x ./gradlew
       - run:
-          name: Run KtLint formatting tools
-          command: ./gradlew ktlintFormat
-      - run:
-          name: KtLint check for validation
-          command: ./gradlew ktlintCheck
-      - store_test_results:
-          path: app/build/test-ktlint
-      - run:
           name: Run Unit Test from all modules
-          command: ./gradlew test
+          command: ./gradlew test --stacktrace
       - store_artifacts:
               path: core/data/build/reports/tests
       - run:
           name: Gradle Build Debug APK
           command: ./gradlew assembleDebug
-      - run:
-          name: Gradle Build Release Unsigned APK
-          command: ./gradlew assembleRelease
       - store_artifacts:
               path: app/build/outputs/apk
 

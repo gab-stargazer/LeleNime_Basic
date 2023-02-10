@@ -30,6 +30,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -45,7 +46,6 @@ android {
 dependencies {
     implementation project(':core:common')
     implementation project(':core:model')
-    implementation "net.zetetic:android-database-sqlcipher:$sqlcipher_version"
 }
 
 kapt {

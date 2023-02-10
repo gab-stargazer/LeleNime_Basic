@@ -1,16 +1,23 @@
 package com.lelestacia.lelenimexml.core.data.di
 
-import com.lelestacia.lelenimexml.core.data.AnimeRepository
-import com.lelestacia.lelenimexml.core.data.CharacterRepository
-import com.lelestacia.lelenimexml.core.data.IAnimeRepository
-import com.lelestacia.lelenimexml.core.data.ICharacterRepository
-import com.lelestacia.lelenimexml.core.database.IAnimeLocalDataSource
-import com.lelestacia.lelenimexml.core.database.ICharacterLocalDataSource
-import com.lelestacia.lelenimexml.core.database.user_pref.UserPref
-import com.lelestacia.lelenimexml.core.network.INetworkDataSource
+import android.content.Context
+import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
+import com.lelestacia.lelenimexml.core.data.impl.anime.AnimeRepository
+import com.lelestacia.lelenimexml.core.data.impl.anime.IAnimeRepository
+import com.lelestacia.lelenimexml.core.data.impl.character.CharacterRepository
+import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
+import com.lelestacia.lelenimexml.core.data.impl.episode.EpisodeRepository
+import com.lelestacia.lelenimexml.core.data.impl.episode.IEpisodeRepository
+import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
+import com.lelestacia.lelenimexml.core.database.service.IAnimeDatabaseService
+import com.lelestacia.lelenimexml.core.database.service.ICharacterDatabaseService
+import com.lelestacia.lelenimexml.core.database.service.IEpisodeDatabaseService
+import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
+import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -21,22 +28,39 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideAnimeRepository(
-        apiService: INetworkDataSource,
-        localDataSource: IAnimeLocalDataSource,
-        userPref: UserPref
+        apiService: IAnimeNetworkService,
+        @ApplicationContext mContext: Context,
+        animeDatabaseService: IAnimeDatabaseService
     ): IAnimeRepository =
         AnimeRepository(
-            apiService, localDataSource, userPref
+            animeApiService = apiService,
+            animeDatabaseService = animeDatabaseService,
+            userPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE),
+            errorParser = JikanErrorParserUtil()
         )
 
     @Provides
     @Singleton
     fun provideCharacterRepository(
-        apiService: INetworkDataSource,
-        localDataSource: ICharacterLocalDataSource
+        apiService: ICharacterNetworkService,
+        characterDatabaseService: ICharacterDatabaseService
     ): ICharacterRepository =
         CharacterRepository(
-            apiService,
-            localDataSource
+            apiService = apiService,
+            characterDatabaseService = characterDatabaseService,
+            errorParser = JikanErrorParserUtil()
         )
+
+    @Provides
+    @Singleton
+    fun provideEpisodeRepository(
+        apiService: IAnimeNetworkService,
+        episodeDatabaseService: IEpisodeDatabaseService,
+        animeDatabaseService: IAnimeDatabaseService
+    ): IEpisodeRepository = EpisodeRepository(
+        animeApiService = apiService,
+        episodeDatabaseService = episodeDatabaseService,
+        animeDatabaseService = animeDatabaseService,
+        errorParserUtil = JikanErrorParserUtil()
+    )
 }

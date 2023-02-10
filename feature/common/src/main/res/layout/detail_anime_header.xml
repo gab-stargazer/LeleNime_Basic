@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_background_anime"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="64dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@id/iv_cover_anime"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/cover" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_cover_anime"
+        android:layout_width="200dp"
+        android:layout_height="267dp"
+        android:layout_marginTop="48dp"
+        android:contentDescription="@string/cover_image"
+        android:scaleType="centerCrop"
+        android:transitionName="cover_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/cover" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_anime_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        android:transitionName="tv_anime_title"
+        app:layout_constraintEnd_toEndOf="@+id/iv_cover_anime"
+        app:layout_constraintHorizontal_bias="0.229"
+        app:layout_constraintStart_toStartOf="@+id/iv_cover_anime"
+        app:layout_constraintTop_toBottomOf="@+id/iv_cover_anime"
+        tools:text="Chainsaw-Man" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_anime_title_japanese"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/tv_anime_title"
+        tools:text="チェンソーマン" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_rank_and_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/rank_and_score"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/iv_icon_score"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_anime_title_japanese"
+        app:layout_goneMarginTop="8dp" />
+
+    <ImageView
+        android:id="@+id/iv_icon_score"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/cover_image"
+        android:src="@drawable/ic_star"
+        app:layout_constraintBottom_toBottomOf="@id/tv_rank_and_rating"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_rank_and_rating"
+        app:layout_constraintTop_toTopOf="@id/tv_rank_and_rating"
+        app:tint="?android:attr/textColorPrimary" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_user_rated"
+        style="@style/TextAppearance.Material3.TitleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintEnd_toEndOf="@id/iv_icon_score"
+        app:layout_constraintStart_toStartOf="@id/tv_rank_and_rating"
+        app:layout_constraintTop_toBottomOf="@id/iv_icon_score"
+        tools:text="@string/rated_by" />
+</androidx.constraintlayout.widget.ConstraintLayout>

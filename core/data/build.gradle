@@ -22,8 +22,10 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -39,6 +41,7 @@ dependencies {
     implementation project(':core:network')
     implementation project(':core:database')
     implementation project(':core:model')
+    testImplementation 'junit:junit:4.12'
 }
 
 kapt {

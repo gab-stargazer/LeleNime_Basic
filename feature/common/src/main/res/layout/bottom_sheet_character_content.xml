@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    tools:background="?attr/backgroundColor">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_character_image"
+            android:layout_width="100dp"
+            android:layout_height="134dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/denji" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_character_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/iv_character_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Denji" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_character_romaji"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_character_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_character_name"
+            tools:text="デンジ" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_character_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tv_character_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_character_romaji"
+            tools:text="13987" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_favorite"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_favorite"
+            android:tint="?android:attr/textColorPrimary"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/tv_character_favorite"
+            app:layout_constraintStart_toEndOf="@id/tv_character_favorite"
+            app:layout_constraintTop_toTopOf="@id/tv_character_favorite" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_character_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintStart_toStartOf="@id/iv_character_image"
+            app:layout_constraintTop_toBottomOf="@id/iv_character_image"
+            tools:text="Nickname: Chainsaw-man" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_character_information"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:justificationMode="inter_word"
+            android:minHeight="50dp"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/tv_character_nickname"
+            tools:text="Age: 16, 17 (currently) As a young boy, Denji inherits his father's debts from the Yakuza. After meeting Pochita, he becomes a Devil Hunter for the Yakuza in an attempt to clear his debt. After Denji was betrayed and murdered by the Yakuza, which were under the control of a Devil, Pochita brought Denji back to life by becoming his heart. He now has the ability to become a devil and human hybrid by pulling the cord on his chest. In his chainsaw man form, Denji is equipped with a chainsaw for a head and one chainsaw blade coming out of each wrist. After meeting Makima, he became a Public Safety Devil Hunter.\n\n(Source: Chainsaw Man Wiki)" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,6 +22,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -35,8 +36,11 @@ android {
 }
 
 dependencies {
+    implementation project(':core:common')
     implementation project(':core:data')
     implementation project(':core:model')
+    implementation project(path: ':core:common')
+    implementation project(path: ':core:common')
 }
 
 kapt {

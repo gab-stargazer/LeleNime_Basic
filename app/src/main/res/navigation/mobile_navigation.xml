@@ -2,8 +2,10 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/anime_navigation">
+    app:startDestination="@+id/explore_navigation">
 
-    <include app:graph="@navigation/anime_navigation" />
+<!--    <include app:graph="@navigation/anime_navigation" />-->
+    <include app:graph="@navigation/explore_navigation"/>
+    <include app:graph="@navigation/collection_navigation"/>
     <include app:graph="@navigation/settings_navigation" />
 </navigation>

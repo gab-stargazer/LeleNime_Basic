@@ -1,6 +1,7 @@
 package com.lelestacia.lelenimexml.core.network.model.character
 
 import com.google.gson.annotations.SerializedName
+import com.lelestacia.lelenimexml.core.network.model.voice_actor.NetworkVoiceActor
 
 data class NetworkCharacterDetail(
     @SerializedName("mal_id")
@@ -20,4 +21,7 @@ data class NetworkCharacterDetail(
 
     @SerializedName("about")
     val characterInformation: String?,
+
+    @SerializedName("voices")
+    val voiceActors: List<NetworkVoiceActor>
 )

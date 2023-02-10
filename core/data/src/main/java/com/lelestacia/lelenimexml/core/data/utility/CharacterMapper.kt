@@ -1,49 +1,82 @@
 package com.lelestacia.lelenimexml.core.data.utility
 
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterInformationEntity
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterProfile
-import com.lelestacia.lelenimexml.core.database.model.character.CharacterEntity
-import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
+import com.lelestacia.lelenimexml.core.database.entity.character.CharacterEntity
+import com.lelestacia.lelenimexml.core.database.entity.character.CharacterInformationEntity
+import com.lelestacia.lelenimexml.core.database.entity.character.CharacterProfile
+import com.lelestacia.lelenimexml.core.database.entity.voice_actor.VoiceActorEntity
 import com.lelestacia.lelenimexml.core.model.character.Character
+import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
 import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterDetail
+import java.util.Date
 
-fun NetworkCharacterDetail.asEntity(): CharacterInformationEntity =
+fun NetworkCharacterDetail.asNewEntity(): CharacterInformationEntity =
     CharacterInformationEntity(
         characterID = characterMalId,
         characterKanjiName = characterKanjiName ?: "",
         characterNickNames = characterNickNames,
         characterFavorite = characterFavoriteCount,
-        characterInformation = characterInformation ?: ""
+        characterInformation = characterInformation ?: "",
+        createdAt = Date(),
+        updatedAt = null
     )
 
-fun NetworkCharacter.asEntity(animeID: Int): CharacterEntity =
+fun NetworkCharacter.asNewEntity(): CharacterEntity =
     CharacterEntity(
-        animeID = animeID,
-        characterID = characterData.characterMalId,
-        characterName = characterData.name,
-        characterImage = characterData.images.webp.imageUrl,
-        characterRole = role,
-        characterFavorite = favoriteBy
+        characterID = characterData.malID,
+        name = characterData.name,
+        image = characterData.images.webp.imageUrl,
+        role = role,
+        favorite = favorites,
+        createdAt = Date(),
+        updatedAt = null
     )
+
+fun NetworkCharacter.asCharacterWithVoiceActorEntities(): Pair<Int, List<VoiceActorEntity>> {
+    val characterID: Int = characterData.malID
+    val voiceActorEntities: List<VoiceActorEntity> = voiceActors.map { networkVoiceActor ->
+        VoiceActorEntity(
+            voiceActorID = networkVoiceActor.person.malID,
+            image = networkVoiceActor.person.image.jpg.imageUrl,
+            name = networkVoiceActor.person.name,
+            language = networkVoiceActor.language,
+            created_at = Date(),
+            updated_at = null
+        )
+    }
+    return Pair(characterID, voiceActorEntities)
+}
+
+fun NetworkCharacter.asNewVoiceActor(): List<VoiceActorEntity> {
+    return voiceActors.map { networkVoiceActor ->
+        VoiceActorEntity(
+            voiceActorID = networkVoiceActor.person.malID,
+            image = networkVoiceActor.person.image.jpg.imageUrl,
+            name = networkVoiceActor.person.name,
+            language = networkVoiceActor.language,
+            created_at = Date(),
+            updated_at = null
+        )
+    }
+}
 
 fun CharacterEntity.asCharacter(): Character =
     Character(
-        characterID = characterID,
-        images = characterImage,
-        name = characterName,
-        role = characterName,
-        favorite = characterFavorite
+        malID = characterID,
+        images = image,
+        name = name,
+        role = name,
+        favorites = favorite
     )
 
 fun CharacterProfile.asCharacterDetail(): CharacterDetail =
     CharacterDetail(
         characterID = character.characterID,
-        name = character.characterName,
+        name = character.name,
         characterKanjiName = additionalInformation.characterKanjiName,
         characterNickNames = additionalInformation.characterNickNames,
-        images = character.characterImage,
-        role = character.characterRole,
-        favoriteBy = character.characterFavorite,
+        images = character.image,
+        role = character.role,
+        favoriteBy = character.favorite,
         characterInformation = additionalInformation.characterInformation
     )

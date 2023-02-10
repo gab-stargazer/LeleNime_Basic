@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_navigation"
+    android:label="Detail Navigation"
+    app:startDestination="@id/detailAnimeFragment">
+
+    <fragment
+        android:id="@+id/detailAnimeFragment"
+        android:name="com.lelestacia.lelenimexml.feature.common.detail_anime.DetailAnimeFragment"
+        android:label="Detail Anime"
+        tools:layout="@layout/fragment_detail_anime">
+        <argument
+            android:name="malID"
+            app:argType="integer" />
+        <argument
+            android:name="fullscreen"
+            android:defaultValue="true"
+            app:argType="boolean" />
+    </fragment>
+</navigation>

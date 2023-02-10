@@ -6,6 +6,9 @@ plugins {
     id 'com.google.dagger.hilt.android'
 }
 
+dependencies {
+}
+
 apply from:'../../shared_dependencies.gradle'
 
 android {
@@ -23,6 +26,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

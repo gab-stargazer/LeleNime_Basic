@@ -1,0 +1,14 @@
+<resources>
+    <string name="upcoming_anime">Upcoming Anime</string>
+
+
+
+
+
+    <string name="anime">Anime</string>
+    <string name="trending">Trending</string>
+    <string name="top_anime">Popular Anime</string>
+    <string name="currently_airing">Currently Airing</string>
+    <string name="airing_anime">Airing Anime</string>
+    <string name="recently_viewed">Recently Viewed</string>
+</resources>

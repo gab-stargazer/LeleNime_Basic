@@ -1,9 +1,9 @@
 package com.lelestacia.lelenimexml.core.model.character
 
 data class Character(
-    val characterID: Int,
+    val malID: Int,
     val images: String,
     val name: String,
     val role: String,
-    val favorite: Int
+    val favorites: Int
 )

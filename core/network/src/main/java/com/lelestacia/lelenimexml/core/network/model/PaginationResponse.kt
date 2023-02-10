@@ -12,7 +12,6 @@ data class PaginationResponse(
     @SerializedName("items")
     val PaginationItem: Items
 ) {
-
     data class Items(
         @SerializedName("count")
         val count: Int,

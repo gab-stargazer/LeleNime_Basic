@@ -8,8 +8,8 @@ import timber.log.Timber
 
 class SearchAnimePaging(
     private val query: String,
-    private val apiService: ApiService,
-    private val isSafety: Boolean
+    private val animeAPI: AnimeAPI,
+    private val nsfwMode: Boolean
 ) : PagingSource<Int, NetworkAnime>() {
 
     override fun getRefreshKey(state: PagingState<Int, NetworkAnime>): Int? {
@@ -19,12 +19,13 @@ class SearchAnimePaging(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NetworkAnime> {
         return try {
             val currentPage = params.key ?: 1
-            delay(500)
+            delay(1000)
+            Timber.d("Nsfw Mode: $nsfwMode")
             val apiResponse =
-                if (isSafety) {
-                    apiService.searchAnimeByTitle(q = query, page = currentPage, sfw = true)
+                if (nsfwMode) {
+                    animeAPI.searchAnimeByTitle(q = query, page = currentPage)
                 } else {
-                    apiService.searchAnimeByTitle(q = query, page = currentPage)
+                    animeAPI.searchAnimeByTitle(q = query, page = currentPage, sfw = true)
                 }
             LoadResult.Page(
                 data = apiResponse.data,
