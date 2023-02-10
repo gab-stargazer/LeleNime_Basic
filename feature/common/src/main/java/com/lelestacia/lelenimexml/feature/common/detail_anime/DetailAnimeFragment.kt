@@ -110,8 +110,9 @@ class DetailAnimeFragment :
                     )
 
                 val parser = DateParser()
+                val episodes = anime.episodes ?: 0
                 tvAiredValue.text =
-                    if ((anime.episodes ?: 0) <= 2) {
+                    if (episodes <= 2) {
                         getText(parser(anime.startedDate))
                     } else {
                         getText("${parser(anime.startedDate)} - ${parser(anime.finishedDate)}")
@@ -235,9 +236,7 @@ class DetailAnimeFragment :
         }
     }
 
-    private fun setCharacters() {
-
-    }
+    private fun setCharacters(){}
 
     private fun getText(input: String?): String {
         return if (input.isNullOrEmpty()) getString(R.string.information_value, UNKNOWN)

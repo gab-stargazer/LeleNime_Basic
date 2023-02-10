@@ -136,7 +136,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
                             binding.rvTopAnime.adapter = ErrorHorizontalAdapter(
                                 message = (loadState.refresh as LoadState.Error).error.message
                                     ?: "Unknown",
-                                onRetryClicked = (topAnimeAdapter::retry)
+                                onRetryClicked = topAnimeAdapter::retry
                             )
                         }
                     }
@@ -211,7 +211,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
                                 binding.rvAiringAnime.adapter = ErrorHorizontalAdapter(
                                     message = (loadState.refresh as LoadState.Error).error.message
                                         ?: "Unknown",
-                                    onRetryClicked = (airingAnimeAdapter::retry)
+                                    onRetryClicked = airingAnimeAdapter::retry
                                 )
                             }
                         }

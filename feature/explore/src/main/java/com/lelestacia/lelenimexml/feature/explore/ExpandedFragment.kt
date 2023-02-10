@@ -55,9 +55,8 @@ class ExpandedFragment : Fragment(R.layout.fragment_expanded) {
         }
 
         /*
-         *   TODO:
          *   1. Fix fragment didn't persist the previous position
-         *   2. Implement Trailer on the list
+         *   2. Implement Trailer on list
          *   3. Fix the load state adapter and make some improvements
          *   4. Wrap everything
          *   5. Refactor everything
