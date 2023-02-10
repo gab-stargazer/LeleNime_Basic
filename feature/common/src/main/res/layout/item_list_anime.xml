@@ -19,11 +19,12 @@
             android:id="@+id/iv_cover_anime"
             android:layout_width="100dp"
             android:layout_height="134dp"
+            android:scaleType="centerCrop"
             android:transitionName="cover_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/cover" />
+            android:src="@drawable/placeholder" />
 
         <LinearLayout
             android:layout_width="0dp"

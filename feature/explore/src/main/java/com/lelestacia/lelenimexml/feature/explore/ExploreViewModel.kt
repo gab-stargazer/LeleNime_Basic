@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.lelestacia.lelenimexml.core.domain.usecase.anime.IAnimeUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.history.IHistoryAnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.home.IHomeAnimeUseCase
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
     private val commonAnimeUseCase: IAnimeUseCase,
-    homeAnimeUseCase: IHomeAnimeUseCase
+    homeAnimeUseCase: IHomeAnimeUseCase,
+    historyAnimeUseCase: IHistoryAnimeUseCase
 ) : ViewModel() {
 
     private val _searchQuery = MutableLiveData("")
@@ -24,6 +26,8 @@ class ExploreViewModel @Inject constructor(
 
     val airingAnime: Flow<PagingData<Anime>> = homeAnimeUseCase.getAiringAnime()
         .cachedIn(viewModelScope)
+
+    val historyAnime: Flow<PagingData<Anime>> = historyAnimeUseCase.getAnimeHistory().cachedIn(viewModelScope)
 
     fun insertNewSearchQuery(newSearchQuery: String) {
         _searchQuery.value = newSearchQuery

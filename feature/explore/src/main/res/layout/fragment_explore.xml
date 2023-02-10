@@ -63,7 +63,7 @@
             android:id="@+id/shimmer_top_anime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:clipChildren="true"
             app:layout_constraintTop_toBottomOf="@id/btn_more_top_anime"
             app:shimmer_auto_start="true"
@@ -83,19 +83,27 @@
                 tools:listitem="@layout/item_card_anime_horizontal" />
         </com.facebook.shimmer.ShimmerFrameLayout>
 
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_top_airing"
+            style="@style/Widget.Material3.MaterialDivider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/shimmer_top_anime" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_header_airing_anime"
             style="@style/TextAppearance.Material3.TitleLarge"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:text="@string/currently_airing"
             android:textColor="?android:attr/textColorPrimary"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/btn_more_airing_anime"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/shimmer_top_anime" />
+            app:layout_constraintTop_toBottomOf="@id/divider_top_airing" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/btn_more_airing_anime"
@@ -113,7 +121,7 @@
             android:id="@+id/shimmer_airing_anime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:clipChildren="true"
             app:layout_constraintTop_toBottomOf="@id/tv_header_airing_anime"
             app:shimmer_auto_start="true"
@@ -132,5 +140,43 @@
                 tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_card_anime_horizontal" />
         </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_airing_history"
+            style="@style/Widget.Material3.MaterialDivider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/shimmer_airing_anime" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_header_recently_viewed"
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/recently_viewed"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_airing_history"
+            tools:text="Recently Viewed" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_history_anime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:splitMotionEvents="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/tv_header_recently_viewed"
+            tools:listitem="@layout/item_list_anime" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/rv_history_anime" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

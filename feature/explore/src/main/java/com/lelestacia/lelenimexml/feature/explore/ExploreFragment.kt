@@ -19,9 +19,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.lelestacia.lelenimexml.core.model.anime.Anime
+import com.lelestacia.lelenimexml.feature.common.adapter.ListAnimePagingAdapter
 import com.lelestacia.lelenimexml.feature.explore.adapter.ErrorHorizontalAdapter
 import com.lelestacia.lelenimexml.feature.explore.adapter.HorizontalAnimePagingAdapter
 import com.lelestacia.lelenimexml.feature.explore.adapter.HorizontalFooterLoadStateAdapter
@@ -40,11 +43,11 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
 
     private val binding: FragmentExploreBinding by viewBinding()
     private val viewModel: ExploreViewModel by activityViewModels()
-    private val topAnimeAdapter = HorizontalAnimePagingAdapter {
-        navigateToDetail(it)
+    private val topAnimeAdapter = HorizontalAnimePagingAdapter { anime ->
+        navigateToDetail(anime = anime)
     }
-    private val airingAnimeAdapter = HorizontalAnimePagingAdapter {
-        navigateToDetail(it)
+    private val airingAnimeAdapter = HorizontalAnimePagingAdapter { anime ->
+        navigateToDetail(anime = anime)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,6 +66,8 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
 
         setAiringAnime()
         listenIntoAiringAnimeProgress()
+
+        setHistoryAnime()
     }
 
     private fun setTopAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -213,6 +218,30 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
                     }
                 }
         }
+
+    private fun setHistoryAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+        val historyAnimeAdapter = ListAnimePagingAdapter { anime ->
+            navigateToDetail(anime = anime)
+        }
+
+        val mLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        val snapHelper = LinearSnapHelper()
+
+        binding.rvHistoryAnime.apply {
+            adapter = historyAnimeAdapter
+            layoutManager = mLayoutManager
+            addItemDecoration(DividerItemDecoration(context, mLayoutManager.orientation))
+            setHasFixedSize(true)
+            snapHelper.attachToRecyclerView(this)
+        }
+
+        viewModel.historyAnime.collectLatest { historyAnime ->
+            historyAnimeAdapter.submitData(
+                lifecycle = viewLifecycleOwner.lifecycle,
+                pagingData = historyAnime
+            )
+        }
+    }
 
     private fun navigateToDetail(anime: Anime) = viewLifecycleOwner.lifecycleScope.launch {
         Timber.d("Selected anime was ${anime.title}")
