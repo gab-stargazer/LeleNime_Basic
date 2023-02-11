@@ -28,4 +28,8 @@ class ExploreUseCases @Inject constructor(
     override fun getRecentAnimeRecommendation(): Flow<PagingData<Recommendation>> {
         return recommendationRepository.getRecentAnimeRecommendation()
     }
+
+    override fun getRecentMangaRecommendation(): Flow<PagingData<Recommendation>> {
+        return recommendationRepository.getRecentMangaRecommendation()
+    }
 }

@@ -10,4 +10,5 @@ interface IExploreUseCases {
     fun getAiringAnime(): Flow<PagingData<Anime>>
     fun getUpcomingAnime(): Flow<PagingData<Anime>>
     fun getRecentAnimeRecommendation(): Flow<PagingData<Recommendation>>
+    fun getRecentMangaRecommendation(): Flow<PagingData<Recommendation>>
 }
