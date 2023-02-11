@@ -7,17 +7,16 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.lelestacia.lelenimexml.core.common.Constant.IS_NSFW
 import com.lelestacia.lelenimexml.core.common.Resource
-import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
-import com.lelestacia.lelenimexml.core.data.utility.asAnime
-import com.lelestacia.lelenimexml.core.data.utility.asNewEntity
+import com.lelestacia.lelenimexml.core.data.utility.*
 import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
 import com.lelestacia.lelenimexml.core.database.service.IAnimeDatabaseService
+import com.lelestacia.lelenimexml.core.model.GenericModel
 import com.lelestacia.lelenimexml.core.model.anime.Anime
+import com.lelestacia.lelenimexml.core.model.review.Review
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
@@ -32,7 +31,7 @@ class AnimeRepository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IAnimeRepository {
 
-    override fun seasonAnimePagingData(): Flow<PagingData<Anime>> {
+    override fun getAiringAnime(): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -48,7 +47,7 @@ class AnimeRepository @Inject constructor(
         }
     }
 
-    override fun upcomingAnimePagingData(): Flow<PagingData<Anime>> {
+    override fun getUpcomingAnime(): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -64,7 +63,7 @@ class AnimeRepository @Inject constructor(
         }
     }
 
-    override fun topAnimePagingData(): Flow<PagingData<Anime>> {
+    override fun getTopAnime(): Flow<PagingData<Anime>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -96,6 +95,25 @@ class AnimeRepository @Inject constructor(
             pagingData.map { it.asAnime() }
         }
     }
+
+    override fun getAnimeReviewsByAnimeID(animeID: Int): Flow<Resource<List<Review>>> =
+        flow<Resource<List<Review>>> {
+            val apiResponse = animeApiService.getAnimeReviewsByAnimeID(animeID = animeID)
+            emit(Resource.Success(data = apiResponse.map { it.asReview() }))
+        }.catch { t ->
+            emit(Resource.Error(data = null, message = errorParser(t)))
+        }.onStart { emit(Resource.Loading) }
+            .flowOn(ioDispatcher)
+
+    override fun getAnimeRecommendationsByAnimeID(animeID: Int): Flow<Resource<List<GenericModel>>> =
+        flow<Resource<List<GenericModel>>> {
+            val apiResponse = animeApiService.getAnimeRecommendationsByAnimeID(animeID = animeID)
+            val recommendations = apiResponse.map { it.entry.asGenericModel() }
+            emit(Resource.Success(data = recommendations))
+        }.catch { t ->
+            emit(Resource.Error(data = null, message = errorParser(t)))
+        }.onStart { emit(Resource.Loading) }
+            .flowOn(ioDispatcher)
 
     override fun getNewestAnimeDataByAnimeID(animeID: Int): Flow<Anime> =
         animeDatabaseService.getNewestAnimeDataByAnimeID(animeID = animeID)

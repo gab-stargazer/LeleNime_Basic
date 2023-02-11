@@ -8,12 +8,18 @@ import com.lelestacia.lelenimexml.core.data.impl.character.CharacterRepository
 import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
 import com.lelestacia.lelenimexml.core.data.impl.episode.EpisodeRepository
 import com.lelestacia.lelenimexml.core.data.impl.episode.IEpisodeRepository
+import com.lelestacia.lelenimexml.core.data.impl.manga.IMangaRepository
+import com.lelestacia.lelenimexml.core.data.impl.manga.MangaRepository
+import com.lelestacia.lelenimexml.core.data.impl.recommendation.IRecommendationRepository
+import com.lelestacia.lelenimexml.core.data.impl.recommendation.RecommendationRepository
 import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
 import com.lelestacia.lelenimexml.core.database.service.IAnimeDatabaseService
 import com.lelestacia.lelenimexml.core.database.service.ICharacterDatabaseService
 import com.lelestacia.lelenimexml.core.database.service.IEpisodeDatabaseService
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkService
+import com.lelestacia.lelenimexml.core.network.impl.manga.IMangaNetworkService
+import com.lelestacia.lelenimexml.core.network.impl.recommendation.IRecommendationNetworkService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,4 +69,24 @@ object RepositoryModule {
         animeDatabaseService = animeDatabaseService,
         errorParserUtil = JikanErrorParserUtil()
     )
+
+    @Provides
+    @Singleton
+    fun provideMangaRepository(
+        mangaAPI: IMangaNetworkService,
+        @ApplicationContext mContext: Context
+    ): IMangaRepository =
+        MangaRepository(
+            mangaAPI = mangaAPI,
+            userPreferences = mContext.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
+        )
+
+    @Provides
+    @Singleton
+    fun provideRecommendationRepository(
+        recommendationAPI: IRecommendationNetworkService
+    ): IRecommendationRepository =
+        RecommendationRepository(
+            recommendationAPI = recommendationAPI
+        )
 }

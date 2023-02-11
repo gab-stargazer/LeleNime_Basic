@@ -10,15 +10,15 @@ class HomeAnimeUseCase @Inject constructor(
     private val animeRepository: IAnimeRepository
 ) : IHomeAnimeUseCase {
     override fun getAiringAnime(): Flow<PagingData<Anime>> {
-        return animeRepository.seasonAnimePagingData()
+        return animeRepository.getAiringAnime()
     }
 
     override fun getUpcomingAnime(): Flow<PagingData<Anime>> {
-        return animeRepository.upcomingAnimePagingData()
+        return animeRepository.getUpcomingAnime()
     }
 
     override fun getTopAnime(): Flow<PagingData<Anime>> {
-        return animeRepository.topAnimePagingData()
+        return animeRepository.getTopAnime()
     }
 
     override fun getAnimeByTitle(query: String): Flow<PagingData<Anime>> {

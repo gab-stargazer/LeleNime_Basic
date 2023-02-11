@@ -10,5 +10,5 @@ class EpisodeUseCase @Inject constructor(
     private val episodeRepository: IEpisodeRepository
 ) : IEpisodeUseCase {
     override fun getEpisodesByAnimeID(animeID: Int): Flow<Resource<List<Episode>>> =
-        episodeRepository.getEpisodesByAnimeID(animeID = animeID)
+        episodeRepository.getAnimeEpisodesByAnimeID(animeID = animeID)
 }
