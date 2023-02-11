@@ -2,7 +2,8 @@ package com.lelestacia.lelenimexml.core.network.source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.lelestacia.lelenimexml.core.network.model.anime.NetworkAnime
+import com.lelestacia.lelenimexml.core.network.model.anime.AnimeResponse
+import com.lelestacia.lelenimexml.core.network.source.endpoint.AnimeAPI
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
@@ -10,13 +11,13 @@ class SearchAnimePaging(
     private val query: String,
     private val animeAPI: AnimeAPI,
     private val nsfwMode: Boolean
-) : PagingSource<Int, NetworkAnime>() {
+) : PagingSource<Int, AnimeResponse>() {
 
-    override fun getRefreshKey(state: PagingState<Int, NetworkAnime>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, AnimeResponse>): Int? {
         return state.anchorPosition
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NetworkAnime> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeResponse> {
         return try {
             val currentPage = params.key ?: 1
             delay(1000)

@@ -1,9 +1,9 @@
 package com.lelestacia.lelenimexml.core.network.model.character
 
 import com.google.gson.annotations.SerializedName
-import com.lelestacia.lelenimexml.core.network.model.voice_actor.NetworkVoiceActor
+import com.lelestacia.lelenimexml.core.network.model.voice_actor.VoiceActorResponse
 
-data class NetworkCharacter(
+data class CharacterResponse(
     @SerializedName("character")
     val characterData: CharacterResponseData,
 
@@ -14,19 +14,19 @@ data class NetworkCharacter(
     val favorites: Int = 0,
 
     @SerializedName("voice_actors")
-    val voiceActors: List<NetworkVoiceActor>
+    val voiceActors: List<VoiceActorResponse>
 ) {
     data class CharacterResponseData(
         @SerializedName("mal_id")
         val malID: Int,
 
         @SerializedName("images")
-        val images: NetworkCharacterImage,
+        val images: CharacterImageResponse,
 
         @SerializedName("name")
         val name: String
     ) {
-        data class NetworkCharacterImage(
+        data class CharacterImageResponse(
             @SerializedName("webp")
             val webp: Webp
         ) {

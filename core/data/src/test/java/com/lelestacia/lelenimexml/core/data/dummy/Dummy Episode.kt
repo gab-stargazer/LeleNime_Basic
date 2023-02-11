@@ -1,9 +1,9 @@
 package com.lelestacia.lelenimexml.core.data.dummy
 
-import com.lelestacia.lelenimexml.core.network.model.episodes.NetworkEpisode
+import com.lelestacia.lelenimexml.core.network.model.episodes.EpisodeResponse
 
-val chainsawManNetworkEpisodes = listOf(
-    NetworkEpisode(
+val chainsawManEpisodeDTOS = listOf(
+    EpisodeResponse(
         malID = 1,
         title = "Dog and Chainsaw",
         titleJapanese = "犬とチェンソー",
@@ -14,7 +14,7 @@ val chainsawManNetworkEpisodes = listOf(
         forumURL = "https://myanimelist.net/forum/?topicid=2049947",
         titleRomanji = ""
     ),
-    NetworkEpisode(
+    EpisodeResponse(
         malID = 2,
         title = "Arrival in Tokyo",
         titleJapanese = "東京到着",
@@ -25,7 +25,7 @@ val chainsawManNetworkEpisodes = listOf(
         forumURL = "https://myanimelist.net/forum/?topicid=2052415",
         titleRomanji = ""
     ),
-    NetworkEpisode(
+    EpisodeResponse(
         malID = 3,
         title = "Meowy's Whereabouts",
         titleJapanese = "ニャーコの行方",
@@ -36,7 +36,7 @@ val chainsawManNetworkEpisodes = listOf(
         forumURL = "https://myanimelist.net/forum/?topicid=2053819",
         titleRomanji = ""
     ),
-    NetworkEpisode(
+    EpisodeResponse(
         malID = 4,
         title = "Rescue",
         titleJapanese = "救出",

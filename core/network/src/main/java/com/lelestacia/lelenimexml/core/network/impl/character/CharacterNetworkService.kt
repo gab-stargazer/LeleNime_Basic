@@ -1,9 +1,9 @@
 package com.lelestacia.lelenimexml.core.network.impl.character
 
-import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
-import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterDetail
-import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
-import com.lelestacia.lelenimexml.core.network.source.CharacterAPI
+import com.lelestacia.lelenimexml.core.network.model.character.CharacterResponse
+import com.lelestacia.lelenimexml.core.network.model.character.CharacterDetailResponse
+import com.lelestacia.lelenimexml.core.network.source.endpoint.AnimeAPI
+import com.lelestacia.lelenimexml.core.network.source.endpoint.CharacterAPI
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -15,14 +15,14 @@ class CharacterNetworkService @Inject constructor(
     private val characterAPI: CharacterAPI,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ICharacterNetworkService {
-    override suspend fun getCharactersByAnimeID(animeID: Int): List<NetworkCharacter> {
+    override suspend fun getCharactersByAnimeID(animeID: Int): List<CharacterResponse> {
         return withContext(ioDispatcher) {
             delay(1000)
             animeAPI.getCharactersByAnimeID(animeID = animeID).data
         }
     }
 
-    override suspend fun getCharacterDetailByCharacterID(characterID: Int): NetworkCharacterDetail {
+    override suspend fun getCharacterDetailByCharacterID(characterID: Int): CharacterDetailResponse {
         return withContext(ioDispatcher) {
             delay(1000)
             characterAPI.getCharacterDetailByCharacterID(id = characterID).data

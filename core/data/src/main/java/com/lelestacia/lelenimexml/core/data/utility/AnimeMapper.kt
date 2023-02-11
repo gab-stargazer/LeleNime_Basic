@@ -2,10 +2,10 @@ package com.lelestacia.lelenimexml.core.data.utility
 
 import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
 import com.lelestacia.lelenimexml.core.model.anime.Anime
-import com.lelestacia.lelenimexml.core.network.model.anime.NetworkAnime
+import com.lelestacia.lelenimexml.core.network.model.anime.AnimeResponse
 import java.util.Date
 
-fun NetworkAnime.asAnime(): Anime =
+fun AnimeResponse.asAnime(): Anime =
     Anime(
         malID = malId,
         coverImages = coverImages.webp.largeImageUrl,

@@ -6,11 +6,11 @@ import com.lelestacia.lelenimexml.core.database.entity.character.CharacterProfil
 import com.lelestacia.lelenimexml.core.database.entity.voice_actor.VoiceActorEntity
 import com.lelestacia.lelenimexml.core.model.character.Character
 import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
-import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
-import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterDetail
+import com.lelestacia.lelenimexml.core.network.model.character.CharacterResponse
+import com.lelestacia.lelenimexml.core.network.model.character.CharacterDetailResponse
 import java.util.Date
 
-fun NetworkCharacterDetail.asNewEntity(): CharacterInformationEntity =
+fun CharacterDetailResponse.asNewEntity(): CharacterInformationEntity =
     CharacterInformationEntity(
         characterID = characterMalId,
         characterKanjiName = characterKanjiName ?: "",
@@ -21,7 +21,7 @@ fun NetworkCharacterDetail.asNewEntity(): CharacterInformationEntity =
         updatedAt = null
     )
 
-fun NetworkCharacter.asNewEntity(): CharacterEntity =
+fun CharacterResponse.asNewEntity(): CharacterEntity =
     CharacterEntity(
         characterID = characterData.malID,
         name = characterData.name,
@@ -32,7 +32,7 @@ fun NetworkCharacter.asNewEntity(): CharacterEntity =
         updatedAt = null
     )
 
-fun NetworkCharacter.asCharacterWithVoiceActorEntities(): Pair<Int, List<VoiceActorEntity>> {
+fun CharacterResponse.asCharacterWithVoiceActorEntities(): Pair<Int, List<VoiceActorEntity>> {
     val characterID: Int = characterData.malID
     val voiceActorEntities: List<VoiceActorEntity> = voiceActors.map { networkVoiceActor ->
         VoiceActorEntity(
@@ -47,7 +47,7 @@ fun NetworkCharacter.asCharacterWithVoiceActorEntities(): Pair<Int, List<VoiceAc
     return Pair(characterID, voiceActorEntities)
 }
 
-fun NetworkCharacter.asNewVoiceActor(): List<VoiceActorEntity> {
+fun CharacterResponse.asNewVoiceActor(): List<VoiceActorEntity> {
     return voiceActors.map { networkVoiceActor ->
         VoiceActorEntity(
             voiceActorID = networkVoiceActor.person.malID,

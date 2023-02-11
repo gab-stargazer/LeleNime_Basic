@@ -12,7 +12,7 @@ import com.lelestacia.lelenimexml.core.database.service.ICharacterDatabaseServic
 import com.lelestacia.lelenimexml.core.model.character.Character
 import com.lelestacia.lelenimexml.core.model.character.CharacterDetail
 import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkService
-import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
+import com.lelestacia.lelenimexml.core.network.model.character.CharacterResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -36,7 +36,7 @@ class CharacterRepository @Inject constructor(
 
             if (animeCharactersCrossRef.isEmpty()) {
 
-                val apiResponse: List<NetworkCharacter> =
+                val apiResponse: List<CharacterResponse> =
                     apiService.getCharactersByAnimeID(animeID = animeID)
 
                 if (apiResponse.isEmpty()) {

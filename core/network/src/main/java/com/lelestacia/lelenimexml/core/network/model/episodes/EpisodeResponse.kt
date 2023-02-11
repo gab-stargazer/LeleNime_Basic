@@ -2,7 +2,7 @@ package com.lelestacia.lelenimexml.core.network.model.episodes
 
 import com.google.gson.annotations.SerializedName
 
-data class NetworkEpisode(
+data class EpisodeResponse(
     @SerializedName("mal_id")
     val malID: Int,
 

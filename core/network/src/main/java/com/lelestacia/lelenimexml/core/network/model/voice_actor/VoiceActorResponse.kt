@@ -2,24 +2,24 @@ package com.lelestacia.lelenimexml.core.network.model.voice_actor
 
 import com.google.gson.annotations.SerializedName
 
-data class NetworkVoiceActor(
+data class VoiceActorResponse(
     @SerializedName("person")
-    val person: Person,
+    val person: PersonResponse,
 
     @SerializedName("language")
     val language: String
 ) {
-    data class Person(
+    data class PersonResponse(
         @SerializedName("mal_id")
         val malID: Int,
 
         @SerializedName("images")
-        val image: NetworkVoiceActorImage,
+        val image: VoiceActorImageResponse,
 
         @SerializedName("name")
         val name: String,
     ) {
-        data class NetworkVoiceActorImage(
+        data class VoiceActorImageResponse(
             @SerializedName("jpg")
             val jpg: Jpeg
         ) {

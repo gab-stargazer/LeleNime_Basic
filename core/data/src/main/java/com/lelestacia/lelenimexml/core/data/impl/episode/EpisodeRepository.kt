@@ -10,7 +10,7 @@ import com.lelestacia.lelenimexml.core.database.service.IAnimeDatabaseService
 import com.lelestacia.lelenimexml.core.database.service.IEpisodeDatabaseService
 import com.lelestacia.lelenimexml.core.model.episode.Episode
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
-import com.lelestacia.lelenimexml.core.network.model.episodes.NetworkEpisode
+import com.lelestacia.lelenimexml.core.network.model.episodes.EpisodeResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -89,8 +89,8 @@ class EpisodeRepository @Inject constructor(
 
                 val apiResponse = animeApiService.getAnimeEpisodesByAnimeID(animeID = animeID)
                 val newEpisodeEntities: List<EpisodeEntity> = apiResponse
-                    .map { networkEpisode: NetworkEpisode ->
-                        networkEpisode.asNewEntity(animeID = animeID)
+                    .map { episodeDTO: EpisodeResponse ->
+                        episodeDTO.asNewEntity(animeID = animeID)
                     }
 
                 localEpisodes =

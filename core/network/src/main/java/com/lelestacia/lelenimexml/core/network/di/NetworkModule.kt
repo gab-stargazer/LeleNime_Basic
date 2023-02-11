@@ -4,8 +4,8 @@ import com.lelestacia.lelenimexml.core.network.impl.anime.AnimeNetworkService
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import com.lelestacia.lelenimexml.core.network.impl.character.CharacterNetworkService
 import com.lelestacia.lelenimexml.core.network.impl.character.ICharacterNetworkService
-import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
-import com.lelestacia.lelenimexml.core.network.source.CharacterAPI
+import com.lelestacia.lelenimexml.core.network.source.endpoint.AnimeAPI
+import com.lelestacia.lelenimexml.core.network.source.endpoint.CharacterAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
