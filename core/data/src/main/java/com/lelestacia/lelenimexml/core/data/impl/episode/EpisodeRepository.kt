@@ -1,5 +1,9 @@
 package com.lelestacia.lelenimexml.core.data.impl.episode
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.lelestacia.lelenimexml.core.common.Resource
 import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
 import com.lelestacia.lelenimexml.core.data.utility.asEpisode
@@ -11,15 +15,12 @@ import com.lelestacia.lelenimexml.core.database.service.IEpisodeDatabaseService
 import com.lelestacia.lelenimexml.core.model.episode.Episode
 import com.lelestacia.lelenimexml.core.network.impl.anime.IAnimeNetworkService
 import com.lelestacia.lelenimexml.core.network.model.episodes.EpisodeResponse
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import timber.log.Timber
-import java.util.Date
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -47,7 +48,7 @@ class EpisodeRepository @Inject constructor(
      *         timestamp tobe used again for the latter use
      */
 
-    override fun getEpisodesByAnimeID(animeID: Int): Flow<Resource<List<Episode>>> =
+    override fun getAnimeEpisodesByAnimeID(animeID: Int): Flow<Resource<List<Episode>>> =
         flow {
             var localEpisodes: List<EpisodeEntity> = episodeDatabaseService
                 .getEpisodesByAnimeID(animeID = animeID)
@@ -133,6 +134,25 @@ class EpisodeRepository @Inject constructor(
                 else -> emit(Resource.Error(data = episodes, message = "Error: ${t.message}"))
             }
         }.onStart { emit(Resource.Loading) }.flowOn(ioDispatcher)
+
+    override fun getAnimeEpisodesWithPagingByAnimeID(animeID: Int): Flow<PagingData<Episode>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 100,
+                prefetchDistance = 10,
+                enablePlaceholders = false,
+                initialLoadSize = 100
+            ),
+            pagingSourceFactory = {
+                animeApiService.getAnimeEpisodesWithPagingByAnimeID(animeID = animeID)
+            }
+        ).flow.map { pagingData ->
+            pagingData.map {
+                it.asNewEntity(animeID = animeID)
+                    .asEpisode()
+            }
+        }
+    }
 
     private fun isLocalDataOutdated(anime: AnimeEntity, oldestUpdate: Long): Boolean {
         val isAnimeOnGoing: Boolean = anime.airing

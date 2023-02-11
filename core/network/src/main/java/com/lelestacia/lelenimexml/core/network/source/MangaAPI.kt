@@ -3,6 +3,7 @@ package com.lelestacia.lelenimexml.core.network.source
 import com.lelestacia.lelenimexml.core.network.model.GenericResponse
 import com.lelestacia.lelenimexml.core.network.model.GenericReviewResponse
 import com.lelestacia.lelenimexml.core.network.model.character.CharacterResponse
+import com.lelestacia.lelenimexml.core.network.model.manga.MangaRecommendationResponse
 import com.lelestacia.lelenimexml.core.network.model.manga.MangaResponse
 import com.lelestacia.lelenimexml.core.network.model.pagination.GenericPaginationResponse
 import retrofit2.http.GET
@@ -29,7 +30,7 @@ interface MangaAPI {
     @GET("manga/{id}/recommendations")
     suspend fun getMangaRecommendationByMangaID(
         @Path("id") mangaID: Int
-    ): GenericResponse<List<MangaResponse>>
+    ): GenericResponse<List<MangaRecommendationResponse>>
 
     @GET("manga")
     suspend fun searchMangaByTitle(

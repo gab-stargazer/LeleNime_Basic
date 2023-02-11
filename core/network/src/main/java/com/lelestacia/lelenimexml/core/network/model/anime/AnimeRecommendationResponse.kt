@@ -6,7 +6,7 @@ import com.lelestacia.lelenimexml.core.network.model.GenericModelResponse
 data class AnimeRecommendationResponse(
 
     @SerializedName("entry")
-    val entry: List<GenericModelResponse>,
+    val entry: GenericModelResponse,
 
     @SerializedName("votes")
     val votes: Int

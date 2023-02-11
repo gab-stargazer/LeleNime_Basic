@@ -3,6 +3,7 @@ package com.lelestacia.lelenimexml.core.network.impl.manga
 import androidx.paging.PagingSource
 import com.lelestacia.lelenimexml.core.network.model.GenericReviewResponse
 import com.lelestacia.lelenimexml.core.network.model.character.CharacterResponse
+import com.lelestacia.lelenimexml.core.network.model.manga.MangaRecommendationResponse
 import com.lelestacia.lelenimexml.core.network.model.manga.MangaResponse
 import com.lelestacia.lelenimexml.core.network.source.MangaAPI
 import kotlinx.coroutines.delay
@@ -27,12 +28,12 @@ class MangaNetworkService @Inject constructor(
         return mangaAPI.getMangaReviewsByMangaID(mangaID = mangaID).data
     }
 
-    override suspend fun getMangaRecommendationByMangaID(mangaID: Int): List<MangaResponse> {
+    override suspend fun getMangaRecommendationByMangaID(mangaID: Int): List<MangaRecommendationResponse> {
         delay(1000)
         return mangaAPI.getMangaRecommendationByMangaID(mangaID = mangaID).data
     }
 
-    override suspend fun searchMangaByTitle(
+    override fun searchMangaByTitle(
         title: String,
         sfw: Boolean
     ): PagingSource<Int, MangaResponse> =
