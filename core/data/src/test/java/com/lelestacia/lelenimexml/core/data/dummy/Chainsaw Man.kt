@@ -4,10 +4,10 @@ import com.lelestacia.lelenimexml.core.data.utility.asNewEntity
 import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterProfile
-import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter
-import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter.CharacterResponseData.NetworkCharacterImage
-import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacter.CharacterResponseData.NetworkCharacterImage.Webp
-import com.lelestacia.lelenimexml.core.network.model.character.NetworkCharacterDetail
+import com.lelestacia.lelenimexml.core.network.model.character.CharacterResponse
+import com.lelestacia.lelenimexml.core.network.model.character.CharacterResponse.CharacterResponseData.CharacterImageResponse
+import com.lelestacia.lelenimexml.core.network.model.character.CharacterResponse.CharacterResponseData.CharacterImageResponse.Webp
+import com.lelestacia.lelenimexml.core.network.model.character.CharacterDetailResponse
 import java.util.Date
 
 val chainsawManEntity = AnimeEntity(
@@ -41,10 +41,10 @@ val chainsawManEntity = AnimeEntity(
 )
 
 val chainsawManCharacters = listOf(
-    NetworkCharacter(
-        characterData = NetworkCharacter.CharacterResponseData(
+    CharacterResponse(
+        characterData = CharacterResponse.CharacterResponseData(
             malID = 170732,
-            images = NetworkCharacterImage(
+            images = CharacterImageResponse(
                 Webp(
                     imageUrl = "https://cdn.myanimelist.net/images/characters/3/492407.webp?s=4d8e9a01dac6a5d891c3ed434187fba9"
                 )
@@ -55,10 +55,10 @@ val chainsawManCharacters = listOf(
         favorites = 13968,
         voiceActors = emptyList()
     ),
-    NetworkCharacter(
-        characterData = NetworkCharacter.CharacterResponseData(
+    CharacterResponse(
+        characterData = CharacterResponse.CharacterResponseData(
             malID = 170735,
-            images = NetworkCharacterImage(
+            images = CharacterImageResponse(
                 Webp(
                     imageUrl = "https://cdn.myanimelist.net/images/characters/10/492791.webp?s=bcd7cca0e5126478eb2417666188adc7"
                 )
@@ -69,10 +69,10 @@ val chainsawManCharacters = listOf(
         favorites = 6872,
         voiceActors = emptyList()
     ),
-    NetworkCharacter(
-        characterData = NetworkCharacter.CharacterResponseData(
+    CharacterResponse(
+        characterData = CharacterResponse.CharacterResponseData(
             malID = 170733,
-            images = NetworkCharacterImage(
+            images = CharacterImageResponse(
                 Webp(
                     imageUrl = "https://cdn.myanimelist.net/images/characters/7/494969.webp?s=02622d6ffa487b8d6d7503af4792a106"
                 )
@@ -85,7 +85,7 @@ val chainsawManCharacters = listOf(
     )
 )
 
-val powerCharacterDetail = NetworkCharacterDetail(
+val powerCharacterDetail = CharacterDetailResponse(
     characterMalId = 170733,
     characterName = "Power",
     characterKanjiName = "パワー",

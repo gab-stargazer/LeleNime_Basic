@@ -1,12 +1,12 @@
 package com.lelestacia.lelenimexml.core.data.dummy
 
-import com.lelestacia.lelenimexml.core.network.model.anime.NetworkAnime
+import com.lelestacia.lelenimexml.core.network.model.anime.AnimeResponse
 import java.util.Date
 
-val chainsawManNetwork = NetworkAnime(
+val chainsawManNetwork = AnimeResponse(
     malId = 44511,
-    coverImages = NetworkAnime.NetworkAnimeImages(
-        webp = NetworkAnime.NetworkAnimeImages.NetworkAnimeWebp(
+    coverImages = AnimeResponse.AnimeImagesDTO(
+        webp = AnimeResponse.AnimeImagesDTO.Webp(
             imageUrl = "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg",
             largeImageUrl = "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg"
         )
@@ -26,7 +26,7 @@ val chainsawManNetwork = NetworkAnime(
     season = "fall",
     year = 2022,
     genres = listOf(),
-    aired = NetworkAnime.NetworkAnimeAiringInformation(
+    aired = AnimeResponse.AnimeAiringInformationResponse(
         from = Date().toString(),
         to = Date().toString(),
     ),
@@ -36,10 +36,10 @@ val chainsawManNetwork = NetworkAnime(
     studio = emptyList()
 )
 
-val mobPsychoNetwork = NetworkAnime(
+val mobPsychoNetwork = AnimeResponse(
     malId = 50172,
-    coverImages = NetworkAnime.NetworkAnimeImages(
-        webp = NetworkAnime.NetworkAnimeImages.NetworkAnimeWebp(
+    coverImages = AnimeResponse.AnimeImagesDTO(
+        webp = AnimeResponse.AnimeImagesDTO.Webp(
             imageUrl = "https://cdn.myanimelist.net/images/anime/1228/125011.jpg",
             largeImageUrl = "https://cdn.myanimelist.net/images/anime/1228/125011.jpg"
         )
@@ -59,7 +59,7 @@ val mobPsychoNetwork = NetworkAnime(
     season = "fall",
     year = 2022,
     genres = listOf(),
-    aired = NetworkAnime.NetworkAnimeAiringInformation(
+    aired = AnimeResponse.AnimeAiringInformationResponse(
         from = Date().toString(),
         to = Date().toString(),
     ),

@@ -2,15 +2,15 @@ package com.lelestacia.lelenimexml.core.network.model.anime
 
 import com.google.gson.annotations.SerializedName
 
-data class NetworkAnime(
+data class AnimeResponse(
     @SerializedName("mal_id")
     val malId: Int,
 
     @SerializedName("images")
-    val coverImages: NetworkAnimeImages,
+    val coverImages: AnimeImagesDTO,
 
     @SerializedName("trailer")
-    val trailer: NetworkAnimeTrailer?,
+    val trailer: AnimeTrailerResponse?,
 
     @SerializedName("title")
     val title: String,
@@ -37,7 +37,7 @@ data class NetworkAnime(
     val airing: Boolean,
 
     @SerializedName("aired")
-    val aired: NetworkAnimeAiringInformation,
+    val aired: AnimeAiringInformationResponse,
 
     @SerializedName("duration")
     val duration: String,
@@ -64,16 +64,16 @@ data class NetworkAnime(
     val year: Int,
 
     @SerializedName("studios")
-    val studio: List<NetworkAnimeStudio>,
+    val studio: List<AnimeStudioResponse>,
 
     @SerializedName("genres")
-    val genres: List<NetworkAnimeGenres>
+    val genres: List<AnimeGenresResponse>
 ) {
-    data class NetworkAnimeImages(
+    data class AnimeImagesDTO(
         @SerializedName("webp")
-        val webp: NetworkAnimeWebp
+        val webp: Webp
     ) {
-        data class NetworkAnimeWebp(
+        data class Webp(
             @SerializedName("image_url")
             val imageUrl: String,
 
@@ -82,7 +82,7 @@ data class NetworkAnime(
         )
     }
 
-    data class NetworkAnimeTrailer(
+    data class AnimeTrailerResponse(
         @SerializedName("youtube_id")
         val youtubeId: String?,
 
@@ -93,9 +93,9 @@ data class NetworkAnime(
         val embedUrl: String?,
 
         @SerializedName("images")
-        val images: NetworkTrailerImages?
+        val images: AnimeTrailerImagesResponse?
     ) {
-        data class NetworkTrailerImages(
+        data class AnimeTrailerImagesResponse(
             @SerializedName("medium_image_url")
             val mediumImageUrl: String,
 
@@ -107,7 +107,7 @@ data class NetworkAnime(
         )
     }
 
-    data class NetworkAnimeGenres(
+    data class AnimeGenresResponse(
         @SerializedName("mal_id")
         val malId: Int,
 
@@ -121,7 +121,7 @@ data class NetworkAnime(
         val url: String
     )
 
-    data class NetworkAnimeAiringInformation(
+    data class AnimeAiringInformationResponse(
         @SerializedName("from")
         val from: String?,
 
@@ -129,7 +129,7 @@ data class NetworkAnime(
         val to: String?
     )
 
-    data class NetworkAnimeStudio(
+    data class AnimeStudioResponse(
         @SerializedName("mal_id")
         val malID: Int,
 

@@ -2,6 +2,8 @@ package com.lelestacia.lelenimexml.core.network.di
 
 import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
 import com.lelestacia.lelenimexml.core.network.source.CharacterAPI
+import com.lelestacia.lelenimexml.core.network.source.MangaAPI
+import com.lelestacia.lelenimexml.core.network.source.RecommendationAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,31 +31,40 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideAnimeService(
+    fun provideRetrofit(
         okHttpClient: OkHttpClient,
         deserializer: GsonConverterFactory
-    ): AnimeAPI =
+    ): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(deserializer)
             .client(okHttpClient)
             .validateEagerly(true)
             .build()
-            .create(AnimeAPI::class.java)
 
     @Provides
     @Singleton
-    fun provideCharacterService(
-        okHttpClient: OkHttpClient,
-        deserializer: GsonConverterFactory
-    ): CharacterAPI =
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(deserializer)
-            .client(okHttpClient)
-            .validateEagerly(true)
-            .build()
-            .create(CharacterAPI::class.java)
+    fun provideAnimeAPI(
+        retrofit: Retrofit
+    ): AnimeAPI = retrofit.create(AnimeAPI::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCharacterAPI(
+        retrofit: Retrofit
+    ): CharacterAPI = retrofit.create(CharacterAPI::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMangaAPI(
+        retrofit: Retrofit
+    ): MangaAPI = retrofit.create(MangaAPI::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRecommendationAPI(
+        retrofit: Retrofit
+    ): RecommendationAPI = retrofit.create(RecommendationAPI::class.java)
 
     private const val HOSTNAME = "api.jikan.moe"
     private const val BASE_URL = "https://api.jikan.moe/v4/"
