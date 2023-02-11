@@ -2,7 +2,7 @@ package com.lelestacia.lelenimexml.core.network.impl.recommendation
 
 import androidx.paging.PagingSource
 import com.lelestacia.lelenimexml.core.network.model.GenericRecommendationResponse
-import com.lelestacia.lelenimexml.core.network.source.endpoint.RecommendationAPI
+import com.lelestacia.lelenimexml.core.network.source.RecommendationAPI
 import javax.inject.Inject
 
 class RecommendationNetworkService @Inject constructor(

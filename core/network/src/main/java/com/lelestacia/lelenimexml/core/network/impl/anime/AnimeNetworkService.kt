@@ -6,11 +6,7 @@ import com.lelestacia.lelenimexml.core.network.model.anime.AnimeRecommendationRe
 import com.lelestacia.lelenimexml.core.network.model.anime.AnimeResponse
 import com.lelestacia.lelenimexml.core.network.model.character.CharacterResponse
 import com.lelestacia.lelenimexml.core.network.model.episodes.EpisodeResponse
-import com.lelestacia.lelenimexml.core.network.source.SearchAnimePaging
-import com.lelestacia.lelenimexml.core.network.source.SeasonAnimePaging
-import com.lelestacia.lelenimexml.core.network.source.TopAnimePaging
-import com.lelestacia.lelenimexml.core.network.source.UpcomingAnimePaging
-import com.lelestacia.lelenimexml.core.network.source.endpoint.AnimeAPI
+import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

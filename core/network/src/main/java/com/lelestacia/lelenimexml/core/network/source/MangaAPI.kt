@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.network.source.endpoint
+package com.lelestacia.lelenimexml.core.network.source
 
 import com.lelestacia.lelenimexml.core.network.model.GenericResponse
 import com.lelestacia.lelenimexml.core.network.model.GenericReviewResponse

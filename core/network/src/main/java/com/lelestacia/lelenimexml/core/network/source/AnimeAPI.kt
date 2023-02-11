@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.network.source.endpoint
+package com.lelestacia.lelenimexml.core.network.source
 
 import com.lelestacia.lelenimexml.core.network.model.*
 import com.lelestacia.lelenimexml.core.network.model.anime.*

@@ -2,8 +2,8 @@ package com.lelestacia.lelenimexml.core.network.impl.character
 
 import com.lelestacia.lelenimexml.core.network.model.character.CharacterResponse
 import com.lelestacia.lelenimexml.core.network.model.character.CharacterDetailResponse
-import com.lelestacia.lelenimexml.core.network.source.endpoint.AnimeAPI
-import com.lelestacia.lelenimexml.core.network.source.endpoint.CharacterAPI
+import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
+import com.lelestacia.lelenimexml.core.network.source.CharacterAPI
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

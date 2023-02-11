@@ -1,9 +1,9 @@
 package com.lelestacia.lelenimexml.core.network.di
 
-import com.lelestacia.lelenimexml.core.network.source.endpoint.AnimeAPI
-import com.lelestacia.lelenimexml.core.network.source.endpoint.CharacterAPI
-import com.lelestacia.lelenimexml.core.network.source.endpoint.MangaAPI
-import com.lelestacia.lelenimexml.core.network.source.endpoint.RecommendationAPI
+import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
+import com.lelestacia.lelenimexml.core.network.source.CharacterAPI
+import com.lelestacia.lelenimexml.core.network.source.MangaAPI
+import com.lelestacia.lelenimexml.core.network.source.RecommendationAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

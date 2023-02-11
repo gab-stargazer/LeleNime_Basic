@@ -1,13 +1,14 @@
-package com.lelestacia.lelenimexml.core.network.source
+package com.lelestacia.lelenimexml.core.network.impl.anime
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.lelestacia.lelenimexml.core.network.model.anime.AnimeResponse
-import com.lelestacia.lelenimexml.core.network.source.endpoint.AnimeAPI
+import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
 import kotlinx.coroutines.delay
+import retrofit2.HttpException
 import timber.log.Timber
 
-class SeasonAnimePaging(
+class TopAnimePaging(
     private val animeAPI: AnimeAPI
 ) : PagingSource<Int, AnimeResponse>() {
 
@@ -18,9 +19,9 @@ class SeasonAnimePaging(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeResponse> {
         return try {
             val currentPage = params.key ?: 1
-            val apiResponse = animeAPI.getCurrentSeason(currentPage)
+            val apiResponse = animeAPI.getTopAnime(page = currentPage)
             delay(
-                if (currentPage == 1) 800
+                if (currentPage == 1) 400
                 else 500
             )
             LoadResult.Page(
@@ -33,7 +34,9 @@ class SeasonAnimePaging(
                 else null
             )
         } catch (e: Exception) {
-            Timber.e(e, e.localizedMessage)
+            Timber.e(e.message)
+            LoadResult.Error(e)
+        } catch (e: HttpException) {
             LoadResult.Error(e)
         }
     }

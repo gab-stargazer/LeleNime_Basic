@@ -1,16 +1,14 @@
-package com.lelestacia.lelenimexml.core.network.source
+package com.lelestacia.lelenimexml.core.network.impl.anime
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.lelestacia.lelenimexml.core.network.model.anime.AnimeResponse
-import com.lelestacia.lelenimexml.core.network.source.endpoint.AnimeAPI
+import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
-class SearchAnimePaging(
-    private val query: String,
-    private val animeAPI: AnimeAPI,
-    private val nsfwMode: Boolean
+class SeasonAnimePaging(
+    private val animeAPI: AnimeAPI
 ) : PagingSource<Int, AnimeResponse>() {
 
     override fun getRefreshKey(state: PagingState<Int, AnimeResponse>): Int? {
@@ -20,14 +18,11 @@ class SearchAnimePaging(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeResponse> {
         return try {
             val currentPage = params.key ?: 1
-            delay(1000)
-            Timber.d("Nsfw Mode: $nsfwMode")
-            val apiResponse =
-                if (nsfwMode) {
-                    animeAPI.searchAnimeByTitle(q = query, page = currentPage)
-                } else {
-                    animeAPI.searchAnimeByTitle(q = query, page = currentPage, sfw = true)
-                }
+            val apiResponse = animeAPI.getCurrentSeason(currentPage)
+            delay(
+                if (currentPage == 1) 800
+                else 500
+            )
             LoadResult.Page(
                 data = apiResponse.data,
                 prevKey =

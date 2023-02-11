@@ -3,7 +3,7 @@ package com.lelestacia.lelenimexml.core.network.impl.recommendation
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.lelestacia.lelenimexml.core.network.model.GenericRecommendationResponse
-import com.lelestacia.lelenimexml.core.network.source.endpoint.RecommendationAPI
+import com.lelestacia.lelenimexml.core.network.source.RecommendationAPI
 import kotlinx.coroutines.delay
 
 class MangaRecommendationPagingSource(

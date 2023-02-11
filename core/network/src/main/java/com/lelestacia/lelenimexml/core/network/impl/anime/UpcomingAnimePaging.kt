@@ -1,9 +1,9 @@
-package com.lelestacia.lelenimexml.core.network.source
+package com.lelestacia.lelenimexml.core.network.impl.anime
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.lelestacia.lelenimexml.core.network.model.anime.AnimeResponse
-import com.lelestacia.lelenimexml.core.network.source.endpoint.AnimeAPI
+import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
 import timber.log.Timber
 
 class UpcomingAnimePaging(

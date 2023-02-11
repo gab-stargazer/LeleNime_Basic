@@ -1,15 +1,16 @@
-package com.lelestacia.lelenimexml.core.network.source
+package com.lelestacia.lelenimexml.core.network.impl.anime
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.lelestacia.lelenimexml.core.network.model.anime.AnimeResponse
-import com.lelestacia.lelenimexml.core.network.source.endpoint.AnimeAPI
+import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
 import kotlinx.coroutines.delay
-import retrofit2.HttpException
 import timber.log.Timber
 
-class TopAnimePaging(
-    private val animeAPI: AnimeAPI
+class SearchAnimePaging(
+    private val query: String,
+    private val animeAPI: AnimeAPI,
+    private val nsfwMode: Boolean
 ) : PagingSource<Int, AnimeResponse>() {
 
     override fun getRefreshKey(state: PagingState<Int, AnimeResponse>): Int? {
@@ -19,11 +20,14 @@ class TopAnimePaging(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeResponse> {
         return try {
             val currentPage = params.key ?: 1
-            val apiResponse = animeAPI.getTopAnime(page = currentPage)
-            delay(
-                if (currentPage == 1) 400
-                else 500
-            )
+            delay(1000)
+            Timber.d("Nsfw Mode: $nsfwMode")
+            val apiResponse =
+                if (nsfwMode) {
+                    animeAPI.searchAnimeByTitle(q = query, page = currentPage)
+                } else {
+                    animeAPI.searchAnimeByTitle(q = query, page = currentPage, sfw = true)
+                }
             LoadResult.Page(
                 data = apiResponse.data,
                 prevKey =
@@ -34,9 +38,7 @@ class TopAnimePaging(
                 else null
             )
         } catch (e: Exception) {
-            Timber.e(e.message)
-            LoadResult.Error(e)
-        } catch (e: HttpException) {
+            Timber.e(e, e.localizedMessage)
             LoadResult.Error(e)
         }
     }
