@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.lelestacia.lelenimexml.core.network.model.GenericRecommendationResponse
 import com.lelestacia.lelenimexml.core.network.source.RecommendationAPI
 import kotlinx.coroutines.delay
+import timber.log.Timber
 
 class AnimeRecommendationPagingSource(
     private val recommendationAPI: RecommendationAPI
@@ -17,6 +18,11 @@ class AnimeRecommendationPagingSource(
         return try {
             val currentPage = params.key ?: 1
             val apiResponse = recommendationAPI.getRecentAnimeRecommendation(page = currentPage)
+            if (apiResponse.data.isEmpty()) {
+                Timber.e("Api Returned 0 data or failed to parse")
+            } else {
+                Timber.i("Api returned data ${apiResponse.data}")
+            }
             delay(
                 if (currentPage == 1) 800
                 else 400
@@ -31,6 +37,7 @@ class AnimeRecommendationPagingSource(
                 else null
             )
         } catch (e: Exception) {
+            Timber.e(e.message)
             LoadResult.Error(e)
         }
     }

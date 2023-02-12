@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.SnapHelper
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.lelestacia.lelenimexml.core.common.Constant.UNKNOWN
-import com.lelestacia.lelenimexml.core.common.DateParser
+import com.lelestacia.lelenimexml.feature.common.util.DateParser
 import com.lelestacia.lelenimexml.core.common.R.anim.fade_in
 import com.lelestacia.lelenimexml.core.common.R.anim.fade_out
 import com.lelestacia.lelenimexml.core.common.Resource

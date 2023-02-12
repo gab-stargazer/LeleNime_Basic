@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.lelestacia.lelenimexml.core.model.anime.Anime
-import com.lelestacia.lelenimexml.feature.common.adapter.ListAnimePagingAdapter
+import com.lelestacia.lelenimexml.feature.common.adapter.RecommendationPagingDataAdapter
 import com.lelestacia.lelenimexml.feature.explore.adapter.ErrorHorizontalAdapter
 import com.lelestacia.lelenimexml.feature.explore.adapter.HorizontalAnimePagingAdapter
 import com.lelestacia.lelenimexml.feature.explore.adapter.HorizontalFooterLoadStateAdapter
@@ -49,12 +49,15 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
     private val airingAnimeAdapter = HorizontalAnimePagingAdapter { anime ->
         navigateToDetail(anime = anime)
     }
+    private val recommendationAnimeAdapter = RecommendationPagingDataAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(
-            this, viewLifecycleOwner, Lifecycle.State.RESUMED
+            this,
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED
         )
 
         val format = "dd MMMM yyyy"
@@ -67,7 +70,8 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
         setAiringAnime()
         listenIntoAiringAnimeProgress()
 
-        setHistoryAnime()
+        setRecommendationAnime()
+        listenIntoRecommendationAnimeProgress()
     }
 
     private fun setTopAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -219,28 +223,26 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
                 }
         }
 
-    private fun setHistoryAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        val historyAnimeAdapter = ListAnimePagingAdapter { anime ->
-            navigateToDetail(anime = anime)
-        }
-
+    private fun setRecommendationAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
         val mLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         val snapHelper = LinearSnapHelper()
-
-        binding.rvHistoryAnime.apply {
-            adapter = historyAnimeAdapter
+        binding.rvRecommendationAnime.apply {
+            adapter = recommendationAnimeAdapter
             layoutManager = mLayoutManager
             addItemDecoration(DividerItemDecoration(context, mLayoutManager.orientation))
-            setHasFixedSize(true)
             snapHelper.attachToRecyclerView(this)
         }
 
-        viewModel.historyAnime.collectLatest { historyAnime ->
-            historyAnimeAdapter.submitData(
+        viewModel.recommendationAnime.collectLatest { recommendationAnime ->
+            recommendationAnimeAdapter.submitData(
                 lifecycle = viewLifecycleOwner.lifecycle,
-                pagingData = historyAnime
+                pagingData = recommendationAnime
             )
         }
+    }
+
+    private fun listenIntoRecommendationAnimeProgress() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+
     }
 
     private fun navigateToDetail(anime: Anime) = viewLifecycleOwner.lifecycleScope.launch {

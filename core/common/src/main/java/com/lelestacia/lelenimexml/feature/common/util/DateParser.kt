@@ -1,15 +1,14 @@
-package com.lelestacia.lelenimexml.core.common
+package com.lelestacia.lelenimexml.feature.common.util
 
-import com.lelestacia.lelenimexml.core.common.Constant.UNKNOWN
+import com.lelestacia.lelenimexml.core.common.Constant
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class DateParser {
     operator fun invoke(unformattedDate: String?): String {
-        return if (unformattedDate.isNullOrEmpty()) UNKNOWN
+        return if (unformattedDate.isNullOrEmpty()) Constant.UNKNOWN
         else {
             val formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
             val date: Date = Date.from(Instant.from(formatter.parse(unformattedDate)))

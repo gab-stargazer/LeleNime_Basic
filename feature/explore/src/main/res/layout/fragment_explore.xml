@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     tools:context="ExploreFragment"
     tools:theme="@style/Theme.LeleNimeXML">
 
@@ -16,19 +17,21 @@
             style="@style/TextAppearance.Material3.HeadlineMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="20dp"
+            android:letterSpacing="0.0125"
             android:text="@string/anime"
             android:textColor="?android:attr/textColorPrimary"
-            android:textStyle="bold"
+            app:fontFamily="@font/noto_sans_bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_header_date"
-            style="@style/TextAppearance.Material3.BodySmall"
+            style="@style/TextAppearance.Material3.BodyMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="?android:attr/textColorPrimary"
+            app:fontFamily="@font/noto_sans"
             app:layout_constraintStart_toStartOf="@id/tv_header_title"
             app:layout_constraintTop_toBottomOf="@id/tv_header_title"
             tools:text="2 February 2023" />
@@ -38,20 +41,21 @@
             style="@style/TextAppearance.Material3.TitleLarge"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:letterSpacing="0.0125"
             android:text="@string/trending"
             android:textColor="?android:attr/textColorPrimary"
-            android:textStyle="bold"
+            app:fontFamily="@font/noto_sans_bold"
             app:layout_constraintEnd_toStartOf="@id/btn_more_top_anime"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_header_date" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/btn_more_top_anime"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="20dp"
             android:scaleType="fitCenter"
             android:src="@drawable/right_arrow"
             app:layout_constraintBottom_toBottomOf="@id/tv_header_top_anime"
@@ -83,33 +87,25 @@
                 tools:listitem="@layout/item_card_anime_horizontal" />
         </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider_top_airing"
-            style="@style/Widget.Material3.MaterialDivider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/shimmer_top_anime" />
-
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_header_airing_anime"
             style="@style/TextAppearance.Material3.TitleLarge"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="24dp"
+            android:letterSpacing="0.0125"
             android:text="@string/currently_airing"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textStyle="bold"
+            app:fontFamily="@font/noto_sans_bold"
             app:layout_constraintEnd_toStartOf="@+id/btn_more_airing_anime"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider_top_airing" />
+            app:layout_constraintTop_toBottomOf="@+id/shimmer_top_anime" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/btn_more_airing_anime"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="20dp"
             android:scaleType="fitCenter"
             android:src="@drawable/right_arrow"
             app:layout_constraintBottom_toBottomOf="@id/tv_header_airing_anime"
@@ -123,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:clipChildren="true"
-            app:layout_constraintTop_toBottomOf="@id/tv_header_airing_anime"
+            app:layout_constraintTop_toBottomOf="@+id/btn_more_airing_anime"
             app:shimmer_auto_start="true"
             app:shimmer_base_color="?android:attr/textColorPrimary"
             app:shimmer_direction="left_to_right">
@@ -141,42 +137,32 @@
                 tools:listitem="@layout/item_card_anime_horizontal" />
         </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider_airing_history"
-            style="@style/Widget.Material3.MaterialDivider"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_header_recommendation_anime"
+            style="@style/TextAppearance.Material3.TitleLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/shimmer_airing_anime" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_header_recently_viewed"
-            style="@style/TextAppearance.Material3.TitleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/recently_viewed"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider_airing_history"
-            tools:text="Recently Viewed" />
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="24dp"
+            android:letterSpacing="0.0125"
+            android:text="@string/recommendation"
+            app:fontFamily="@font/noto_sans_bold"
+            app:layout_constraintTop_toBottomOf="@+id/shimmer_airing_anime"
+            tools:layout_editor_absoluteX="16dp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_history_anime"
+            android:id="@+id/rv_recommendation_anime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            android:splitMotionEvents="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/tv_header_recently_viewed"
-            tools:listitem="@layout/item_list_anime" />
+            app:layout_constraintTop_toBottomOf="@id/tv_header_recommendation_anime"
+            tools:listitem="@layout/recommendation_item" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            app:layout_constraintTop_toBottomOf="@id/rv_history_anime" />
+            app:layout_constraintTop_toBottomOf="@id/rv_recommendation_anime" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

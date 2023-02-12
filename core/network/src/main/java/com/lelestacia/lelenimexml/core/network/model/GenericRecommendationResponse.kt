@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class GenericRecommendationResponse(
 
     @SerializedName("mal_id")
-    val malID: Int,
+    val malID: String,
 
     @SerializedName("entry")
     val entry: List<GenericModelResponse>,
@@ -17,10 +17,10 @@ data class GenericRecommendationResponse(
     val date: String,
 
     @SerializedName("user")
-    val user: UserRecommendationAnimeDTO
+    val user: UserRecommendationAnimeResponse
 ) {
 
-    data class UserRecommendationAnimeDTO(
+    data class UserRecommendationAnimeResponse(
 
         @SerializedName("username")
         val userName: String
