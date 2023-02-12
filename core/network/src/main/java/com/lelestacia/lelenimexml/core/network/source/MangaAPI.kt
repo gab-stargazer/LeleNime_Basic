@@ -12,6 +12,11 @@ import retrofit2.http.Query
 
 interface MangaAPI {
 
+    @GET("top/manga")
+    suspend fun getTopManga(
+        @Query("page") page: Int
+    ): GenericPaginationResponse<MangaResponse>
+
     @GET("manga/{id}")
     suspend fun getMangaByMangaID(
         @Path("id") mangaID: Int

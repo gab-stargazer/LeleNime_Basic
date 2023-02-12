@@ -17,8 +17,8 @@ class GenericModelListAdapter :
 
         fun bind(item: GenericModel) {
             binding.apply {
-                tvTitleAnime.text = item.title
-                ivCoverAnime.load(item.images)
+                tvTitle.text = item.title
+                ivCover.load(item.images)
             }
         }
     }

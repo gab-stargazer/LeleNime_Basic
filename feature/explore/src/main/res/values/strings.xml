@@ -12,4 +12,6 @@
     <string name="airing_anime">Airing Anime</string>
     <string name="recently_viewed">Recently Viewed</string>
     <string name="upcoming">Upcoming</string>
+    <string name="manga">Manga</string>
+    <string name="top_manga">Top Manga</string>
 </resources>

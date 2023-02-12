@@ -7,6 +7,7 @@ import com.lelestacia.lelenimexml.core.network.model.manga.MangaRecommendationRe
 import com.lelestacia.lelenimexml.core.network.model.manga.MangaResponse
 
 interface IMangaNetworkService {
+    fun getTopManga(): PagingSource<Int, MangaResponse>
     suspend fun getMangaByMangaID(mangaID: Int): MangaResponse
     suspend fun getMangaCharactersByMangaID(mangaID: Int): List<CharacterResponse>
     suspend fun getMangaReviewsByMangaID(mangaID: Int): List<GenericReviewResponse>

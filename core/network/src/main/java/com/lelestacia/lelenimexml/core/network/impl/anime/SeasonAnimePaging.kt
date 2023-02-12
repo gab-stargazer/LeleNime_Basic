@@ -19,7 +19,7 @@ class SeasonAnimePaging(
         return try {
             val currentPage = params.key ?: 1
             delay(
-                if (currentPage == 1) 700
+                if (currentPage == 1) 500
                 else 500
             )
             val apiResponse = animeAPI.getCurrentSeason(currentPage)

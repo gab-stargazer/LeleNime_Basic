@@ -16,10 +16,7 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.feature.common.adapter.RecommendationPagingDataAdapter
-import com.lelestacia.lelenimexml.feature.explore.adapter.ErrorHorizontalAdapter
-import com.lelestacia.lelenimexml.feature.explore.adapter.HorizontalAnimePagingAdapter
-import com.lelestacia.lelenimexml.feature.explore.adapter.HorizontalFooterLoadStateAdapter
-import com.lelestacia.lelenimexml.feature.explore.adapter.PlaceHolderHorizontalAdapter
+import com.lelestacia.lelenimexml.feature.explore.adapter.*
 import com.lelestacia.lelenimexml.feature.explore.databinding.FragmentExploreBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -43,6 +40,9 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
     private val upcomingAnimeAdapter = HorizontalAnimePagingAdapter { anime ->
         navigateToDetail(anime = anime)
     }
+    private val topMangaAdapter = HorizontalMangaPagingAdapter { manga ->
+
+    }
     private val recommendationAnimeAdapter = RecommendationPagingDataAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,6 +63,9 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
         setRecommendationAnime()
         listenIntoRecommendationAnimeProgress()
+
+        setTopManga()
+        listenIntoTopMangaProgress()
     }
 
     private fun setTopAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -288,6 +291,80 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                     }
                 }
         }
+
+    private fun setTopManga() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+        binding.cvHeaderTopManga.setOnClickListener {
+            val destination = ExploreFragmentDirections.exploreToExpanded(
+                title = getString(R.string.top_manga),
+            )
+            findNavController().navigate(destination)
+        }
+
+        binding.rvTopManga.apply {
+            layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
+                override fun canScrollHorizontally(): Boolean = false
+            }
+            setHasFixedSize(true)
+        }
+
+        viewModel.topManga.collectLatest { upcomingAnime ->
+            topMangaAdapter.submitData(
+                lifecycle = viewLifecycleOwner.lifecycle,
+                pagingData = upcomingAnime
+            )
+        }
+    }
+
+    private fun listenIntoTopMangaProgress() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+        val placeHolderAnimeAdapter = PlaceHolderHorizontalAdapter((1..4).toList())
+
+        topMangaAdapter.loadStateFlow
+            .distinctUntilChangedBy { it.refresh }
+            .collectLatest { loadState ->
+                when (loadState.refresh) {
+                    is LoadState.NotLoading -> {
+                        Timber.d("Current state is Not Loading")
+                        TransitionManager.beginDelayedTransition(
+                            binding.rvTopManga,
+                            AutoTransition()
+                        )
+                        if (binding.shimmerTopManga.isShimmerVisible) binding.shimmerTopManga.hideShimmer()
+                        binding.rvTopManga.apply {
+                            adapter = topMangaAdapter.withLoadStateFooter(
+                                HorizontalFooterLoadStateAdapter(topMangaAdapter::retry)
+                            )
+                            layoutManager =
+                                LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                        }
+                    }
+                    LoadState.Loading -> {
+                        Timber.d("Current state is Loading")
+                        if (!binding.shimmerTopManga.isShimmerVisible) binding.shimmerTopManga.showShimmer(
+                            true
+                        )
+                        if (binding.rvTopManga.adapter != placeHolderAnimeAdapter) {
+                            TransitionManager.beginDelayedTransition(binding.rvTopManga)
+                            binding.rvTopManga.adapter = placeHolderAnimeAdapter
+                        }
+                    }
+                    is LoadState.Error -> {
+                        Timber.d("Current state is Error")
+                        if (binding.rvTopManga.adapter == placeHolderAnimeAdapter) {
+                            if (binding.shimmerTopManga.isShimmerVisible) binding.shimmerTopManga.hideShimmer()
+                            TransitionManager.beginDelayedTransition(
+                                binding.rvTopManga,
+                                AutoTransition()
+                            )
+                            binding.rvTopManga.adapter = ErrorHorizontalAdapter(
+                                message = (loadState.refresh as LoadState.Error).error.message
+                                    ?: "Unknown",
+                                onRetryClicked = topMangaAdapter::retry
+                            )
+                        }
+                    }
+                }
+            }
+    }
 
     private fun setRecommendationAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
         val mLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)

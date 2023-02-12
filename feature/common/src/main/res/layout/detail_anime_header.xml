@@ -13,7 +13,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="@id/iv_cover_anime"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/cover" />
+        tools:src="@drawable/placeholder" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_cover_anime"
@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/cover" />
+        tools:src="@drawable/placeholder" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_anime_title"

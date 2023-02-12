@@ -7,9 +7,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.lelestacia.lelenimexml.core.domain.usecase.anime.IAnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.explore.IExploreUseCases
-import com.lelestacia.lelenimexml.core.domain.usecase.history.IHistoryAnimeUseCase
-import com.lelestacia.lelenimexml.core.domain.usecase.home.IHomeAnimeUseCase
 import com.lelestacia.lelenimexml.core.model.anime.Anime
+import com.lelestacia.lelenimexml.core.model.manga.Manga
 import com.lelestacia.lelenimexml.core.model.recommendation.Recommendation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -19,8 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
     private val commonAnimeUseCase: IAnimeUseCase,
-    homeAnimeUseCase: IHomeAnimeUseCase,
-    historyAnimeUseCase: IHistoryAnimeUseCase,
     private val explorePageUseCases: IExploreUseCases
 ) : ViewModel() {
 
@@ -44,6 +41,11 @@ class ExploreViewModel @Inject constructor(
     val recommendationAnime: Flow<PagingData<Recommendation>> =
         explorePageUseCases
             .getRecentAnimeRecommendation()
+            .cachedIn(viewModelScope)
+
+    val topManga: Flow<PagingData<Manga>> =
+        explorePageUseCases
+            .getTopManga()
             .cachedIn(viewModelScope)
 
     fun insertNewSearchQuery(newSearchQuery: String) {

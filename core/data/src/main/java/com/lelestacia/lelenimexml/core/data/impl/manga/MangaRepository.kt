@@ -25,6 +25,22 @@ class MangaRepository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IMangaRepository {
 
+    override fun getTopManga(): Flow<PagingData<Manga>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 25,
+                prefetchDistance = 5,
+                enablePlaceholders = false,
+                initialLoadSize = 25
+            ),
+            pagingSourceFactory = {
+                mangaAPI.getTopManga()
+            }
+        ).flow.map { pagingData ->
+            pagingData.map { it.asManga() }
+        }
+    }
+
     override fun getMangaByMangaID(mangaID: Int): Flow<Resource<Manga>> =
         flow<Resource<Manga>> {
 

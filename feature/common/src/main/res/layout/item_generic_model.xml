@@ -19,7 +19,7 @@
         app:strokeColor="@android:color/transparent">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_cover_anime"
+            android:id="@+id/iv_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -27,7 +27,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_title_anime"
+        android:id="@+id/tv_title"
         style="@style/TextAppearance.Material3.TitleSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

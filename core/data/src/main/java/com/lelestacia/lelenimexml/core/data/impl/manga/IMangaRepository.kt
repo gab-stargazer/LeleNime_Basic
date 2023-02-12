@@ -9,6 +9,7 @@ import com.lelestacia.lelenimexml.core.model.review.Review
 import kotlinx.coroutines.flow.Flow
 
 interface IMangaRepository {
+    fun getTopManga(): Flow<PagingData<Manga>>
     fun getMangaByMangaID(mangaID: Int): Flow<Resource<Manga>>
     fun getMangaCharactersByMangaID(mangaID: Int): Flow<Resource<List<Character>>>
     fun getMangaReviewsByMangaID(mangaID: Int): Flow<Resource<List<Review>>>

@@ -12,6 +12,8 @@ import javax.inject.Inject
 class MangaNetworkService @Inject constructor(
     private val mangaAPI: MangaAPI
 ) : IMangaNetworkService {
+    override fun getTopManga(): PagingSource<Int, MangaResponse> =
+        TopMangaPagingSource(mangaAPI = mangaAPI)
 
     override suspend fun getMangaByMangaID(mangaID: Int): MangaResponse {
         delay(1000)

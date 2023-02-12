@@ -3,6 +3,7 @@ package com.lelestacia.lelenimexml.core.domain.di
 import com.lelestacia.lelenimexml.core.data.impl.anime.IAnimeRepository
 import com.lelestacia.lelenimexml.core.data.impl.character.ICharacterRepository
 import com.lelestacia.lelenimexml.core.data.impl.episode.IEpisodeRepository
+import com.lelestacia.lelenimexml.core.data.impl.manga.IMangaRepository
 import com.lelestacia.lelenimexml.core.data.impl.recommendation.IRecommendationRepository
 import com.lelestacia.lelenimexml.core.domain.usecase.anime.AnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.anime.IAnimeUseCase
@@ -62,10 +63,12 @@ object UseCaseModule {
     @ViewModelScoped
     fun provideExploreUseCases(
         animeRepository: IAnimeRepository,
+        mangaRepository: IMangaRepository,
         recommendationRepository: IRecommendationRepository
     ): IExploreUseCases =
         ExploreUseCases(
             animeRepository = animeRepository,
+            mangaRepository = mangaRepository,
             recommendationRepository = recommendationRepository
         )
 }
