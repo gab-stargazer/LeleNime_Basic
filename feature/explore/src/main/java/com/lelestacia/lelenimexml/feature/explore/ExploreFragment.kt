@@ -1,21 +1,12 @@
 package com.lelestacia.lelenimexml.feature.explore
 
-import android.content.Context
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.viewbinding.library.fragment.viewBinding
-import androidx.appcompat.widget.SearchView
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -39,7 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
+class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
     private val binding: FragmentExploreBinding by viewBinding()
     private val viewModel: ExploreViewModel by activityViewModels()
@@ -49,16 +40,13 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
     private val airingAnimeAdapter = HorizontalAnimePagingAdapter { anime ->
         navigateToDetail(anime = anime)
     }
+    private val upcomingAnimeAdapter = HorizontalAnimePagingAdapter { anime ->
+        navigateToDetail(anime = anime)
+    }
     private val recommendationAnimeAdapter = RecommendationPagingDataAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(
-            this,
-            viewLifecycleOwner,
-            Lifecycle.State.RESUMED
-        )
 
         val format = "dd MMMM yyyy"
         val simpleDateFormat = SimpleDateFormat(format, Locale.getDefault())
@@ -70,12 +58,15 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
         setAiringAnime()
         listenIntoAiringAnimeProgress()
 
+        setUpcomingAnime()
+        listenIntoUpcomingAnimeProgress()
+
         setRecommendationAnime()
         listenIntoRecommendationAnimeProgress()
     }
 
     private fun setTopAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        binding.btnMoreTopAnime.setOnClickListener {
+        binding.cvHeaderTopAnime.setOnClickListener {
             val destination = ExploreFragmentDirections.exploreToExpanded(
                 title = getString(R.string.top_anime),
             )
@@ -89,10 +80,10 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
             setHasFixedSize(true)
         }
 
-        viewModel.topAnime.collectLatest { upcomingAnime ->
+        viewModel.topAnime.collectLatest { topAnime ->
             topAnimeAdapter.submitData(
                 lifecycle = viewLifecycleOwner.lifecycle,
-                pagingData = upcomingAnime
+                pagingData = topAnime
             )
         }
     }
@@ -106,11 +97,11 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
                 when (loadState.refresh) {
                     is LoadState.NotLoading -> {
                         Timber.d("Current state is Not Loading")
-                        if (binding.shimmerTopAnime.isShimmerVisible) binding.shimmerTopAnime.hideShimmer()
                         TransitionManager.beginDelayedTransition(
-                            binding.root,
+                            binding.rvTopAnime,
                             AutoTransition()
                         )
+                        if (binding.shimmerTopAnime.isShimmerVisible) binding.shimmerTopAnime.hideShimmer()
                         binding.rvTopAnime.apply {
                             adapter = topAnimeAdapter.withLoadStateFooter(
                                 HorizontalFooterLoadStateAdapter(topAnimeAdapter::retry)
@@ -149,7 +140,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
     }
 
     private fun setAiringAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        binding.btnMoreAiringAnime.setOnClickListener {
+        binding.cvHeaderAiringAnime.setOnClickListener {
             val destination = ExploreFragmentDirections.exploreToExpanded(
                 title = getString(R.string.airing_anime),
             )
@@ -181,11 +172,11 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
                     when (loadState.refresh) {
                         is LoadState.NotLoading -> {
                             Timber.d("Current state is Not Loading")
-                            if (binding.shimmerAiringAnime.isShimmerVisible) binding.shimmerAiringAnime.hideShimmer()
                             TransitionManager.beginDelayedTransition(
-                                binding.root,
+                                binding.rvAiringAnime,
                                 AutoTransition()
                             )
+                            if (binding.shimmerAiringAnime.isShimmerVisible) binding.shimmerAiringAnime.hideShimmer()
                             binding.rvAiringAnime.apply {
                                 adapter = airingAnimeAdapter.withLoadStateFooter(
                                     HorizontalFooterLoadStateAdapter(airingAnimeAdapter::retry)
@@ -223,6 +214,81 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
                 }
         }
 
+    private fun setUpcomingAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+        binding.cvHeaderUpcomingAnime.setOnClickListener {
+            val destination = ExploreFragmentDirections.exploreToExpanded(
+                title = getString(R.string.upcoming_anime),
+            )
+            findNavController().navigate(destination)
+        }
+
+        binding.rvUpcomingAnime.apply {
+            layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
+                override fun canScrollHorizontally(): Boolean = false
+            }
+            setHasFixedSize(true)
+        }
+
+        viewModel.upcomingAnime.collectLatest { upcomingAnime ->
+            upcomingAnimeAdapter.submitData(
+                lifecycle = viewLifecycleOwner.lifecycle,
+                pagingData = upcomingAnime
+            )
+        }
+    }
+
+    private fun listenIntoUpcomingAnimeProgress() =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            val placeHolderAnimeAdapter = PlaceHolderHorizontalAdapter((1..4).toList())
+
+            upcomingAnimeAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .collectLatest { loadState ->
+                    when (loadState.refresh) {
+                        is LoadState.NotLoading -> {
+                            Timber.d("Current state is Not Loading")
+                            TransitionManager.beginDelayedTransition(
+                                binding.rvUpcomingAnime,
+                                AutoTransition()
+                            )
+                            if (binding.shimmerUpcomingAnime.isShimmerVisible) binding.shimmerUpcomingAnime.hideShimmer()
+                            binding.rvUpcomingAnime.apply {
+                                adapter = upcomingAnimeAdapter.withLoadStateFooter(
+                                    HorizontalFooterLoadStateAdapter(upcomingAnimeAdapter::retry)
+                                )
+                                layoutManager =
+                                    LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                            }
+                        }
+                        LoadState.Loading -> {
+                            Timber.d("Current state is Loading")
+                            if (!binding.shimmerUpcomingAnime.isShimmerVisible) binding.shimmerUpcomingAnime.showShimmer(
+                                true
+                            )
+                            if (binding.rvUpcomingAnime.adapter != placeHolderAnimeAdapter) {
+                                TransitionManager.beginDelayedTransition(binding.rvUpcomingAnime)
+                                binding.rvUpcomingAnime.adapter = placeHolderAnimeAdapter
+                            }
+                        }
+                        is LoadState.Error -> {
+                            Timber.d("Current state is Error")
+                            if (binding.rvAiringAnime.adapter == placeHolderAnimeAdapter) {
+                                if (binding.shimmerUpcomingAnime.isShimmerVisible) binding.shimmerUpcomingAnime.hideShimmer()
+                                TransitionManager.beginDelayedTransition(
+                                    binding.rvUpcomingAnime,
+                                    AutoTransition()
+                                )
+                                binding.rvUpcomingAnime.adapter = ErrorHorizontalAdapter(
+                                    message = (loadState.refresh as LoadState.Error).error.message
+                                        ?: "Unknown",
+                                    onRetryClicked = upcomingAnimeAdapter::retry
+                                )
+                            }
+                        }
+                    }
+                }
+        }
+
     private fun setRecommendationAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
         val mLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         val snapHelper = LinearSnapHelper()
@@ -241,9 +307,10 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
         }
     }
 
-    private fun listenIntoRecommendationAnimeProgress() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+    private fun listenIntoRecommendationAnimeProgress() =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
 
-    }
+        }
 
     private fun navigateToDetail(anime: Anime) = viewLifecycleOwner.lifecycleScope.launch {
         Timber.d("Selected anime was ${anime.title}")
@@ -251,25 +318,4 @@ class ExploreFragment : Fragment(R.layout.fragment_explore), MenuProvider {
         val destination = ExploreFragmentDirections.exploreToDetail(malID = anime.malID)
         findNavController().navigate(destination)
     }
-
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(com.lelestacia.lelenimexml.feature.common.R.menu.main_menu, menu)
-        val myActionMenuItem =
-            menu.findItem(com.lelestacia.lelenimexml.feature.common.R.id.btn_search_menu)
-        val searchView = myActionMenuItem.actionView as SearchView
-        searchView.queryHint =
-            getString(com.lelestacia.lelenimexml.feature.common.R.string.insert_anime_title)
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                    .hideSoftInputFromWindow(view?.windowToken, 0)
-                viewModel.insertNewSearchQuery(query)
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean = false
-        })
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean = false
 }

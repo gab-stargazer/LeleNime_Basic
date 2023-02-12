@@ -19,11 +19,11 @@ class TopAnimePaging(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeResponse> {
         return try {
             val currentPage = params.key ?: 1
-            val apiResponse = animeAPI.getTopAnime(page = currentPage)
             delay(
                 if (currentPage == 1) 400
                 else 500
             )
+            val apiResponse = animeAPI.getTopAnime(page = currentPage)
             LoadResult.Page(
                 data = apiResponse.data,
                 prevKey =

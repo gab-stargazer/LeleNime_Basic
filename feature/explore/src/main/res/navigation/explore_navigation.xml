@@ -38,6 +38,10 @@
                 android:defaultValue="1"
                 app:argType="integer" />
         </action>
+        <argument
+            android:name="dashboard"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
 
     <fragment

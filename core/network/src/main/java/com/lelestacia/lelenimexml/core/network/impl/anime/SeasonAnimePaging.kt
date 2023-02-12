@@ -18,11 +18,11 @@ class SeasonAnimePaging(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeResponse> {
         return try {
             val currentPage = params.key ?: 1
-            val apiResponse = animeAPI.getCurrentSeason(currentPage)
             delay(
-                if (currentPage == 1) 800
+                if (currentPage == 1) 700
                 else 500
             )
+            val apiResponse = animeAPI.getCurrentSeason(currentPage)
             LoadResult.Page(
                 data = apiResponse.data,
                 prevKey =

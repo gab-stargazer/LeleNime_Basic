@@ -36,6 +36,11 @@ class ExploreViewModel @Inject constructor(
             .getAiringAnime()
             .cachedIn(viewModelScope)
 
+    val upcomingAnime: Flow<PagingData<Anime>> =
+        explorePageUseCases
+            .getUpcomingAnime()
+            .cachedIn(viewModelScope)
+
     val recommendationAnime: Flow<PagingData<Recommendation>> =
         explorePageUseCases
             .getRecentAnimeRecommendation()

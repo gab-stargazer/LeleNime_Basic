@@ -34,6 +34,7 @@
         android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:maxWidth="100dp"
+        app:fontFamily="@font/source_sans_pro_semi_bold"
         android:maxLines="1"
         android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"

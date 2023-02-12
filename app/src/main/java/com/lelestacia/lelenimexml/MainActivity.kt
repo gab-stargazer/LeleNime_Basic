@@ -48,6 +48,18 @@ class MainActivity : AppCompatActivity() {
             } else {
                 navView.visibility = View.VISIBLE
             }
+
+            if (arguments?.getBoolean("dashboard", false) == true) {
+                window.statusBarColor =
+                    getColor(com.lelestacia.lelenimexml.feature.common.R.color.light_background)
+                binding.toolbar.visibility = View.GONE
+                window.decorView.systemUiVisibility = View.STATUS_BAR_HIDDEN
+            } else {
+                window.decorView.systemUiVisibility = View.STATUS_BAR_VISIBLE
+                window.statusBarColor =
+                    getColor(com.lelestacia.lelenimexml.feature.common.R.color.light_primary)
+                binding.toolbar.visibility = View.VISIBLE
+            }
         }
         navView.setupWithNavController(navController)
     }

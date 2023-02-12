@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.lelestacia.lelenimexml.core.network.model.anime.AnimeResponse
 import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
+import kotlinx.coroutines.delay
 import timber.log.Timber
 
 class UpcomingAnimePaging(
@@ -16,6 +17,10 @@ class UpcomingAnimePaging(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeResponse> {
         return try {
             val currentPage = params.key ?: 1
+            delay(
+                if (currentPage == 1) 1000
+                else 500
+            )
             val apiResponse = animeAPI.getUpcomingSeason(page = currentPage)
             LoadResult.Page(
                 data = apiResponse.data,
