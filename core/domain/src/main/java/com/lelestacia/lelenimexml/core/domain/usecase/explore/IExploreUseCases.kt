@@ -7,6 +7,7 @@ import com.lelestacia.lelenimexml.core.model.recommendation.Recommendation
 import kotlinx.coroutines.flow.Flow
 
 interface IExploreUseCases {
+    suspend fun insertOrReplaceAnimeOnHistory(anime: Anime)
     fun getTopAnime(): Flow<PagingData<Anime>>
     fun getAiringAnime(): Flow<PagingData<Anime>>
     fun getUpcomingAnime(): Flow<PagingData<Anime>>

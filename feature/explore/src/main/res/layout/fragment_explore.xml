@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor">
+    android:background="?attr/backgroundColor"
+    tools:theme="@style/Theme.LeleNimeXML">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="ExploreFragment"
-        tools:theme="@style/Theme.LeleNimeXML">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -363,16 +362,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:backgroundTint="?attr/colorPrimary"
-        android:text="@string/search"
-        android:textColor="@color/white"
-        app:icon="@drawable/ic_search"
-        app:iconTint="@color/white"
+        android:contentDescription="@string/search"
         app:layout_anchor="@id/nested_scroll"
         app:layout_anchorGravity="bottom|end" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

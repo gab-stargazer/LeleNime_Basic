@@ -5,8 +5,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.lelestacia.lelenimexml.core.common.Constant.IS_NSFW
-import com.lelestacia.lelenimexml.core.common.Resource
+import com.lelestacia.lelenimexml.core.common.util.Constant.IS_NSFW
+import com.lelestacia.lelenimexml.core.common.util.Resource
 import com.lelestacia.lelenimexml.core.data.utility.*
 import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeEntity
 import com.lelestacia.lelenimexml.core.database.service.IAnimeDatabaseService

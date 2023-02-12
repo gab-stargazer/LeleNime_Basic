@@ -1,7 +1,7 @@
 package com.lelestacia.lelenimexml.core.data.impl.episode
 
 import androidx.paging.PagingData
-import com.lelestacia.lelenimexml.core.common.Resource
+import com.lelestacia.lelenimexml.core.common.util.Resource
 import com.lelestacia.lelenimexml.core.model.episode.Episode
 import kotlinx.coroutines.flow.Flow
 

@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.lelestacia.lelenimexml.core.common.Resource
+import com.lelestacia.lelenimexml.core.common.util.Resource
 import com.lelestacia.lelenimexml.core.data.utility.JikanErrorParserUtil
 import com.lelestacia.lelenimexml.core.data.utility.asEpisode
 import com.lelestacia.lelenimexml.core.data.utility.asNewEntity

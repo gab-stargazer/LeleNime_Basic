@@ -1,7 +1,7 @@
 package com.lelestacia.lelenimexml.core.data.impl.anime
 
 import androidx.paging.PagingData
-import com.lelestacia.lelenimexml.core.common.Resource
+import com.lelestacia.lelenimexml.core.common.util.Resource
 import com.lelestacia.lelenimexml.core.model.GenericModel
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.model.review.Review

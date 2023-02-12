@@ -16,6 +16,10 @@ class ExploreUseCases @Inject constructor(
     private val recommendationRepository: IRecommendationRepository
 ) : IExploreUseCases {
 
+    override suspend fun insertOrReplaceAnimeOnHistory(anime: Anime) {
+        animeRepository.insertAnimeToHistory(anime = anime)
+    }
+
     override fun getTopAnime(): Flow<PagingData<Anime>> {
         return animeRepository.getTopAnime()
     }

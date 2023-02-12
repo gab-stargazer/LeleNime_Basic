@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lelestacia.lelenimexml.core.common.Constant.SHORT_DELAY
-import com.lelestacia.lelenimexml.core.common.Resource
+import com.lelestacia.lelenimexml.core.common.util.Constant.SHORT_DELAY
+import com.lelestacia.lelenimexml.core.common.util.Resource
 import com.lelestacia.lelenimexml.core.domain.usecase.anime.IAnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.character.ICharacterUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.episode.EpisodeUseCase

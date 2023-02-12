@@ -1,6 +1,6 @@
 package com.lelestacia.lelenimexml.core.domain.usecase.anime
 
-import com.lelestacia.lelenimexml.core.common.Resource
+import com.lelestacia.lelenimexml.core.common.util.Resource
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import kotlinx.coroutines.flow.Flow
 

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.lelestacia.lelenimexml.feature.common.util.DateParser
+import com.lelestacia.lelenimexml.core.common.util.DateParser
 import com.lelestacia.lelenimexml.core.model.episode.Episode
 import com.lelestacia.lelenimexml.feature.common.databinding.ItemCardEpisodeBinding
 

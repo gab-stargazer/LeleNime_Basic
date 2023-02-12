@@ -1,6 +1,6 @@
 package com.lelestacia.lelenimexml.core.data.impl.character
 
-import com.lelestacia.lelenimexml.core.common.Resource
+import com.lelestacia.lelenimexml.core.common.util.Resource
 import com.lelestacia.lelenimexml.core.data.utility.*
 import com.lelestacia.lelenimexml.core.database.entity.anime.AnimeCharacterReferenceEntity
 import com.lelestacia.lelenimexml.core.database.entity.character.CharacterEntity

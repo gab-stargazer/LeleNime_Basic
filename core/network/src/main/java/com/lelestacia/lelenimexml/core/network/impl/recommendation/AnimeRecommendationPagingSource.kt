@@ -17,16 +17,16 @@ class AnimeRecommendationPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GenericRecommendationResponse> {
         return try {
             val currentPage = params.key ?: 1
+            delay(
+                if (currentPage == 1) 5000
+                else 400
+            )
             val apiResponse = recommendationAPI.getRecentAnimeRecommendation(page = currentPage)
             if (apiResponse.data.isEmpty()) {
                 Timber.e("Api Returned 0 data or failed to parse")
             } else {
                 Timber.i("Api returned data ${apiResponse.data}")
             }
-            delay(
-                if (currentPage == 1) 800
-                else 400
-            )
             LoadResult.Page(
                 data = apiResponse.data,
                 prevKey =

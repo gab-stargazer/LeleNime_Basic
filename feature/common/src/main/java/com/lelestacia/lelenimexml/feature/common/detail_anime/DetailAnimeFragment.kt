@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.lelestacia.lelenimexml.core.common.Constant.UNKNOWN
-import com.lelestacia.lelenimexml.feature.common.util.DateParser
+import com.lelestacia.lelenimexml.core.common.util.Constant.UNKNOWN
+import com.lelestacia.lelenimexml.core.common.util.DateParser
 import com.lelestacia.lelenimexml.core.common.R.anim.fade_in
 import com.lelestacia.lelenimexml.core.common.R.anim.fade_out
-import com.lelestacia.lelenimexml.core.common.Resource
+import com.lelestacia.lelenimexml.core.common.util.Resource
 import com.lelestacia.lelenimexml.core.model.episode.Episode
 import com.lelestacia.lelenimexml.feature.common.R
 import com.lelestacia.lelenimexml.feature.common.adapter.EpisodeAdapter

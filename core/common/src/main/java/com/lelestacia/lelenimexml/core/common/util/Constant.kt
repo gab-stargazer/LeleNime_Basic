@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.common
+package com.lelestacia.lelenimexml.core.common.util
 
 object Constant {
     const val USER_PREF = "user_pref"

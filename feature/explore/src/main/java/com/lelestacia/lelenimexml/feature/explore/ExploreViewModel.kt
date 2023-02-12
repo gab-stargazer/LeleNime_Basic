@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.lelestacia.lelenimexml.core.domain.usecase.anime.IAnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.explore.IExploreUseCases
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.core.model.manga.Manga
@@ -17,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
-    private val commonAnimeUseCase: IAnimeUseCase,
     private val explorePageUseCases: IExploreUseCases
 ) : ViewModel() {
 
@@ -53,6 +51,6 @@ class ExploreViewModel @Inject constructor(
     }
 
     fun insertOrUpdateAnimeToHistory(anime: Anime) = viewModelScope.launch {
-        commonAnimeUseCase.insertOrUpdateNewAnimeToHistory(anime)
+        explorePageUseCases.insertOrReplaceAnimeOnHistory(anime)
     }
 }

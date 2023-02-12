@@ -5,12 +5,14 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import coil.imageLoader
+import coil.request.ImageRequest
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import com.lelestacia.lelenimexml.feature.explore.databinding.ItemCardAnimeHorizontalBinding
 
-class HorizontalAnimePagingAdapter(private val onItemSelected: (Anime) -> Unit) :
-    PagingDataAdapter<Anime, HorizontalAnimePagingAdapter.ViewHolder>(DIFF_CALLBACK) {
+class HorizontalAnimePagingAdapter(
+    private val onItemSelected: (Anime) -> Unit
+) : PagingDataAdapter<Anime, HorizontalAnimePagingAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     inner class ViewHolder(
         private val binding: ItemCardAnimeHorizontalBinding
@@ -18,7 +20,14 @@ class HorizontalAnimePagingAdapter(private val onItemSelected: (Anime) -> Unit) 
 
         fun bind(item: Anime) {
             binding.apply {
-                ivCoverAnime.load(item.coverImages)
+                val imageRequest: ImageRequest =
+                    ImageRequest.Builder(context = root.context)
+                        .data(data = item.coverImages)
+                        .crossfade(enable = true)
+                        .target(imageView = ivCoverAnime)
+                        .build()
+                root.context.imageLoader.enqueue(imageRequest)
+
                 tvTitleAnime.text = item.title
                 root.setOnClickListener {
                     onItemSelected(item)

@@ -1,6 +1,5 @@
-package com.lelestacia.lelenimexml.feature.common.util
+package com.lelestacia.lelenimexml.core.common.util
 
-import com.lelestacia.lelenimexml.core.common.Constant
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.format.DateTimeFormatter

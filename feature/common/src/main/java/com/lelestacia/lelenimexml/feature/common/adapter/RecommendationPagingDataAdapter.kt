@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lelestacia.lelenimexml.core.model.recommendation.Recommendation
 import com.lelestacia.lelenimexml.feature.common.databinding.RecommendationItemBinding
-import com.lelestacia.lelenimexml.feature.common.util.DateParser
+import com.lelestacia.lelenimexml.core.common.util.DateParser
 
 class RecommendationPagingDataAdapter :
     PagingDataAdapter<Recommendation, RecommendationPagingDataAdapter.ViewHolder>(DIFF_CALLBACK) {

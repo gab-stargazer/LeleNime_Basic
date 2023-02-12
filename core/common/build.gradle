@@ -1,7 +1,11 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
+
+apply from:'../../shared_dependencies.gradle'
 
 android {
     namespace 'com.lelestacia.lelenimexml.core.common'

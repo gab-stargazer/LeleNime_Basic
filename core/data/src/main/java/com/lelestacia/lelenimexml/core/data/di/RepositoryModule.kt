@@ -1,7 +1,7 @@
 package com.lelestacia.lelenimexml.core.data.di
 
 import android.content.Context
-import com.lelestacia.lelenimexml.core.common.Constant.USER_PREF
+import com.lelestacia.lelenimexml.core.common.util.Constant.USER_PREF
 import com.lelestacia.lelenimexml.core.data.impl.anime.AnimeRepository
 import com.lelestacia.lelenimexml.core.data.impl.anime.IAnimeRepository
 import com.lelestacia.lelenimexml.core.data.impl.character.CharacterRepository

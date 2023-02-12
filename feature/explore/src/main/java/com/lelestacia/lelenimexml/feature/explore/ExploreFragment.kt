@@ -275,7 +275,7 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
                         }
                         is LoadState.Error -> {
                             Timber.d("Current state is Error")
-                            if (binding.rvAiringAnime.adapter == placeHolderAnimeAdapter) {
+                            if (binding.rvUpcomingAnime.adapter == placeHolderAnimeAdapter) {
                                 if (binding.shimmerUpcomingAnime.isShimmerVisible) binding.shimmerUpcomingAnime.hideShimmer()
                                 TransitionManager.beginDelayedTransition(
                                     binding.rvUpcomingAnime,
