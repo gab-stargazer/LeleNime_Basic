@@ -14,5 +14,5 @@ data class Manga(
     val score: Double?,
     val scoredBy: Double?,
     val rank: Int,
-    val synopsis: String
+    val synopsis: String?
 )

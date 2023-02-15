@@ -15,9 +15,13 @@
     <color name="light_blue">#46C2CB</color>
     <color name="dark_mode_yellow">#F2F7A1</color>
 
+    <color name="warna_sensei">#ededed</color>
+    <color name="test_background">#E2E2E3</color>
+
     <!--Light Mode-->
     <color name="light_primary">#444aa2</color>
-    <color name="light_background">#e1e1e9</color>
+    <color name="light_background">#BEBEC8</color>
+    <color name="light_button_background">#D5D5DA</color>
 
     <!--Dark Mode-->
     <color name="blue">#6D67E4</color>

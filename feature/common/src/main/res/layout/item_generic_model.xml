@@ -23,20 +23,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/placeholder"/>
+            app:srcCompat="@drawable/placeholder" />
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_title"
         style="@style/TextAppearance.Material3.TitleSmall"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:maxWidth="100dp"
-        app:fontFamily="@font/source_sans_pro_semi_bold"
         android:maxLines="1"
         android:textColor="?android:attr/textColorPrimary"
+        app:fontFamily="@font/source_sans_pro_semi_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card_cover_holder"

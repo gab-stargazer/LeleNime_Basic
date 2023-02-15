@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.feature.common.adapter
+package com.lelestacia.lelenimexml.feature.common.adapter.recommendation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,12 +6,16 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lelestacia.lelenimexml.core.model.recommendation.Recommendation
-import com.lelestacia.lelenimexml.feature.common.databinding.RecommendationItemBinding
 import com.lelestacia.lelenimexml.core.common.util.DateParser
+import com.lelestacia.lelenimexml.core.model.recommendation.Recommendation
+import com.lelestacia.lelenimexml.feature.common.adapter.GenericModelListAdapter
+import com.lelestacia.lelenimexml.feature.common.databinding.RecommendationItemBinding
 
-class RecommendationPagingDataAdapter :
-    PagingDataAdapter<Recommendation, RecommendationPagingDataAdapter.ViewHolder>(DIFF_CALLBACK) {
+class RecommendationAnimePagingAdapter(
+    private val onItemClicked: (Recommendation) -> Unit,
+    private val onNextButtonClicked: () -> Unit
+) :
+    PagingDataAdapter<Recommendation, RecommendationAnimePagingAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     inner class ViewHolder(private val binding: RecommendationItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -38,12 +42,15 @@ class RecommendationPagingDataAdapter :
                     setHasFixedSize(true)
                 }
                 genericModelListAdapter.submitList(item.entry)
+
+                root.setOnClickListener { onItemClicked(item) }
+                btnNextRecommendation.setOnClickListener { onNextButtonClicked.invoke() }
             }
         }
     }
 
     override fun onBindViewHolder(
-        holder: RecommendationPagingDataAdapter.ViewHolder,
+        holder: ViewHolder,
         position: Int
     ) {
         getItem(position)?.let {
@@ -54,7 +61,7 @@ class RecommendationPagingDataAdapter :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RecommendationPagingDataAdapter.ViewHolder {
+    ): ViewHolder {
         return ViewHolder(
             RecommendationItemBinding.inflate(
                 LayoutInflater.from(parent.context),

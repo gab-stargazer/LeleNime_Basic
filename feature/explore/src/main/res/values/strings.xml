@@ -2,7 +2,7 @@
     <string name="upcoming_anime">Upcoming Anime</string>
 
     <!--Explore Page-->
-    <string name="recommendation_page_number">Showing %s from %s</string>
+    <string name="recommendation_page_number">Showing %d from %d</string>
 
 
     <string name="anime">Anime</string>

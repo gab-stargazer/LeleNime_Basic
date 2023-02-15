@@ -1,6 +1,5 @@
 package com.lelestacia.lelenimexml.feature.explore
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -18,8 +17,6 @@ import javax.inject.Inject
 class ExploreViewModel @Inject constructor(
     private val explorePageUseCases: IExploreUseCases
 ) : ViewModel() {
-
-    private val _searchQuery = MutableLiveData("")
 
     val topAnime: Flow<PagingData<Anime>> =
         explorePageUseCases
@@ -45,10 +42,6 @@ class ExploreViewModel @Inject constructor(
         explorePageUseCases
             .getTopManga()
             .cachedIn(viewModelScope)
-
-    fun insertNewSearchQuery(newSearchQuery: String) {
-        _searchQuery.value = newSearchQuery
-    }
 
     fun insertOrUpdateAnimeToHistory(anime: Anime) = viewModelScope.launch {
         explorePageUseCases.insertOrReplaceAnimeOnHistory(anime)

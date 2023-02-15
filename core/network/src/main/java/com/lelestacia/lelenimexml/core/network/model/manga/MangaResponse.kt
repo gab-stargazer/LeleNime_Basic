@@ -44,7 +44,7 @@ data class MangaResponse(
     val rank: Int,
 
     @SerializedName("synopsis")
-    val synopsis: String
+    val synopsis: String?
 ) {
 
     data class MangaImageResponse(

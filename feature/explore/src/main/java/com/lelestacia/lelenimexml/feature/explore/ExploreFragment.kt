@@ -15,10 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.lelestacia.lelenimexml.core.model.anime.Anime
-import com.lelestacia.lelenimexml.feature.common.adapter.RecommendationPagingDataAdapter
+import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationAnimePagingAdapter
+import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationErrorAdapter
+import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationPlaceholderAdapter
 import com.lelestacia.lelenimexml.feature.explore.adapter.*
 import com.lelestacia.lelenimexml.feature.explore.databinding.FragmentExploreBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
@@ -43,7 +46,6 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
     private val topMangaAdapter = HorizontalMangaPagingAdapter { manga ->
 
     }
-    private val recommendationAnimeAdapter = RecommendationPagingDataAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,11 +63,13 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
         setUpcomingAnime()
         listenIntoUpcomingAnimeProgress()
 
-        setRecommendationAnime()
-        listenIntoRecommendationAnimeProgress()
-
         setTopManga()
         listenIntoTopMangaProgress()
+
+        setRecommendationAnime()
+        listenIntoRecommendationAnimeProgress()
+        listenIntoRecommendationAnimePageNumber()
+
     }
 
     private fun setTopAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -366,27 +370,109 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
             }
     }
 
-    private fun setRecommendationAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        val mLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        val snapHelper = LinearSnapHelper()
-        binding.rvRecommendationAnime.apply {
-            adapter = recommendationAnimeAdapter
-            layoutManager = mLayoutManager
-            addItemDecoration(DividerItemDecoration(context, mLayoutManager.orientation))
-            snapHelper.attachToRecyclerView(this)
-        }
+    private val recommendationAnimeAdapter: RecommendationAnimePagingAdapter =
+        RecommendationAnimePagingAdapter(
+            onItemClicked = { recommendationItem ->
+                Timber.d("Selected Item is: $recommendationItem")
+            },
+            onNextButtonClicked = {
+                val currentPosition =
+                    (binding.rvRecommendationAnime.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+//                (binding.rvRecommendationAnime.layoutManager as LinearLayoutManager)
+//                    .smoothScrollToPosition(
+//                        binding.rvRecommendationAnime,
+//                        binding.rvRecommendationAnime.scrollState,
+//                        currentPosition + 1
+//                    )
+                binding.rvRecommendationAnime.smoothScrollToPosition(currentPosition + 1)
+            }
+        )
 
-        viewModel.recommendationAnime.collectLatest { recommendationAnime ->
-            recommendationAnimeAdapter.submitData(
-                lifecycle = viewLifecycleOwner.lifecycle,
-                pagingData = recommendationAnime
-            )
-        }
-    }
-
-    private fun listenIntoRecommendationAnimeProgress() =
+    private fun setRecommendationAnime(): Job =
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            val mLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+            val snapHelper = LinearSnapHelper()
+            binding.rvRecommendationAnime.apply {
+                adapter = recommendationAnimeAdapter
+                layoutManager = mLayoutManager
+                addItemDecoration(DividerItemDecoration(context, mLayoutManager.orientation))
+                snapHelper.attachToRecyclerView(this)
+            }
 
+            viewModel.recommendationAnime.collectLatest { recommendationAnime ->
+                recommendationAnimeAdapter.submitData(
+                    lifecycle = viewLifecycleOwner.lifecycle,
+                    pagingData = recommendationAnime
+                )
+            }
+        }
+
+    private fun listenIntoRecommendationAnimeProgress(): Job =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            val placeHolderRecommendationAdapter = RecommendationPlaceholderAdapter()
+
+            recommendationAnimeAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .collectLatest { loadState ->
+                    when (loadState.refresh) {
+                        is LoadState.NotLoading -> {
+                            Timber.d("Current state is Not Loading")
+                            TransitionManager.beginDelayedTransition(
+                                binding.root,
+                                AutoTransition()
+                            )
+                            binding.rvRecommendationAnime.apply {
+                                adapter = recommendationAnimeAdapter
+                                layoutManager =
+                                    LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                            }
+                            binding.tvRecommendationPageNumber.visibility = View.VISIBLE
+                        }
+                        LoadState.Loading -> {
+                            Timber.d("Current state is Loading")
+                            if (binding.rvRecommendationAnime.adapter != placeHolderRecommendationAdapter) {
+                                TransitionManager.beginDelayedTransition(binding.root)
+                                binding.rvRecommendationAnime.adapter =
+                                    placeHolderRecommendationAdapter
+                            }
+                        }
+                        is LoadState.Error -> {
+                            Timber.d("Current state is Error")
+                            if (binding.rvRecommendationAnime.adapter == placeHolderRecommendationAdapter) {
+                                TransitionManager.beginDelayedTransition(
+                                    binding.root,
+                                    AutoTransition()
+                                )
+                                binding.rvRecommendationAnime.adapter = RecommendationErrorAdapter(
+                                    message = (loadState.refresh as LoadState.Error).error.message
+                                        ?: "Unknown",
+                                    onRetry = recommendationAnimeAdapter::retry
+                                )
+                            }
+                        }
+                    }
+                }
+        }
+
+    private fun listenIntoRecommendationAnimePageNumber() =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            binding.rvRecommendationAnime.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        val currentPosition =
+                            (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                        binding.tvRecommendationPageNumber.text =
+                            getString(
+                                R.string.recommendation_page_number,
+                                currentPosition.plus(1),
+                                recommendationAnimeAdapter.itemCount
+                            )
+                    }
+                }
+            })
         }
 
     private fun navigateToDetail(anime: Anime) = viewLifecycleOwner.lifecycleScope.launch {

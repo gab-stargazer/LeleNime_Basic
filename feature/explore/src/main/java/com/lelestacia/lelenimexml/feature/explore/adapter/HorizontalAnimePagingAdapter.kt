@@ -6,9 +6,13 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.imageLoader
+import coil.request.CachePolicy
 import coil.request.ImageRequest
+import coil.size.Scale
 import com.lelestacia.lelenimexml.core.model.anime.Anime
+import com.lelestacia.lelenimexml.feature.common.R
 import com.lelestacia.lelenimexml.feature.explore.databinding.ItemCardAnimeHorizontalBinding
+import kotlinx.coroutines.Dispatchers
 
 class HorizontalAnimePagingAdapter(
     private val onItemSelected: (Anime) -> Unit
@@ -20,13 +24,20 @@ class HorizontalAnimePagingAdapter(
 
         fun bind(item: Anime) {
             binding.apply {
+                val context = root.context
                 val imageRequest: ImageRequest =
-                    ImageRequest.Builder(context = root.context)
+                    ImageRequest.Builder(context = context)
                         .data(data = item.coverImages)
+                        .scale(Scale.FIT)
+                        .placeholder(drawableResId = R.drawable.placeholder)
                         .crossfade(enable = true)
+                        .diskCachePolicy(CachePolicy.ENABLED)
+                        .fetcherDispatcher(Dispatchers.IO)
+                        .transformationDispatcher(Dispatchers.Main)
+                        .diskCacheKey("img-cache-${item.malID}")
                         .target(imageView = ivCoverAnime)
                         .build()
-                root.context.imageLoader.enqueue(imageRequest)
+                context.imageLoader.enqueue(request = imageRequest)
 
                 tvTitleAnime.text = item.title
                 root.setOnClickListener {
