@@ -2,6 +2,8 @@ package com.lelestacia.lelenimexml.core.network.impl.recommendation
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.lelestacia.lelenimexml.core.common.util.Constant.AFTER_FIRST_PAGE_DELAY
+import com.lelestacia.lelenimexml.core.common.util.Constant.FIRST_PAGE_DELAY
 import com.lelestacia.lelenimexml.core.network.model.GenericRecommendationResponse
 import com.lelestacia.lelenimexml.core.network.source.RecommendationAPI
 import kotlinx.coroutines.delay
@@ -20,8 +22,8 @@ class AnimeRecommendationPagingSource(
         return try {
             val currentPage = params.key ?: 1
             delay(
-                if (currentPage == 1) 5000
-                else 400
+                if (currentPage == 1) FIRST_PAGE_DELAY * 5
+                else AFTER_FIRST_PAGE_DELAY
             )
             if(shouldError) {
                 shouldError = false

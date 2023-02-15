@@ -1,16 +1,16 @@
-package com.lelestacia.lelenimexml.feature.explore.adapter
+package com.lelestacia.lelenimexml.feature.common.adapter.util
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.lelestacia.lelenimexml.feature.explore.databinding.HorizontalErrorAdapterBinding
+import com.lelestacia.lelenimexml.feature.common.databinding.HorizontalErrorBinding
 
-class ErrorHorizontalAdapter(
+class HorizontalErrorAdapter(
     val message: String,
     val onRetryClicked: () -> Unit
-) : RecyclerView.Adapter<ErrorHorizontalAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<HorizontalErrorAdapter.ViewHolder>() {
 
-    inner class ViewHolder(private val binding: HorizontalErrorAdapterBinding) :
+    inner class ViewHolder(private val binding: HorizontalErrorBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind() {
@@ -21,9 +21,12 @@ class ErrorHorizontalAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
         return ViewHolder(
-            HorizontalErrorAdapterBinding.inflate(
+            binding = HorizontalErrorBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -31,9 +34,9 @@ class ErrorHorizontalAdapter(
         )
     }
 
-    override fun getItemCount(): Int = 1
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind()
     }
+
+    override fun getItemCount(): Int = 1
 }

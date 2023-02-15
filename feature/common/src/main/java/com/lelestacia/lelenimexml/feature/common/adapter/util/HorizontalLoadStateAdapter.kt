@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.feature.explore.adapter
+package com.lelestacia.lelenimexml.feature.common.adapter.util
 
 import android.transition.TransitionManager
 import android.view.LayoutInflater
@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.lelestacia.lelenimexml.feature.explore.databinding.HorizontalFooterLoadstateBinding
+import com.lelestacia.lelenimexml.feature.common.databinding.HorizontalFooterLoadstateBinding
 
-class HorizontalFooterLoadStateAdapter(private val onRetry: () -> Unit) :
-    LoadStateAdapter<HorizontalFooterLoadStateAdapter.ViewHolder>() {
+class HorizontalLoadStateAdapter(
+    private val onRetryClicked: () -> Unit
+) : LoadStateAdapter<HorizontalLoadStateAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: HorizontalFooterLoadstateBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(loadState: LoadState) {
             when (loadState) {
                 is LoadState.NotLoading -> Unit
@@ -42,18 +42,24 @@ class HorizontalFooterLoadStateAdapter(private val onRetry: () -> Unit) :
                     }
             }
             binding.btnRetry.setOnClickListener {
-                onRetry.invoke()
+                onRetryClicked.invoke()
             }
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, loadState: LoadState) {
-        holder.bind(loadState)
+    override fun onBindViewHolder(
+        holder: HorizontalLoadStateAdapter.ViewHolder,
+        loadState: LoadState
+    ) {
+        holder.bind(loadState = loadState)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        loadState: LoadState
+    ): HorizontalLoadStateAdapter.ViewHolder {
         return ViewHolder(
-            HorizontalFooterLoadstateBinding.inflate(
+            binding = HorizontalFooterLoadstateBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

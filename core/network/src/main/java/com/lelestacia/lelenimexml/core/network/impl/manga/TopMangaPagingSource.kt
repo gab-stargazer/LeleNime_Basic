@@ -2,6 +2,8 @@ package com.lelestacia.lelenimexml.core.network.impl.manga
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.lelestacia.lelenimexml.core.common.util.Constant.AFTER_FIRST_PAGE_DELAY
+import com.lelestacia.lelenimexml.core.common.util.Constant.FIRST_PAGE_DELAY
 import com.lelestacia.lelenimexml.core.network.model.manga.MangaResponse
 import com.lelestacia.lelenimexml.core.network.source.MangaAPI
 import kotlinx.coroutines.delay
@@ -19,8 +21,8 @@ class TopMangaPagingSource(
         return try {
             val currentPage = params.key ?: 1
             delay(
-                if (currentPage == 1) 1500
-                else 500
+                if (currentPage == 1) FIRST_PAGE_DELAY * 4.toLong()
+                else AFTER_FIRST_PAGE_DELAY
             )
             val apiResponse = mangaAPI.getTopManga(page = currentPage)
             LoadResult.Page(

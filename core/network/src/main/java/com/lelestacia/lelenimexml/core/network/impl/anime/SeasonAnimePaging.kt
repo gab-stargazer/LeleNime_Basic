@@ -2,6 +2,8 @@ package com.lelestacia.lelenimexml.core.network.impl.anime
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.lelestacia.lelenimexml.core.common.util.Constant.AFTER_FIRST_PAGE_DELAY
+import com.lelestacia.lelenimexml.core.common.util.Constant.FIRST_PAGE_DELAY
 import com.lelestacia.lelenimexml.core.network.model.anime.AnimeResponse
 import com.lelestacia.lelenimexml.core.network.source.AnimeAPI
 import kotlinx.coroutines.delay
@@ -19,8 +21,8 @@ class SeasonAnimePaging(
         return try {
             val currentPage = params.key ?: 1
             delay(
-                if (currentPage == 1) 500
-                else 500
+                if (currentPage == 1) FIRST_PAGE_DELAY * 2
+                else AFTER_FIRST_PAGE_DELAY
             )
             val apiResponse = animeAPI.getCurrentSeason(currentPage)
             LoadResult.Page(
