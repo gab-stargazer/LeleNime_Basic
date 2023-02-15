@@ -20,7 +20,7 @@
 
     <!--Light Mode-->
     <color name="light_primary">#444aa2</color>
-    <color name="light_background">#BEBEC8</color>
+    <color name="light_background">#E2E2E3</color>
     <color name="light_button_background">#D5D5DA</color>
 
     <!--Dark Mode-->
