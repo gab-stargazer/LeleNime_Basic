@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lelestacia.lelenimexml.core.model.anime.Anime
-import com.lelestacia.lelenimexml.feature.common.adapter.FooterLoadStateAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.ListAnimePagingAdapter
 import com.lelestacia.lelenimexml.feature.explore.databinding.FragmentExpandedBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,33 +23,33 @@ import timber.log.Timber
 class ExpandedFragment : Fragment(R.layout.fragment_expanded) {
 
     private val binding: FragmentExpandedBinding by viewBinding()
-    private val viewModel: ExpandedViewModel by activityViewModels()
+    private val viewModel: ExpandedViewModel by viewModels()
     private val args: ExpandedFragmentArgs by navArgs()
+    private val listAnimeAdapter = ListAnimePagingAdapter { anime: Anime ->
+        Timber.d("Selected anime is ${anime.title}")
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.insertOrUpdateAnimeToHistory(anime = anime).join()
+            val destination = ExpandedFragmentDirections.expandedToDetail(malID = anime.malID)
+            findNavController().navigate(destination)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
 
-        val listAnimeAdapter = ListAnimePagingAdapter { anime: Anime ->
-            Timber.d("Selected anime is ${anime.title}")
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.insertOrUpdateAnimeToHistory(anime = anime).join()
-                val destination = ExpandedFragmentDirections.expandedToDetail(malID = anime.malID)
-                findNavController().navigate(destination)
-            }
-        }
         val mLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         binding.root.apply {
-            adapter = listAnimeAdapter.withLoadStateFooter(FooterLoadStateAdapter {
-                listAnimeAdapter.retry()
-            })
+            adapter = listAnimeAdapter
             layoutManager = mLayoutManager
+            layoutManager?.onRestoreInstanceState(savedInstanceState)
             addItemDecoration(DividerItemDecoration(context, mLayoutManager.orientation))
         }
 
         when (args.title) {
             getString(R.string.top_anime) -> setTopAnime(adapter = listAnimeAdapter)
-            getString(R.string.airing_anime) -> setAiringAnime(adapter = listAnimeAdapter)
+            getString(R.string.airing_anime)
+            -> setAiringAnime(adapter = listAnimeAdapter)
             getString(R.string.upcoming_anime) -> setUpcomingAnime()
         }
 
@@ -62,32 +61,50 @@ class ExpandedFragment : Fragment(R.layout.fragment_expanded) {
          *   5. Refactor everything
          *   6. Make some documentation
          */
-
     }
 
     private fun setAdapter() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
 
     }
 
-    private fun setTopAnime(adapter: ListAnimePagingAdapter) = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        viewModel.upcomingAnime.collect { anime: PagingData<Anime> ->
-            adapter.submitData(
-                lifecycle = viewLifecycleOwner.lifecycle,
-                pagingData = anime
-            )
+    private fun setTopAnime(adapter: ListAnimePagingAdapter) =
+        lifecycleScope.launchWhenCreated {
+            viewModel.upcomingAnime.collect { anime: PagingData<Anime> ->
+                adapter.submitData(
+                    lifecycle = viewLifecycleOwner.lifecycle,
+                    pagingData = anime
+                )
+            }
         }
-    }
 
-    private fun setAiringAnime(adapter: ListAnimePagingAdapter) = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        viewModel.airingAnime.collect { anime: PagingData<Anime> ->
-            adapter.submitData(
-                lifecycle = viewLifecycleOwner.lifecycle,
-                pagingData = anime
-            )
+    private fun setAiringAnime(adapter: ListAnimePagingAdapter) =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.airingAnime.collect { anime: PagingData<Anime> ->
+                adapter.submitData(
+                    lifecycle = viewLifecycleOwner.lifecycle,
+                    pagingData = anime
+                )
+            }
         }
-    }
 
     private fun setUpcomingAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.root.layoutManager?.let {
+            onSaveInstanceState(outState = outState)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Timber.tag("Fragment Logger").w("Fragment Dashboard Expanded View was Destroyed")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.tag("Fragment Logger").w("Fragment Expanded was Destroyed")
     }
 }

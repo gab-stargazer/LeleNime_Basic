@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/exploreFragment"
-        android:name="com.lelestacia.lelenimexml.feature.explore.ExploreFragment"
+        android:name="com.lelestacia.lelenimexml.feature.explore.DashboardFragment"
         android:label="Explore"
-        tools:layout="@layout/fragment_explore">
+        tools:layout="@layout/fragment_dashboard">
 
         <action
             android:id="@+id/explore_to_detail"
@@ -40,8 +40,8 @@
         </action>
         <argument
             android:name="dashboard"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
     </fragment>
 
     <fragment

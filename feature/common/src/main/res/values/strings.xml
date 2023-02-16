@@ -2,6 +2,12 @@
     <string name="insert_anime_title">Insert Anime Title Here…</string>
     <string name="search">Search</string>
 
+
+    <string-array name="dashboard_title">
+        <item>Anime</item>
+        <item>Manga</item>
+    </string-array>
+
     <!--Utility-->
     <string name="not_found">No Result Found</string>
     <string name="no_information_by_mal">No information provided by the MAL Website</string>

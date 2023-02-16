@@ -8,7 +8,6 @@ import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -84,219 +83,207 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
 
     }
 
-    private val rvTopAnime = binding.rvTopAnime
-    private val shimmerTopAnime = binding.shimmerTopAnime
-    private fun setTopAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        binding.cvHeaderTopAnime.setOnClickListener {
-            val destination = ExploreFragmentDirections.exploreToExpanded(
-                title = getString(R.string.top_anime),
-            )
-            findNavController().navigate(destination)
-        }
+        private val rvTopAnime = binding.rvTopAnime
+        private val shimmerTopAnime = binding.shimmerTopAnime
+        private fun setTopAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            binding.cvHeaderTopAnime.setOnClickListener {
 
-        rvTopAnime.apply {
-            layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
-                override fun canScrollHorizontally(): Boolean = false
             }
-            setHasFixedSize(true)
+
+            rvTopAnime.apply {
+                layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
+                    override fun canScrollHorizontally(): Boolean = false
+                }
+                setHasFixedSize(true)
+            }
+
+            viewModel.topAnime.collectLatest { topAnime ->
+                topAnimeAdapter.submitData(
+                    lifecycle = viewLifecycleOwner.lifecycle,
+                    pagingData = topAnime
+                )
+            }
         }
 
-        viewModel.topAnime.collectLatest { topAnime ->
-            topAnimeAdapter.submitData(
-                lifecycle = viewLifecycleOwner.lifecycle,
-                pagingData = topAnime
-            )
-        }
-    }
-
-    private fun listenIntoTopAnimeProgress() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        topAnimeAdapter.loadStateFlow
-            .distinctUntilChangedBy { it.refresh }
-            .collectLatest { loadState ->
-                when (loadState.refresh) {
-                    is LoadState.NotLoading -> {
-                        Timber.d("Current state is Not Loading")
-                        TransitionManager.beginDelayedTransition(rvTopAnime)
-                        if (shimmerTopAnime.isShimmerVisible) shimmerTopAnime.hideShimmer()
-                        rvTopAnime.apply {
-                            adapter = topAnimeAdapter.withLoadStateFooter(
-                                HorizontalLoadStateAdapter(onRetryClicked = topAnimeAdapter::retry)
-                            )
-                            layoutManager =
-                                LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        private fun listenIntoTopAnimeProgress() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            topAnimeAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .collectLatest { loadState ->
+                    when (loadState.refresh) {
+                        is LoadState.NotLoading -> {
+                            Timber.d("Current state is Not Loading")
+                            TransitionManager.beginDelayedTransition(rvTopAnime)
+                            if (shimmerTopAnime.isShimmerVisible) shimmerTopAnime.hideShimmer()
+                            rvTopAnime.apply {
+                                adapter = topAnimeAdapter.withLoadStateFooter(
+                                    HorizontalLoadStateAdapter(onRetryClicked = topAnimeAdapter::retry)
+                                )
+                                layoutManager =
+                                    LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                            }
                         }
-                    }
-                    LoadState.Loading -> {
-                        Timber.d("Current state is Loading")
-                        if (!shimmerTopAnime.isShimmerVisible) shimmerTopAnime.showShimmer(true)
-                        if (rvTopAnime.adapter != placeHolderAdapter) {
+                        LoadState.Loading -> {
+                            Timber.d("Current state is Loading")
+                            if (!shimmerTopAnime.isShimmerVisible) shimmerTopAnime.showShimmer(true)
+                            if (rvTopAnime.adapter != placeHolderAdapter) {
+                                TransitionManager.beginDelayedTransition(binding.root)
+                                rvTopAnime.adapter = placeHolderAdapter
+                            }
+                        }
+                        is LoadState.Error -> {
+                            Timber.d("Current state is Error")
+                            if (shimmerTopAnime.isShimmerVisible) shimmerTopAnime.hideShimmer()
                             TransitionManager.beginDelayedTransition(binding.root)
-                            rvTopAnime.adapter = placeHolderAdapter
-                        }
-                    }
-                    is LoadState.Error -> {
-                        Timber.d("Current state is Error")
-                        if (shimmerTopAnime.isShimmerVisible) shimmerTopAnime.hideShimmer()
-                        TransitionManager.beginDelayedTransition(binding.root)
-                        if (rvTopAnime.adapter == placeHolderAdapter) {
-                            rvTopAnime.adapter = HorizontalErrorAdapter(
-                                message = (loadState.refresh as LoadState.Error).error.message
-                                    ?: "Unknown",
-                                onRetryClicked = topAnimeAdapter::retry
-                            )
+                            if (rvTopAnime.adapter == placeHolderAdapter) {
+                                rvTopAnime.adapter = HorizontalErrorAdapter(
+                                    message = (loadState.refresh as LoadState.Error).error.message
+                                        ?: "Unknown",
+                                    onRetryClicked = topAnimeAdapter::retry
+                                )
+                            }
                         }
                     }
                 }
+        }
+
+        private val rvAiringAnime = binding.rvAiringAnime
+        private val shimmerAiringAnime = binding.shimmerAiringAnime
+        private fun setAiringAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            binding.cvHeaderAiringAnime.setOnClickListener {
+
             }
-    }
 
-    private val rvAiringAnime = binding.rvAiringAnime
-    private val shimmerAiringAnime = binding.shimmerAiringAnime
-    private fun setAiringAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        binding.cvHeaderAiringAnime.setOnClickListener {
-            val destination = ExploreFragmentDirections.exploreToExpanded(
-                title = getString(R.string.airing_anime),
-            )
-            findNavController().navigate(destination)
-        }
-
-        rvAiringAnime.apply {
-            layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
-                override fun canScrollHorizontally(): Boolean = false
+            rvAiringAnime.apply {
+                layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
+                    override fun canScrollHorizontally(): Boolean = false
+                }
+                setHasFixedSize(true)
             }
-            setHasFixedSize(true)
+
+            viewModel.airingAnime.collectLatest { airingAnime ->
+                airingAnimeAdapter.submitData(
+                    lifecycle = viewLifecycleOwner.lifecycle,
+                    pagingData = airingAnime
+                )
+            }
         }
 
-        viewModel.airingAnime.collectLatest { airingAnime ->
-            airingAnimeAdapter.submitData(
-                lifecycle = viewLifecycleOwner.lifecycle,
-                pagingData = airingAnime
-            )
-        }
-    }
-
-    private fun listenIntoAiringAnimeProgress() =
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            airingAnimeAdapter.loadStateFlow
-                .distinctUntilChangedBy { it.refresh }
-                .collectLatest { loadState ->
-                    when (loadState.refresh) {
-                        is LoadState.NotLoading -> {
-                            Timber.d("Current state is Not Loading")
-                            TransitionManager.beginDelayedTransition(binding.rvAiringAnime)
-                            if (shimmerAiringAnime.isShimmerVisible) shimmerAiringAnime.hideShimmer()
-                            rvAiringAnime.apply {
-                                adapter = airingAnimeAdapter.withLoadStateFooter(
-                                    HorizontalLoadStateAdapter(onRetryClicked = airingAnimeAdapter::retry)
-                                )
-                                layoutManager =
-                                    LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-                            }
-                        }
-                        LoadState.Loading -> {
-                            Timber.d("Current state is Loading")
-                            if (!shimmerAiringAnime.isShimmerVisible) shimmerAiringAnime.showShimmer(
-                                true
-                            )
-                            if (rvAiringAnime.adapter != placeHolderAdapter) {
-                                TransitionManager.beginDelayedTransition(binding.root)
-                                rvAiringAnime.adapter = placeHolderAdapter
-                            }
-                        }
-                        is LoadState.Error -> {
-                            Timber.d("Current state is Error")
-                            if (rvAiringAnime.adapter == placeHolderAdapter) {
+        private fun listenIntoAiringAnimeProgress() =
+            viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+                airingAnimeAdapter.loadStateFlow
+                    .distinctUntilChangedBy { it.refresh }
+                    .collectLatest { loadState ->
+                        when (loadState.refresh) {
+                            is LoadState.NotLoading -> {
+                                Timber.d("Current state is Not Loading")
+                                TransitionManager.beginDelayedTransition(binding.rvAiringAnime)
                                 if (shimmerAiringAnime.isShimmerVisible) shimmerAiringAnime.hideShimmer()
-                                TransitionManager.beginDelayedTransition(binding.root)
-                                rvAiringAnime.adapter = HorizontalErrorAdapter(
-                                    message = (loadState.refresh as LoadState.Error).error.message
-                                        ?: "Unknown",
-                                    onRetryClicked = airingAnimeAdapter::retry
+                                rvAiringAnime.apply {
+                                    adapter = airingAnimeAdapter.withLoadStateFooter(
+                                        HorizontalLoadStateAdapter(onRetryClicked = airingAnimeAdapter::retry)
+                                    )
+                                    layoutManager =
+                                        LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                                }
+                            }
+                            LoadState.Loading -> {
+                                Timber.d("Current state is Loading")
+                                if (!shimmerAiringAnime.isShimmerVisible) shimmerAiringAnime.showShimmer(
+                                    true
                                 )
+                                if (rvAiringAnime.adapter != placeHolderAdapter) {
+                                    TransitionManager.beginDelayedTransition(binding.root)
+                                    rvAiringAnime.adapter = placeHolderAdapter
+                                }
+                            }
+                            is LoadState.Error -> {
+                                Timber.d("Current state is Error")
+                                if (rvAiringAnime.adapter == placeHolderAdapter) {
+                                    if (shimmerAiringAnime.isShimmerVisible) shimmerAiringAnime.hideShimmer()
+                                    TransitionManager.beginDelayedTransition(binding.root)
+                                    rvAiringAnime.adapter = HorizontalErrorAdapter(
+                                        message = (loadState.refresh as LoadState.Error).error.message
+                                            ?: "Unknown",
+                                        onRetryClicked = airingAnimeAdapter::retry
+                                    )
+                                }
                             }
                         }
                     }
-                }
-        }
-
-    private val rvUpcomingAnime = binding.rvUpcomingAnime
-    private val shimmerUpcomingAnime = binding.shimmerUpcomingAnime
-    private fun setUpcomingAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        binding.cvHeaderUpcomingAnime.setOnClickListener {
-            val destination = ExploreFragmentDirections.exploreToExpanded(
-                title = getString(R.string.upcoming_anime),
-            )
-            findNavController().navigate(destination)
-        }
-
-        rvUpcomingAnime.apply {
-            layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
-                override fun canScrollHorizontally(): Boolean = false
             }
-            setHasFixedSize(true)
+
+        private val rvUpcomingAnime = binding.rvUpcomingAnime
+        private val shimmerUpcomingAnime = binding.shimmerUpcomingAnime
+        private fun setUpcomingAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            binding.cvHeaderUpcomingAnime.setOnClickListener {
+
+            }
+
+            rvUpcomingAnime.apply {
+                layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
+                    override fun canScrollHorizontally(): Boolean = false
+                }
+                setHasFixedSize(true)
+            }
+
+            viewModel.upcomingAnime.collectLatest { upcomingAnime ->
+                upcomingAnimeAdapter.submitData(
+                    lifecycle = viewLifecycleOwner.lifecycle,
+                    pagingData = upcomingAnime
+                )
+            }
         }
 
-        viewModel.upcomingAnime.collectLatest { upcomingAnime ->
-            upcomingAnimeAdapter.submitData(
-                lifecycle = viewLifecycleOwner.lifecycle,
-                pagingData = upcomingAnime
-            )
-        }
-    }
-
-    private fun listenIntoUpcomingAnimeProgress() =
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            upcomingAnimeAdapter.loadStateFlow
-                .distinctUntilChangedBy { it.refresh }
-                .collectLatest { loadState ->
-                    when (loadState.refresh) {
-                        is LoadState.NotLoading -> {
-                            Timber.d("Current state is Not Loading")
-                            TransitionManager.beginDelayedTransition(rvUpcomingAnime)
-                            if (shimmerUpcomingAnime.isShimmerVisible) shimmerUpcomingAnime.hideShimmer()
-                            rvUpcomingAnime.apply {
-                                adapter = upcomingAnimeAdapter.withLoadStateFooter(
-                                    HorizontalLoadStateAdapter(onRetryClicked = upcomingAnimeAdapter::retry)
-                                )
-                                layoutManager =
-                                    LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-                            }
-                        }
-                        LoadState.Loading -> {
-                            Timber.d("Current state is Loading")
-                            if (!shimmerUpcomingAnime.isShimmerVisible) shimmerUpcomingAnime.showShimmer(
-                                true
-                            )
-                            if (rvUpcomingAnime.adapter != placeHolderAdapter) {
-                                TransitionManager.beginDelayedTransition(binding.root)
-                                rvUpcomingAnime.adapter = placeHolderAdapter
-                            }
-                        }
-                        is LoadState.Error -> {
-                            Timber.d("Current state is Error")
-                            if (rvUpcomingAnime.adapter == placeHolderAdapter) {
+        private fun listenIntoUpcomingAnimeProgress() =
+            viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+                upcomingAnimeAdapter.loadStateFlow
+                    .distinctUntilChangedBy { it.refresh }
+                    .collectLatest { loadState ->
+                        when (loadState.refresh) {
+                            is LoadState.NotLoading -> {
+                                Timber.d("Current state is Not Loading")
+                                TransitionManager.beginDelayedTransition(rvUpcomingAnime)
                                 if (shimmerUpcomingAnime.isShimmerVisible) shimmerUpcomingAnime.hideShimmer()
-                                TransitionManager.beginDelayedTransition(binding.root)
-                                rvUpcomingAnime.adapter = HorizontalErrorAdapter(
-                                    message = (loadState.refresh as LoadState.Error).error.message
-                                        ?: "Unknown",
-                                    onRetryClicked = upcomingAnimeAdapter::retry
+                                rvUpcomingAnime.apply {
+                                    adapter = upcomingAnimeAdapter.withLoadStateFooter(
+                                        HorizontalLoadStateAdapter(onRetryClicked = upcomingAnimeAdapter::retry)
+                                    )
+                                    layoutManager =
+                                        LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                                }
+                            }
+                            LoadState.Loading -> {
+                                Timber.d("Current state is Loading")
+                                if (!shimmerUpcomingAnime.isShimmerVisible) shimmerUpcomingAnime.showShimmer(
+                                    true
                                 )
+                                if (rvUpcomingAnime.adapter != placeHolderAdapter) {
+                                    TransitionManager.beginDelayedTransition(binding.root)
+                                    rvUpcomingAnime.adapter = placeHolderAdapter
+                                }
+                            }
+                            is LoadState.Error -> {
+                                Timber.d("Current state is Error")
+                                if (rvUpcomingAnime.adapter == placeHolderAdapter) {
+                                    if (shimmerUpcomingAnime.isShimmerVisible) shimmerUpcomingAnime.hideShimmer()
+                                    TransitionManager.beginDelayedTransition(binding.root)
+                                    rvUpcomingAnime.adapter = HorizontalErrorAdapter(
+                                        message = (loadState.refresh as LoadState.Error).error.message
+                                            ?: "Unknown",
+                                        onRetryClicked = upcomingAnimeAdapter::retry
+                                    )
+                                }
                             }
                         }
                     }
-                }
-        }
+            }
 
 
     private val rvTopManga = binding.rvTopManga
     private val shimmerTopManga = binding.shimmerTopManga
     private fun setTopManga() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
         binding.cvHeaderTopManga.setOnClickListener {
-            val destination = ExploreFragmentDirections.exploreToExpanded(
-                title = getString(R.string.top_manga),
-            )
-            findNavController().navigate(destination)
+
         }
 
         rvTopManga.apply {
@@ -467,7 +454,6 @@ class ExploreFragment : Fragment(R.layout.fragment_explore) {
     private fun navigateToDetail(anime: Anime) = viewLifecycleOwner.lifecycleScope.launch {
         Timber.d("Selected anime was ${anime.title}")
         viewModel.insertOrUpdateAnimeToHistory(anime = anime).join()
-        val destination = ExploreFragmentDirections.exploreToDetail(malID = anime.malID)
-        findNavController().navigate(destination)
+
     }
 }

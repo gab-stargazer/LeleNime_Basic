@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
+    tools:context=".DashboardAnimeFragment"
+    tools:theme="@style/Theme.LeleNimeXML">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_header_title_anime"
+            style="@style/TextAppearance.Material3.HeadlineLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="@string/anime"
+            android:textColor="?android:attr/textColorPrimary"
+            app:fontFamily="@font/source_sans_pro_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_header_date"
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorPrimary"
+            app:fontFamily="@font/source_sans_pro_light"
+            app:layout_constraintStart_toStartOf="@id/tv_header_title_anime"
+            app:layout_constraintTop_toBottomOf="@id/tv_header_title_anime"
+            tools:text="2 February 2023" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_trending_anime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/tv_header_date">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_header_top_anime"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/trending"
+                android:textColor="?android:attr/textColorPrimary"
+                app:fontFamily="@font/source_sans_pro_semi_bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_top_anime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                android:clipChildren="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_header_top_anime"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_color="?android:attr/textColorPrimary"
+                app:shimmer_direction="left_to_right">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_top_anime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="170dp"
+                    android:orientation="horizontal"
+                    android:splitMotionEvents="false"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_more_top_anime"
+                    tools:itemCount="5"
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_airing_anime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/layout_trending_anime">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_header_airing_anime"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/currently_airing"
+                android:textColor="?android:attr/textColorPrimary"
+                app:fontFamily="@font/source_sans_pro_semi_bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_airing_anime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clipChildren="true"
+                app:layout_constraintTop_toBottomOf="@+id/tv_header_airing_anime"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_color="?android:attr/textColorPrimary"
+                app:shimmer_direction="left_to_right">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_airing_anime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="170dp"
+                    android:orientation="horizontal"
+                    android:splitMotionEvents="false"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_more_top_anime"
+                    tools:itemCount="5"
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_upcoming_anime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/layout_airing_anime">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_header_upcoming_anime"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/upcoming"
+                android:textColor="?android:attr/textColorPrimary"
+                app:fontFamily="@font/source_sans_pro_semi_bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_upcoming_anime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                android:clipChildren="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_header_upcoming_anime"
+                app:shimmer_auto_start="true"
+                app:shimmer_base_color="?android:attr/textColorPrimary"
+                app:shimmer_direction="left_to_right">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_upcoming_anime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="170dp"
+                    android:orientation="horizontal"
+                    android:splitMotionEvents="false"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_more_top_anime"
+                    tools:itemCount="5"
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
