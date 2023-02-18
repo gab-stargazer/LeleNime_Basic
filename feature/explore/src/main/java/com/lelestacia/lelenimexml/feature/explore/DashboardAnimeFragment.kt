@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.feature.common.adapter.anime.AnimeHorizontalPagingAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.util.HorizontalErrorAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.util.HorizontalLoadStateAdapter
@@ -20,8 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.*
 
 @AndroidEntryPoint
 class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
@@ -31,25 +30,38 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
     private val placeHolderAdapter: PlaceHolderHorizontalAdapter =
         PlaceHolderHorizontalAdapter(placeHolderCount = (1..4).toList())
     private val topAnimeAdapter = AnimeHorizontalPagingAdapter { anime ->
+        Snackbar.make(
+            binding.root,
+            "Selected anime is: ${anime.title}",
+            Snackbar.LENGTH_SHORT
+        ).show()
+    }
 
-    }
     private val airingAnimeAdapter = AnimeHorizontalPagingAdapter { anime ->
+        Snackbar.make(
+            binding.root,
+            "Selected anime is: ${anime.title}",
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
+
     private val upcomingAnimeAdapter = AnimeHorizontalPagingAdapter { anime ->
+        Snackbar.make(
+            binding.root,
+            "Selected anime is: ${anime.title}",
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val format = "dd MMMM yyyy"
-        val simpleDateFormat = SimpleDateFormat(format, Locale.getDefault())
-        binding.tvHeaderDate.text = simpleDateFormat.format(Date())
-
         setTopAnime()
         listenIntoTopAnimeProgress()
+
         setAiringAnime()
         listenIntoAiringAnimeProgress()
+
         setUpcomingAnime()
         listenIntoUpcomingAnimeProgress()
     }

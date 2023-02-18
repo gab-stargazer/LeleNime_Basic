@@ -3,20 +3,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent"
     tools:context=".DashboardFragment"
     tools:theme="@style/Theme.LeleNimeXML">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edt_search"
+        style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/insert_anime_title"
+        android:textColorHint="?android:attr/textColorPrimary"
+        app:boxBackgroundColor="@color/background_edt_color"
+        app:boxCornerRadiusBottomEnd="24dp"
+        app:boxCornerRadiusBottomStart="24dp"
+        app:boxCornerRadiusTopEnd="24dp"
+        app:boxCornerRadiusTopStart="24dp"
+        app:boxStrokeWidth="0dp"
+        app:hintTextColor="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/ic_search"
+        app:startIconTint="?android:attr/textColorPrimary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:inputType="none"
+            android:enabled="false"
+            style="@style/ThemeOverlay.Material3.TextInputEditText.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout_dashboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="16dp"
+        android:background="?attr/backgroundColor"
+        android:backgroundTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/edt_search"
+        app:tabIndicatorColor="?attr/colorPrimary"
+        app:tabSelectedTextColor="?attr/colorPrimary"
+        app:tabTextColor="?android:attr/textColorSecondary" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_dashboard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab_layout_dashboard" />
+        app:layout_constraintTop_toBottomOf="@id/tab_layout_dashboard"
+        tools:background="?attr/backgroundColor" />
 </androidx.constraintlayout.widget.ConstraintLayout>

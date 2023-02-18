@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".DashboardAnimeFragment"
     tools:theme="@style/Theme.LeleNimeXML">
 
@@ -12,36 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_header_title_anime"
-            style="@style/TextAppearance.Material3.HeadlineLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="@string/anime"
-            android:textColor="?android:attr/textColorPrimary"
-            app:fontFamily="@font/source_sans_pro_bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_header_date"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?android:attr/textColorPrimary"
-            app:fontFamily="@font/source_sans_pro_light"
-            app:layout_constraintStart_toStartOf="@id/tv_header_title_anime"
-            app:layout_constraintTop_toBottomOf="@id/tv_header_title_anime"
-            tools:text="2 February 2023" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_trending_anime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:background="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/tv_header_date">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_header_top_anime"
@@ -49,11 +27,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="16dp"
                 android:text="@string/trending"
                 android:textColor="?android:attr/textColorPrimary"
                 app:fontFamily="@font/source_sans_pro_semi_bold"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_more_trending"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btn_more_trending" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/btn_more_trending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_next"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
@@ -64,7 +51,7 @@
                 android:layout_marginBottom="24dp"
                 android:clipChildren="true"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_header_top_anime"
+                app:layout_constraintTop_toBottomOf="@id/btn_more_trending"
                 app:shimmer_auto_start="true"
                 app:shimmer_base_color="?android:attr/textColorPrimary"
                 app:shimmer_direction="left_to_right">
@@ -78,7 +65,8 @@
                     android:splitMotionEvents="false"
                     app:layout_constraintTop_toBottomOf="@+id/btn_more_top_anime"
                     tools:itemCount="5"
-                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/anime_horizontal_item" />
             </com.facebook.shimmer.ShimmerFrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -86,7 +74,7 @@
             android:id="@+id/layout_airing_anime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:background="@color/white"
             app:layout_constraintTop_toBottomOf="@id/layout_trending_anime">
 
@@ -96,11 +84,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="16dp"
                 android:text="@string/currently_airing"
                 android:textColor="?android:attr/textColorPrimary"
                 app:fontFamily="@font/source_sans_pro_semi_bold"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_more_airing"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btn_more_airing" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/btn_more_airing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_next"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
@@ -108,8 +105,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
                 android:clipChildren="true"
-                app:layout_constraintTop_toBottomOf="@+id/tv_header_airing_anime"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_more_airing"
                 app:shimmer_auto_start="true"
                 app:shimmer_base_color="?android:attr/textColorPrimary"
                 app:shimmer_direction="left_to_right">
@@ -123,7 +122,8 @@
                     android:splitMotionEvents="false"
                     app:layout_constraintTop_toBottomOf="@+id/btn_more_top_anime"
                     tools:itemCount="5"
-                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/anime_horizontal_item" />
             </com.facebook.shimmer.ShimmerFrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -131,7 +131,7 @@
             android:id="@+id/layout_upcoming_anime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:background="@color/white"
             app:layout_constraintTop_toBottomOf="@id/layout_airing_anime">
 
@@ -141,11 +141,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="16dp"
                 android:text="@string/upcoming"
                 android:textColor="?android:attr/textColorPrimary"
                 app:fontFamily="@font/source_sans_pro_semi_bold"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_more_upcoming"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btn_more_upcoming" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/btn_more_upcoming"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_next"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
@@ -156,7 +165,7 @@
                 android:layout_marginBottom="24dp"
                 android:clipChildren="true"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_header_upcoming_anime"
+                app:layout_constraintTop_toBottomOf="@+id/btn_more_upcoming"
                 app:shimmer_auto_start="true"
                 app:shimmer_base_color="?android:attr/textColorPrimary"
                 app:shimmer_direction="left_to_right">
@@ -170,7 +179,8 @@
                     android:splitMotionEvents="false"
                     app:layout_constraintTop_toBottomOf="@+id/btn_more_top_anime"
                     tools:itemCount="5"
-                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/anime_horizontal_item" />
             </com.facebook.shimmer.ShimmerFrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

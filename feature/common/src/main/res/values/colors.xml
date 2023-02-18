@@ -22,6 +22,8 @@
     <color name="light_primary">#444aa2</color>
     <color name="light_background">#E2E2E3</color>
     <color name="light_button_background">#D5D5DA</color>
+    <color name="disable_text_color">#696969</color>
+    <color name="background_edt_color">#ECEDF3</color>
 
     <!--Dark Mode-->
     <color name="blue">#6D67E4</color>

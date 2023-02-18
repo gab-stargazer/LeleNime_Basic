@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.viewbinding.library.activity.viewBinding
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -48,8 +49,26 @@ class MainActivity : AppCompatActivity() {
             } else {
                 navView.visibility = View.VISIBLE
             }
+
+            if (arguments?.getBoolean("dashboard", false) == true) {
+                val white = ResourcesCompat.getColor(
+                    resources,
+                    com.lelestacia.lelenimexml.feature.common.R.color.white,
+                    resources.newTheme()
+                )
+                binding.toolbar.visibility = View.GONE
+                window.statusBarColor = white
+            } else {
+                val colorPrimary = ResourcesCompat.getColor(
+                    resources,
+                    com.lelestacia.lelenimexml.feature.common.R.color.light_primary,
+                    resources.newTheme()
+                )
+                binding.toolbar.visibility = View.VISIBLE
+                window.statusBarColor = colorPrimary
+            }
+            navView.setupWithNavController(navController)
         }
-        navView.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
