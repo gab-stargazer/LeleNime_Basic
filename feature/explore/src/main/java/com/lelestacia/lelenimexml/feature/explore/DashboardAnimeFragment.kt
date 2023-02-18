@@ -1,6 +1,7 @@
 package com.lelestacia.lelenimexml.feature.explore
 
 import android.os.Bundle
+import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.View
 import android.viewbinding.library.fragment.viewBinding
@@ -9,10 +10,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.feature.common.adapter.anime.AnimeHorizontalPagingAdapter
+import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationAnimePagingAdapter
+import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationErrorAdapter
+import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationPlaceholderAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.util.HorizontalErrorAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.util.HorizontalLoadStateAdapter
 import com.lelestacia.lelenimexml.feature.explore.adapter.PlaceHolderHorizontalAdapter
@@ -53,7 +59,6 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
         ).show()
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTopAnime()
@@ -64,6 +69,9 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
 
         setUpcomingAnime()
         listenIntoUpcomingAnimeProgress()
+
+        setUpRecommendation()
+        listenIntoRecommendationAnimeProgress()
     }
 
 
@@ -251,6 +259,91 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                     message = (loadState.refresh as LoadState.Error).error.message
                                         ?: "Unknown",
                                     onRetryClicked = upcomingAnimeAdapter::retry
+                                )
+                            }
+                        }
+                    }
+                }
+        }
+
+    private val recommendationAnimeAdapter: RecommendationAnimePagingAdapter =
+        RecommendationAnimePagingAdapter(
+            onItemClicked = { recommendationItem ->
+                Timber.d("Selected Item is: $recommendationItem")
+            },
+            onNextButtonClicked = {
+                val currentPosition =
+                    (binding.rvRecommendationAnime.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                binding.rvRecommendationAnime.smoothScrollToPosition(currentPosition + 1)
+            }
+        )
+
+    private fun setUpRecommendation() =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            val mLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+            val snapHelper = LinearSnapHelper()
+            binding.rvRecommendationAnime.apply {
+                adapter = recommendationAnimeAdapter
+                layoutManager = mLayoutManager
+                addItemDecoration(DividerItemDecoration(context, mLayoutManager.orientation))
+                snapHelper.attachToRecyclerView(this)
+            }
+
+            viewModel.animeRecommendation.collectLatest { recommendationAnime ->
+                recommendationAnimeAdapter.submitData(
+                    lifecycle = viewLifecycleOwner.lifecycle,
+                    pagingData = recommendationAnime
+                )
+            }
+        }
+
+    private fun listenIntoRecommendationAnimeProgress() =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            val placeHolderRecommendationAdapter = RecommendationPlaceholderAdapter()
+
+            recommendationAnimeAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .collectLatest { loadState ->
+                    when (loadState.refresh) {
+                        is LoadState.NotLoading -> {
+                            Timber.d("Current state is Not Loading")
+                            TransitionManager.beginDelayedTransition(
+                                binding.root,
+                                AutoTransition()
+                            )
+                            binding.rvRecommendationAnime.apply {
+                                adapter = recommendationAnimeAdapter
+                                layoutManager =
+                                    LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                            }
+                            /*binding.tvRecommendationPageNumber.apply {
+                                text = getString(
+                                    R.string.recommendation_page_number,
+                                    1,
+                                    recommendationAnimeAdapter.itemCount
+                                )
+                                visibility = View.VISIBLE
+                            }*/
+                        }
+                        LoadState.Loading -> {
+                            Timber.d("Current state is Loading")
+                            if (binding.rvRecommendationAnime.adapter != placeHolderRecommendationAdapter) {
+                                TransitionManager.beginDelayedTransition(binding.root)
+                                binding.rvRecommendationAnime.adapter =
+                                    placeHolderRecommendationAdapter
+                            }
+                        }
+                        is LoadState.Error -> {
+                            Timber.d("Current state is Error")
+                            if (binding.rvRecommendationAnime.adapter == placeHolderRecommendationAdapter) {
+                                TransitionManager.beginDelayedTransition(
+                                    binding.root,
+                                    AutoTransition()
+                                )
+                                binding.rvRecommendationAnime.adapter = RecommendationErrorAdapter(
+                                    message = (loadState.refresh as LoadState.Error).error.message
+                                        ?: "Unknown",
+                                    onRetry = recommendationAnimeAdapter::retry
                                 )
                             }
                         }

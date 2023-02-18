@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:hint="@string/insert_anime_title"
+        android:hint="@string/search"
         android:textColorHint="?android:attr/textColorPrimary"
         app:boxBackgroundColor="@color/background_edt_color"
         app:boxCornerRadiusBottomEnd="24dp"

@@ -17,7 +17,7 @@
             android:id="@+id/layout_trending_anime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/slight_rounded_corners"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -89,7 +89,7 @@
             android:id="@+id/layout_airing_anime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/slight_rounded_corners"
             app:layout_constraintTop_toBottomOf="@id/layout_trending_anime">
 
@@ -161,7 +161,7 @@
             android:id="@+id/layout_upcoming_anime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/slight_rounded_corners"
             app:layout_constraintTop_toBottomOf="@id/layout_airing_anime">
 
@@ -252,8 +252,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:id="@+id/rv_recommendation_anime"
+                android:layout_marginBottom="24dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_header_recommendation_anime"
                 tools:itemCount="1"
                 tools:listitem="@layout/recommendation_item" />

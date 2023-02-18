@@ -9,19 +9,20 @@
         <!-- Customize your theme here. -->
         <item name="backgroundColor">@color/light_background</item>
         <item name="itemIconTint">?android:attr/textColorPrimary</item>
-        <item name="colorOnSecondaryContainer">@color/white</item>
-        <item name="colorOnSurfaceVariant">#D8D8D8</item>
         <item name="cardBackgroundColor">@color/white</item>
         <item name="indicatorColor">@color/navy</item>
         <item name="iconTint">?android:attr/textColorPrimary</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="colorSurface">?attr/colorPrimary</item>
         <item name="colorOnSurface">@color/white</item>
-        <item name="colorSecondaryContainer">?attr/colorPrimary</item>
 
 
+        <item name="colorSecondaryContainer">@android:color/transparent</item>
+        <item name="colorOnSecondaryContainer">?attr/colorPrimary</item>
+        <item name="colorOnSurfaceVariant">?android:attr/textColorSecondary</item>
 
-<!--Text Color-->
+
+        <!--Text Color-->
         <item name="android:textColorPrimary">@color/black</item>
         <item name="android:textColorSecondary">@color/disable_text_color</item>
     </style>
