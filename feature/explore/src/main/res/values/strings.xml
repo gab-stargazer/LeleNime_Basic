@@ -14,4 +14,5 @@
     <string name="upcoming">Upcoming</string>
     <string name="manga">Manga</string>
     <string name="top_manga">Top Manga</string>
+    <string name="tab_layout_explore_pages">Tab Layout Explore Pages</string>
 </resources>

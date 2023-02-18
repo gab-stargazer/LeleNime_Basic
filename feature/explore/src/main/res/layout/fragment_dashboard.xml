@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".DashboardFragment"
     tools:theme="@style/Theme.LeleNimeXML">
 
@@ -28,11 +28,11 @@
         app:startIconTint="?android:attr/textColorPrimary">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:inputType="none"
-            android:enabled="false"
             style="@style/ThemeOverlay.Material3.TextInputEditText.FilledBox.Dense"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.tabs.TabLayout
@@ -42,6 +42,7 @@
         android:layout_marginTop="16dp"
         android:background="?attr/backgroundColor"
         android:backgroundTint="@color/white"
+        android:contentDescription="@string/tab_layout_explore_pages"
         app:layout_constraintTop_toBottomOf="@id/edt_search"
         app:tabIndicatorColor="?attr/colorPrimary"
         app:tabSelectedTextColor="?attr/colorPrimary"
