@@ -13,7 +13,6 @@ class AnimeRecommendationPagingSource(
     private val recommendationAPI: RecommendationAPI
 ) : PagingSource<Int, GenericRecommendationResponse>() {
 
-    var shouldError: Boolean = true
     override fun getRefreshKey(state: PagingState<Int, GenericRecommendationResponse>): Int? {
         return state.anchorPosition
     }
@@ -25,10 +24,6 @@ class AnimeRecommendationPagingSource(
                 if (currentPage == 1) FIRST_PAGE_DELAY * 5
                 else AFTER_FIRST_PAGE_DELAY
             )
-            if(shouldError) {
-                shouldError = false
-                throw Exception("Test Recommendation Exception on First Page")
-            }
             val apiResponse = recommendationAPI.getRecentAnimeRecommendation(page = currentPage)
             if (apiResponse.data.isEmpty()) {
                 Timber.e("Api Returned 0 data or failed to parse")

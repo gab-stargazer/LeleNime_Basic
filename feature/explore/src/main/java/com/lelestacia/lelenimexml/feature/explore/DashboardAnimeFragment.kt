@@ -72,6 +72,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
 
         setUpRecommendation()
         listenIntoRecommendationAnimeProgress()
+        listenIntoRecommendationAnimePageNumber()
     }
 
 
@@ -316,14 +317,14 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                 layoutManager =
                                     LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
                             }
-                            /*binding.tvRecommendationPageNumber.apply {
+                            binding.tvRecommendationPageNumber.apply {
                                 text = getString(
                                     R.string.recommendation_page_number,
                                     1,
                                     recommendationAnimeAdapter.itemCount
                                 )
                                 visibility = View.VISIBLE
-                            }*/
+                            }
                         }
                         LoadState.Loading -> {
                             Timber.d("Current state is Loading")
@@ -349,6 +350,27 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                         }
                     }
                 }
+        }
+
+    private fun listenIntoRecommendationAnimePageNumber() =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            binding.rvRecommendationAnime.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        val currentPosition =
+                            (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                        binding.tvRecommendationPageNumber.text =
+                            getString(
+                                R.string.recommendation_page_number,
+                                currentPosition.plus(1),
+                                recommendationAnimeAdapter.itemCount
+                            )
+                    }
+                }
+            })
         }
 
     override fun onDestroyView() {

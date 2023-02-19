@@ -249,17 +249,30 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_recommendation_anime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:id="@+id/rv_recommendation_anime"
                 android:layout_marginBottom="24dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_header_recommendation_anime"
                 tools:itemCount="1"
                 tools:listitem="@layout/recommendation_item" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_recommendation_page_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:textColor="?android:attr/textColorPrimary"
+                app:fontFamily="@font/source_sans_pro_regular"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_recommendation_anime"
+                tools:text="@string/recommendation_page_number" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
