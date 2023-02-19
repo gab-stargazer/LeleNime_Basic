@@ -9,10 +9,12 @@ import com.lelestacia.lelenimexml.core.domain.usecase.anime.AnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.anime.IAnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.character.CharacterUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.character.ICharacterUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.DashboardAnimeUseCases
+import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.DashboardMangaUseCases
+import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.IDashboardAnimeUseCases
+import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.IDashboardMangaUseCases
 import com.lelestacia.lelenimexml.core.domain.usecase.episode.EpisodeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.episode.IEpisodeUseCase
-import com.lelestacia.lelenimexml.core.domain.usecase.explore.ExploreUseCases
-import com.lelestacia.lelenimexml.core.domain.usecase.explore.IExploreUseCases
 import com.lelestacia.lelenimexml.core.domain.usecase.favorite.FavoriteAnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.favorite.IFavoriteAnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.history.HistoryAnimeUseCase
@@ -61,13 +63,24 @@ object UseCaseModule {
 
     @Provides
     @ViewModelScoped
-    fun provideExploreUseCases(
+    fun provideDashboardAnimeUseCases(
         animeRepository: IAnimeRepository,
         mangaRepository: IMangaRepository,
         recommendationRepository: IRecommendationRepository
-    ): IExploreUseCases =
-        ExploreUseCases(
+    ): IDashboardAnimeUseCases =
+        DashboardAnimeUseCases(
             animeRepository = animeRepository,
+            mangaRepository = mangaRepository,
+            recommendationRepository = recommendationRepository
+        )
+
+    @Provides
+    @ViewModelScoped
+    fun provideDashboardMangaUseCases(
+        mangaRepository: IMangaRepository,
+        recommendationRepository: IRecommendationRepository
+    ): IDashboardMangaUseCases =
+        DashboardMangaUseCases(
             mangaRepository = mangaRepository,
             recommendationRepository = recommendationRepository
         )

@@ -8,7 +8,6 @@ import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,8 +15,8 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.feature.common.adapter.anime.AnimeHorizontalPagingAdapter
-import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationAnimePagingAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationErrorAdapter
+import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationItemPagingAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationPlaceholderAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.util.HorizontalErrorAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.util.HorizontalLoadStateAdapter
@@ -76,87 +75,102 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
     }
 
 
-    private fun setTopAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        binding.layoutTrendingAnime.setOnClickListener {
-            val destination =
-                DashboardFragmentDirections.exploreToExpanded(getString(R.string.top_anime))
-            findNavController().navigate(destination)
-        }
-        val rvTopAnime = binding.rvTopAnime
-        rvTopAnime.apply {
-            layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
-                override fun canScrollHorizontally(): Boolean = false
+    private fun setTopAnime() =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            binding.cvHeaderTrendingAnime.setOnClickListener {
+                //TODO: Implement Expanded Dashboard for Anime
+                Snackbar.make(
+                    binding.root,
+                    "Expanded Version is not yet implemented",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
-            setHasFixedSize(true)
-        }
-
-        viewModel.topAnime.collectLatest { topAnime ->
-            topAnimeAdapter.submitData(
-                lifecycle = viewLifecycleOwner.lifecycle,
-                pagingData = topAnime
-            )
-        }
-    }
-
-    private fun listenIntoTopAnimeProgress() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        val rvTopAnime = binding.rvTopAnime
-        val shimmerTopAnime = binding.shimmerTopAnime
-        topAnimeAdapter.loadStateFlow
-            .distinctUntilChangedBy { it.refresh }
-            .collectLatest { loadState ->
-                when (loadState.refresh) {
-                    is LoadState.NotLoading -> {
-                        Timber.d("Current state is Not Loading")
-                        TransitionManager.beginDelayedTransition(rvTopAnime)
-                        if (shimmerTopAnime.isShimmerVisible) shimmerTopAnime.hideShimmer()
-                        rvTopAnime.apply {
-                            adapter = topAnimeAdapter.withLoadStateFooter(
-                                HorizontalLoadStateAdapter(onRetryClicked = topAnimeAdapter::retry)
-                            )
-                            layoutManager =
-                                LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-                        }
+            binding.rvTrendingAnime.apply {
+                layoutManager =
+                    object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
+                        override fun canScrollHorizontally(): Boolean = false
                     }
-                    LoadState.Loading -> {
-                        Timber.d("Current state is Loading")
-                        if (!shimmerTopAnime.isShimmerVisible) shimmerTopAnime.showShimmer(true)
-                        if (rvTopAnime.adapter != placeHolderAdapter) {
+                setHasFixedSize(true)
+            }
+
+            viewModel.topAnime.collectLatest { topAnime ->
+                topAnimeAdapter.submitData(
+                    lifecycle = viewLifecycleOwner.lifecycle,
+                    pagingData = topAnime
+                )
+            }
+        }
+
+    private fun listenIntoTopAnimeProgress() =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            val rvTopAnime = binding.rvTrendingAnime
+            val shimmerTopAnime = binding.shimmerTrendingAnime
+            topAnimeAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .collectLatest { loadState ->
+                    when (loadState.refresh) {
+                        is LoadState.NotLoading -> {
+                            Timber.d("Current state is Not Loading")
+                            TransitionManager.beginDelayedTransition(rvTopAnime)
+                            if (shimmerTopAnime.isShimmerVisible) shimmerTopAnime.hideShimmer()
+                            rvTopAnime.apply {
+                                adapter = topAnimeAdapter.withLoadStateFooter(
+                                    HorizontalLoadStateAdapter(onRetryClicked = topAnimeAdapter::retry)
+                                )
+                                layoutManager =
+                                    LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                            }
+                        }
+                        LoadState.Loading -> {
+                            Timber.d("Current state is Loading")
+                            if (!shimmerTopAnime.isShimmerVisible) shimmerTopAnime.showShimmer(true)
+                            if (rvTopAnime.adapter != placeHolderAdapter) {
+                                TransitionManager.beginDelayedTransition(binding.root)
+                                rvTopAnime.adapter = placeHolderAdapter
+                            }
+                        }
+                        is LoadState.Error -> {
+                            Timber.d("Current state is Error")
+                            if (shimmerTopAnime.isShimmerVisible) shimmerTopAnime.hideShimmer()
                             TransitionManager.beginDelayedTransition(binding.root)
-                            rvTopAnime.adapter = placeHolderAdapter
-                        }
-                    }
-                    is LoadState.Error -> {
-                        Timber.d("Current state is Error")
-                        if (shimmerTopAnime.isShimmerVisible) shimmerTopAnime.hideShimmer()
-                        TransitionManager.beginDelayedTransition(binding.root)
-                        if (rvTopAnime.adapter == placeHolderAdapter) {
-                            rvTopAnime.adapter = HorizontalErrorAdapter(
-                                message = (loadState.refresh as LoadState.Error).error.message
-                                    ?: "Unknown",
-                                onRetryClicked = topAnimeAdapter::retry
-                            )
+                            if (rvTopAnime.adapter == placeHolderAdapter) {
+                                rvTopAnime.adapter = HorizontalErrorAdapter(
+                                    message = (loadState.refresh as LoadState.Error).error.message
+                                        ?: "Unknown",
+                                    onRetryClicked = topAnimeAdapter::retry
+                                )
+                            }
                         }
                     }
                 }
-            }
-    }
-
-    private fun setAiringAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        val rvAiringAnime = binding.rvAiringAnime
-        rvAiringAnime.apply {
-            layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
-                override fun canScrollHorizontally(): Boolean = false
-            }
-            setHasFixedSize(true)
         }
 
-        viewModel.airingAnime.collectLatest { airingAnime ->
-            airingAnimeAdapter.submitData(
-                lifecycle = viewLifecycleOwner.lifecycle,
-                pagingData = airingAnime
-            )
+    private fun setAiringAnime() =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            val rvAiringAnime = binding.rvAiringAnime
+            binding.cvHeaderAiringAnime.setOnClickListener {
+                //TODO: Implement Expanded Dashboard for Anime
+                Snackbar.make(
+                    binding.root,
+                    "Expanded Version is not yet implemented",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+            rvAiringAnime.apply {
+                layoutManager =
+                    object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
+                        override fun canScrollHorizontally(): Boolean = false
+                    }
+                setHasFixedSize(true)
+            }
+
+            viewModel.airingAnime.collectLatest { airingAnime ->
+                airingAnimeAdapter.submitData(
+                    lifecycle = viewLifecycleOwner.lifecycle,
+                    pagingData = airingAnime
+                )
+            }
         }
-    }
 
     private fun listenIntoAiringAnimeProgress() =
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -204,22 +218,32 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                 }
         }
 
-    private fun setUpcomingAnime() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        val rvUpcomingAnime = binding.rvUpcomingAnime
-        rvUpcomingAnime.apply {
-            layoutManager = object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
-                override fun canScrollHorizontally(): Boolean = false
+    private fun setUpcomingAnime() =
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            val rvUpcomingAnime = binding.rvUpcomingAnime
+            binding.cvHeaderUpcomingAnime.setOnClickListener {
+                //TODO: Implement Expanded Dashboard for Anime
+                Snackbar.make(
+                    binding.root,
+                    "Expanded Version is not yet implemented",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
-            setHasFixedSize(true)
-        }
+            rvUpcomingAnime.apply {
+                layoutManager =
+                    object : LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) {
+                        override fun canScrollHorizontally(): Boolean = false
+                    }
+                setHasFixedSize(true)
+            }
 
-        viewModel.upcomingAnime.collectLatest { upcomingAnime ->
-            upcomingAnimeAdapter.submitData(
-                lifecycle = viewLifecycleOwner.lifecycle,
-                pagingData = upcomingAnime
-            )
+            viewModel.upcomingAnime.collectLatest { upcomingAnime ->
+                upcomingAnimeAdapter.submitData(
+                    lifecycle = viewLifecycleOwner.lifecycle,
+                    pagingData = upcomingAnime
+                )
+            }
         }
-    }
 
     private fun listenIntoUpcomingAnimeProgress() =
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -267,10 +291,10 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                 }
         }
 
-    private val recommendationAnimeAdapter: RecommendationAnimePagingAdapter =
-        RecommendationAnimePagingAdapter(
+    private val animeRecommendationAdapter: RecommendationItemPagingAdapter =
+        RecommendationItemPagingAdapter(
             onItemClicked = { recommendationItem ->
-                Timber.d("Selected Item is: $recommendationItem")
+                //TODO: Implement Bottom Fragment View for Recommendation Item
             },
             onNextButtonClicked = {
                 val currentPosition =
@@ -284,14 +308,14 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
             val mLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             val snapHelper = LinearSnapHelper()
             binding.rvRecommendationAnime.apply {
-                adapter = recommendationAnimeAdapter
+                adapter = animeRecommendationAdapter
                 layoutManager = mLayoutManager
                 addItemDecoration(DividerItemDecoration(context, mLayoutManager.orientation))
                 snapHelper.attachToRecyclerView(this)
             }
 
             viewModel.animeRecommendation.collectLatest { recommendationAnime ->
-                recommendationAnimeAdapter.submitData(
+                animeRecommendationAdapter.submitData(
                     lifecycle = viewLifecycleOwner.lifecycle,
                     pagingData = recommendationAnime
                 )
@@ -302,7 +326,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             val placeHolderRecommendationAdapter = RecommendationPlaceholderAdapter()
 
-            recommendationAnimeAdapter.loadStateFlow
+            animeRecommendationAdapter.loadStateFlow
                 .distinctUntilChangedBy { it.refresh }
                 .collectLatest { loadState ->
                     when (loadState.refresh) {
@@ -313,7 +337,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                 AutoTransition()
                             )
                             binding.rvRecommendationAnime.apply {
-                                adapter = recommendationAnimeAdapter
+                                adapter = animeRecommendationAdapter
                                 layoutManager =
                                     LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
                             }
@@ -321,7 +345,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                 text = getString(
                                     R.string.recommendation_page_number,
                                     1,
-                                    recommendationAnimeAdapter.itemCount
+                                    animeRecommendationAdapter.itemCount
                                 )
                                 visibility = View.VISIBLE
                             }
@@ -344,7 +368,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                 binding.rvRecommendationAnime.adapter = RecommendationErrorAdapter(
                                     message = (loadState.refresh as LoadState.Error).error.message
                                         ?: "Unknown",
-                                    onRetry = recommendationAnimeAdapter::retry
+                                    onRetry = animeRecommendationAdapter::retry
                                 )
                             }
                         }
@@ -366,7 +390,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                             getString(
                                 R.string.recommendation_page_number,
                                 currentPosition.plus(1),
-                                recommendationAnimeAdapter.itemCount
+                                animeRecommendationAdapter.itemCount
                             )
                     }
                 }

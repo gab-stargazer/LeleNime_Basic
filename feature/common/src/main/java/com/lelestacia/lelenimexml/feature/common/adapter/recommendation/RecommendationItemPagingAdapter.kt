@@ -11,11 +11,11 @@ import com.lelestacia.lelenimexml.core.model.recommendation.Recommendation
 import com.lelestacia.lelenimexml.feature.common.adapter.GenericModelListAdapter
 import com.lelestacia.lelenimexml.feature.common.databinding.RecommendationItemBinding
 
-class RecommendationAnimePagingAdapter(
+class RecommendationItemPagingAdapter(
     private val onItemClicked: (Recommendation) -> Unit,
     private val onNextButtonClicked: () -> Unit
 ) :
-    PagingDataAdapter<Recommendation, RecommendationAnimePagingAdapter.ViewHolder>(DIFF_CALLBACK) {
+    PagingDataAdapter<Recommendation, RecommendationItemPagingAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     inner class ViewHolder(private val binding: RecommendationItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

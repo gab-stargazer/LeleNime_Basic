@@ -5,13 +5,13 @@
     <item
         android:id="@+id/explore_navigation"
         android:icon="@drawable/ic_explore"
-        android:title="Explore" />
+        android:title="@string/menu_title_explore" />
     <item
         android:id="@+id/collection_navigation"
         android:icon="@drawable/ic_collection"
-        android:title="Collection" />
+        android:title="@string/menu_title_collection" />
     <item
         android:id="@+id/more_navigation"
         android:icon="@drawable/ic_more"
-        android:title="More" />
+        android:title="@string/menu_title_more" />
 </menu>

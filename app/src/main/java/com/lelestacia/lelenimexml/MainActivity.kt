@@ -15,7 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lelestacia.lelenimexml.databinding.ActivityMainBinding
 import com.lelestacia.lelenimexml.feature.collection.R.id.collectionFragment
-import com.lelestacia.lelenimexml.feature.explore.R.id.exploreFragment
+import com.lelestacia.lelenimexml.feature.explore.R.id.exploreDashboardFragment
 import com.lelestacia.lelenimexml.feature.others.R.id.settingsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top-level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                exploreFragment,
+                exploreDashboardFragment,
                 collectionFragment,
                 settingsFragment,
             )

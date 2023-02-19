@@ -13,4 +13,7 @@
     <string name="settings">Settings</string>
     <string name="application_banner">Application Banner</string>
     <string name="this_is_main_toolbar">This is main toolbar</string>
+    <string name="menu_title_more">More</string>
+    <string name="menu_title_collection">Collection</string>
+    <string name="menu_title_explore">Explore</string>
 </resources>

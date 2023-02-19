@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             app:itemTextColor="@color/light_primary"
+            app:elevation="3dp"
             app:labelVisibilityMode="selected"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
             app:layout_constraintBottom_toBottomOf="parent"

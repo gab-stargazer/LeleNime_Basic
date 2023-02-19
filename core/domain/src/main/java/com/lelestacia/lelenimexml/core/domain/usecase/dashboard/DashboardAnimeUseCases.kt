@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.domain.usecase.explore
+package com.lelestacia.lelenimexml.core.domain.usecase.dashboard
 
 import androidx.paging.PagingData
 import com.lelestacia.lelenimexml.core.data.impl.anime.IAnimeRepository
@@ -10,11 +10,11 @@ import com.lelestacia.lelenimexml.core.model.recommendation.Recommendation
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ExploreUseCases @Inject constructor(
+class DashboardAnimeUseCases @Inject constructor(
     private val animeRepository: IAnimeRepository,
     private val mangaRepository: IMangaRepository,
     private val recommendationRepository: IRecommendationRepository
-) : IExploreUseCases {
+) : IDashboardAnimeUseCases {
 
     override suspend fun insertOrReplaceAnimeOnHistory(anime: Anime) {
         animeRepository.insertAnimeToHistory(anime = anime)
@@ -38,9 +38,5 @@ class ExploreUseCases @Inject constructor(
 
     override fun getRecentAnimeRecommendation(): Flow<PagingData<Recommendation>> {
         return recommendationRepository.getRecentAnimeRecommendation()
-    }
-
-    override fun getRecentMangaRecommendation(): Flow<PagingData<Recommendation>> {
-        return recommendationRepository.getRecentMangaRecommendation()
     }
 }

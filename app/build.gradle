@@ -51,7 +51,7 @@ dependencies {
     implementation project(':feature:collection')
     implementation project(':feature:others')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_std_version"
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.3'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.5'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
 }
 

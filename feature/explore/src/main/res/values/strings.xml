@@ -15,4 +15,5 @@
     <string name="manga">Manga</string>
     <string name="top_manga">Top Manga</string>
     <string name="tab_layout_explore_pages">Tab Layout Explore Pages</string>
+    <string name="layout_scroll_dashboard_manga">Layout Scroll Dashboard Manga</string>
 </resources>

@@ -12,7 +12,7 @@ interface RecommendationAPI {
         @Query("page") page: Int
     ): GenericScrappingPaginationResponse<GenericRecommendationResponse>
 
-    @GET("recommendation/manga")
+    @GET("recommendations/manga")
     suspend fun getRecentMangaRecommendation(
         @Query("page") page: Int
     ): GenericScrappingPaginationResponse<GenericRecommendationResponse>
