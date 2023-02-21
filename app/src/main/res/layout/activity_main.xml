@@ -25,11 +25,9 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/white"
                 android:elevation="1dp"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                app:popupTheme="@style/Theme.LeleNimeXML.PopupOverlay"
-                app:titleTextColor="@color/light_primary" />
+                app:popupTheme="@style/Theme.LeleNimeXML.PopupOverlay" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.fragment.app.FragmentContainerView
@@ -49,11 +47,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            app:itemTextColor="@color/light_primary"
             app:elevation="3dp"
+            app:itemTextColor="@color/light_primary"
             app:labelVisibilityMode="selected"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/activity_main_menu" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation_main" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

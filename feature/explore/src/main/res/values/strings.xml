@@ -1,15 +1,18 @@
 <resources>
-    <string name="upcoming_anime">Upcoming Anime</string>
-
     <!--Explore Page-->
     <string name="recommendation_page_number">Showing %d from %d</string>
 
 
     <string name="anime">Anime</string>
     <string name="trending">Trending</string>
-    <string name="top_anime">Popular Anime</string>
-    <string name="currently_airing">Airing</string>
+
+    <!--Expanded Page Title-->
+    <string name="trending_anime">Popular Anime</string>
     <string name="airing_anime">Airing Anime</string>
+    <string name="upcoming_anime">Upcoming Anime</string>
+    <string name="trending_manga">Popular Manga</string>
+
+    <string name="currently_airing">Airing</string>
     <string name="recently_viewed">Recently Viewed</string>
     <string name="upcoming">Upcoming</string>
     <string name="manga">Manga</string>

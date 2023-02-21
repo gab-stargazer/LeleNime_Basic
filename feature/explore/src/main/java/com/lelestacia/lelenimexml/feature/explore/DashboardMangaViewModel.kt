@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.IDashboardMangaUseCases
+import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.manga.IDashboardMangaUseCases
 import com.lelestacia.lelenimexml.core.model.manga.Manga
 import com.lelestacia.lelenimexml.core.model.recommendation.Recommendation
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -2,6 +2,8 @@ package com.lelestacia.lelenimexml.core.network.impl.recommendation
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.lelestacia.lelenimexml.core.common.util.Constant.AFTER_FIRST_PAGE_DELAY
+import com.lelestacia.lelenimexml.core.common.util.Constant.FIRST_PAGE_DELAY
 import com.lelestacia.lelenimexml.core.network.model.GenericRecommendationResponse
 import com.lelestacia.lelenimexml.core.network.source.RecommendationAPI
 import kotlinx.coroutines.delay
@@ -18,8 +20,8 @@ class MangaRecommendationPagingSource(
             val currentPage = params.key ?: 1
             val apiResponse = recommendationAPI.getRecentMangaRecommendation(page = currentPage)
             delay(
-                if (currentPage == 1) 800
-                else 400
+                if (currentPage == 1) FIRST_PAGE_DELAY * 2
+                else AFTER_FIRST_PAGE_DELAY
             )
             LoadResult.Page(
                 data = apiResponse.data,

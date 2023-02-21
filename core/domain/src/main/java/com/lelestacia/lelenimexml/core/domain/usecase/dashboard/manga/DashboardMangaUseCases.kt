@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.core.domain.usecase.dashboard
+package com.lelestacia.lelenimexml.core.domain.usecase.dashboard.manga
 
 import androidx.paging.PagingData
 import com.lelestacia.lelenimexml.core.data.impl.manga.IMangaRepository

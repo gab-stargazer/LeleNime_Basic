@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@android:color/transparent"
+    android:elevation="0dp"
+    app:strokeWidth="0dp"
+    tools:theme="@style/Theme.LeleNimeXML">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:padding="8dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_cover_manga"
+            android:layout_width="100dp"
+            android:layout_height="134dp"
+            android:contentDescription="@string/cover_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ImageContrastCheck"
+            tools:src="@drawable/placeholder" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title_manga"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold"
+            app:fontFamily="@font/source_sans_pro_bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_cover_manga"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Berserk" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_score_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/source_sans_pro_semi_bold"
+            android:text="@string/score_holder"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintStart_toStartOf="@id/tv_title_manga"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_manga" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_score_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/source_sans_pro_semi_bold"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/tv_score_holder"
+            app:layout_constraintStart_toStartOf="@+id/tv_chapter_value"
+            app:layout_constraintTop_toTopOf="@id/tv_score_holder"
+            tools:text=": 5.9" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_chapter_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/source_sans_pro_semi_bold"
+            android:text="@string/chapter_holder"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintStart_toStartOf="@id/tv_score_holder"
+            app:layout_constraintTop_toBottomOf="@id/tv_score_holder" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_chapter_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/source_sans_pro_semi_bold"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/tv_chapter_holder"
+            app:layout_constraintStart_toEndOf="@id/tv_chapter_holder"
+            app:layout_constraintTop_toTopOf="@id/tv_chapter_holder"
+            tools:text=": 121" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_status_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/source_sans_pro_semi_bold"
+            android:text="@string/status_holder"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintStart_toStartOf="@id/tv_chapter_holder"
+            app:layout_constraintTop_toBottomOf="@id/tv_chapter_holder" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_status_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/source_sans_pro_semi_bold"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            app:layout_constraintBottom_toBottomOf="@id/tv_status_holder"
+            app:layout_constraintStart_toStartOf="@id/tv_chapter_value"
+            app:layout_constraintTop_toTopOf="@id/tv_status_holder"
+            tools:text=": 4" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_star"
+            app:layout_constraintBottom_toBottomOf="@id/tv_score_value"
+            app:layout_constraintStart_toEndOf="@id/tv_score_value"
+            app:layout_constraintTop_toTopOf="@id/tv_score_value" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

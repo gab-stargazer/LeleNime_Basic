@@ -8,6 +8,8 @@ import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,8 +62,8 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTopAnime()
-        listenIntoTopAnimeProgress()
+        setTrendingAnime()
+        listenIntoTrendingAnimeProgress()
 
         setAiringAnime()
         listenIntoAiringAnimeProgress()
@@ -75,15 +77,14 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
     }
 
 
-    private fun setTopAnime() =
+    private fun setTrendingAnime() =
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             binding.cvHeaderTrendingAnime.setOnClickListener {
-                //TODO: Implement Expanded Dashboard for Anime
-                Snackbar.make(
-                    binding.root,
-                    "Expanded Version is not yet implemented",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                val destination: NavDirections = DashboardFragmentDirections.exploreToExpanded(
+                    title = getString(R.string.trending_anime),
+                    fullscreen = true
+                )
+                findNavController().navigate(directions = destination)
             }
             binding.rvTrendingAnime.apply {
                 layoutManager =
@@ -101,7 +102,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
             }
         }
 
-    private fun listenIntoTopAnimeProgress() =
+    private fun listenIntoTrendingAnimeProgress() =
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             val rvTopAnime = binding.rvTrendingAnime
             val shimmerTopAnime = binding.shimmerTrendingAnime
@@ -121,6 +122,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                     LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
                             }
                         }
+
                         LoadState.Loading -> {
                             Timber.d("Current state is Loading")
                             if (!shimmerTopAnime.isShimmerVisible) shimmerTopAnime.showShimmer(true)
@@ -129,6 +131,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                 rvTopAnime.adapter = placeHolderAdapter
                             }
                         }
+
                         is LoadState.Error -> {
                             Timber.d("Current state is Error")
                             if (shimmerTopAnime.isShimmerVisible) shimmerTopAnime.hideShimmer()
@@ -149,12 +152,11 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             val rvAiringAnime = binding.rvAiringAnime
             binding.cvHeaderAiringAnime.setOnClickListener {
-                //TODO: Implement Expanded Dashboard for Anime
-                Snackbar.make(
-                    binding.root,
-                    "Expanded Version is not yet implemented",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                val destination: NavDirections = DashboardFragmentDirections.exploreToExpanded(
+                    title = getString(R.string.airing_anime),
+                    fullscreen = true
+                )
+                findNavController().navigate(directions = destination)
             }
             rvAiringAnime.apply {
                 layoutManager =
@@ -192,6 +194,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                     LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
                             }
                         }
+
                         LoadState.Loading -> {
                             Timber.d("Current state is Loading")
                             if (!shimmerAiringAnime.isShimmerVisible) shimmerAiringAnime.showShimmer(
@@ -202,6 +205,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                 rvAiringAnime.adapter = placeHolderAdapter
                             }
                         }
+
                         is LoadState.Error -> {
                             Timber.d("Current state is Error")
                             if (rvAiringAnime.adapter == placeHolderAdapter) {
@@ -222,12 +226,11 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             val rvUpcomingAnime = binding.rvUpcomingAnime
             binding.cvHeaderUpcomingAnime.setOnClickListener {
-                //TODO: Implement Expanded Dashboard for Anime
-                Snackbar.make(
-                    binding.root,
-                    "Expanded Version is not yet implemented",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                val destination: NavDirections = DashboardFragmentDirections.exploreToExpanded(
+                    title = getString(R.string.upcoming_anime),
+                    fullscreen = true
+                )
+                findNavController().navigate(directions = destination)
             }
             rvUpcomingAnime.apply {
                 layoutManager =
@@ -265,6 +268,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                     LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
                             }
                         }
+
                         LoadState.Loading -> {
                             Timber.d("Current state is Loading")
                             if (!shimmerUpcomingAnime.isShimmerVisible) shimmerUpcomingAnime.showShimmer(
@@ -275,6 +279,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                 rvUpcomingAnime.adapter = placeHolderAdapter
                             }
                         }
+
                         is LoadState.Error -> {
                             Timber.d("Current state is Error")
                             if (rvUpcomingAnime.adapter == placeHolderAdapter) {
@@ -350,6 +355,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                 visibility = View.VISIBLE
                             }
                         }
+
                         LoadState.Loading -> {
                             Timber.d("Current state is Loading")
                             if (binding.rvRecommendationAnime.adapter != placeHolderRecommendationAdapter) {
@@ -358,6 +364,7 @@ class DashboardAnimeFragment : Fragment(R.layout.fragment_dashboard_anime) {
                                     placeHolderRecommendationAdapter
                             }
                         }
+
                         is LoadState.Error -> {
                             Timber.d("Current state is Error")
                             if (binding.rvRecommendationAnime.adapter == placeHolderRecommendationAdapter) {

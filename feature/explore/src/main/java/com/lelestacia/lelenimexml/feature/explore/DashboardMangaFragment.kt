@@ -8,18 +8,19 @@ import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationErrorAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationItemPagingAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.recommendation.RecommendationPlaceholderAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.util.HorizontalErrorAdapter
 import com.lelestacia.lelenimexml.feature.common.adapter.util.HorizontalLoadStateAdapter
 import com.lelestacia.lelenimexml.feature.explore.adapter.HorizontalMangaPagingAdapter
+import com.lelestacia.lelenimexml.feature.explore.adapter.PlaceHolderHorizontalAdapter
 import com.lelestacia.lelenimexml.feature.explore.databinding.FragmentDashboardMangaBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -51,12 +52,11 @@ class DashboardMangaFragment : Fragment(R.layout.fragment_dashboard_manga) {
     private fun setupTopManga() =
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             binding.cvHeaderTopManga.setOnClickListener {
-                //TODO: Implement Expanded Dashboard for Manga
-                Snackbar.make(
-                    binding.root,
-                    "Expanded Version is not yet implemented",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                val destination = DashboardFragmentDirections.exploreToExpanded(
+                    title = getString(R.string.trending_manga),
+                    fullscreen = true
+                )
+                findNavController().navigate(directions = destination)
             }
 
             binding.rvTopManga.apply {
@@ -77,7 +77,7 @@ class DashboardMangaFragment : Fragment(R.layout.fragment_dashboard_manga) {
 
     private fun listenIntoTopMangaProgress() =
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            val placeHolderAdapter = RecommendationPlaceholderAdapter()
+            val placeHolderAdapter = PlaceHolderHorizontalAdapter((1..4).toList())
 
             topMangaAdapter.loadStateFlow
                 .distinctUntilChangedBy { it.refresh }

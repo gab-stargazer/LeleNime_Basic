@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:backgroundTint="@android:color/transparent"
-    android:theme="@style/Theme.LeleNimeXML"
     app:cardElevation="0dp"
-    app:strokeWidth="0dp">
+    app:strokeWidth="0dp"
+    tools:theme="@style/Theme.LeleNimeXML">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,7 +19,6 @@
             android:id="@+id/iv_cover_anime"
             android:layout_width="100dp"
             android:layout_height="134dp"
-            android:transitionName="cover_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

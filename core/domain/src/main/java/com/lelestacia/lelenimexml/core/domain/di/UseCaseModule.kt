@@ -9,10 +9,10 @@ import com.lelestacia.lelenimexml.core.domain.usecase.anime.AnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.anime.IAnimeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.character.CharacterUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.character.ICharacterUseCase
-import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.DashboardAnimeUseCases
-import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.DashboardMangaUseCases
-import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.IDashboardAnimeUseCases
-import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.IDashboardMangaUseCases
+import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.anime.DashboardAnimeUseCases
+import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.manga.DashboardMangaUseCases
+import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.anime.IDashboardAnimeUseCases
+import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.manga.IDashboardMangaUseCases
 import com.lelestacia.lelenimexml.core.domain.usecase.episode.EpisodeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.episode.IEpisodeUseCase
 import com.lelestacia.lelenimexml.core.domain.usecase.favorite.FavoriteAnimeUseCase

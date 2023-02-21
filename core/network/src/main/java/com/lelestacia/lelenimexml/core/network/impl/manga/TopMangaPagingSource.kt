@@ -13,6 +13,7 @@ import timber.log.Timber
 class TopMangaPagingSource(
     private val mangaAPI: MangaAPI
 ) : PagingSource<Int, MangaResponse>() {
+
     override fun getRefreshKey(state: PagingState<Int, MangaResponse>): Int? {
         return state.anchorPosition
     }
@@ -21,7 +22,7 @@ class TopMangaPagingSource(
         return try {
             val currentPage = params.key ?: 1
             delay(
-                if (currentPage == 1) FIRST_PAGE_DELAY * 4.toLong()
+                if (currentPage == 1) FIRST_PAGE_DELAY
                 else AFTER_FIRST_PAGE_DELAY
             )
             val apiResponse = mangaAPI.getTopManga(page = currentPage)

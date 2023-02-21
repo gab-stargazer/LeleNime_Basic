@@ -1,4 +1,4 @@
-package com.lelestacia.lelenimexml.feature.common.adapter
+package com.lelestacia.lelenimexml.feature.common.adapter.anime
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

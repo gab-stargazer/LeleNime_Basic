@@ -3,8 +3,8 @@ package com.lelestacia.lelenimexml.feature.explore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.lelestacia.lelenimexml.core.domain.usecase.anime.IAnimeUseCase
-import com.lelestacia.lelenimexml.core.domain.usecase.home.IHomeAnimeUseCase
+import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.anime.IDashboardAnimeUseCases
+import com.lelestacia.lelenimexml.core.domain.usecase.dashboard.manga.IDashboardMangaUseCases
 import com.lelestacia.lelenimexml.core.model.anime.Anime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,15 +13,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExpandedViewModel @Inject constructor(
-    animeUseCase: IHomeAnimeUseCase,
-    private val commonAnimeUseCase: IAnimeUseCase
+    private val dashboardAnimeUseCases: IDashboardAnimeUseCases,
+    private val dashboardMangaUseCases: IDashboardMangaUseCases
 ) : ViewModel() {
-    val topAnime = animeUseCase.getTopAnime().cachedIn(viewModelScope)
-    val airingAnime = animeUseCase.getAiringAnime().cachedIn(viewModelScope)
-    val upcomingAnime = animeUseCase.getUpcomingAnime().cachedIn(viewModelScope)
+
+    val trendingAnime = dashboardAnimeUseCases.getTopAnime().cachedIn(viewModelScope)
+    val airingAnime = dashboardAnimeUseCases.getAiringAnime().cachedIn(viewModelScope)
+    val upcomingAnime = dashboardAnimeUseCases.getUpcomingAnime().cachedIn(viewModelScope)
+    val trendingManga = dashboardMangaUseCases.getTopManga().cachedIn(viewModelScope)
 
     fun insertOrUpdateAnimeToHistory(anime: Anime) = viewModelScope.launch {
-        commonAnimeUseCase.insertOrUpdateNewAnimeToHistory(anime)
+        dashboardAnimeUseCases.insertOrReplaceAnimeOnHistory(anime)
     }
 
     override fun onCleared() {
